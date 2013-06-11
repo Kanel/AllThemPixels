@@ -30,20 +30,23 @@ int main(int argc, char ** argv)
 			}
 			if (event.type == Event::Resized)
 			{
-				int h = event.size.height;
-				int w = event.size.width;
-				if (w > h)
+				int height = event.size.height;
+				int width = event.size.width;
+
+				if (width > height)
 				{
-					shape.setRadius(h / 2);
-					shape.setPosition(w / 2 - h / 2, 0);
+					shape.setRadius(height / 2);
+					shape.setPosition(width / 2 - height / 2, 0);
 				}
 				else
 				{
-					shape.setRadius(w / 2);
-					shape.setPosition(0, h / 2 - w / 2);
+					shape.setRadius(width / 2);
+					shape.setPosition(0, height / 2 - width / 2);
 				}
-				videoMode.height = h;
-				videoMode.width = w;
+				shape.setPointCount(3.14 * 2 * shape.getRadius() / 10);
+
+				videoMode.height = height;
+				videoMode.width = width;
 				
 				window.create(videoMode, windowtitle, windowStyle);
 			}
