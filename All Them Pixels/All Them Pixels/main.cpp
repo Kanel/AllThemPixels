@@ -30,9 +30,21 @@ int main(int argc, char ** argv)
 			}
 			if (event.type == Event::Resized)
 			{
-				videoMode.height = event.size.height;
-				videoMode.width = event.size.width;
-
+				int h = event.size.height;
+				int w = event.size.width;
+				if (w > h)
+				{
+					shape.setRadius(h / 2);
+					shape.setPosition(w / 2 - h / 2, 0);
+				}
+				else
+				{
+					shape.setRadius(w / 2);
+					shape.setPosition(0, h / 2 - w / 2);
+				}
+				videoMode.height = h;
+				videoMode.width = w;
+				
 				window.create(videoMode, windowtitle, windowStyle);
 			}
         }
