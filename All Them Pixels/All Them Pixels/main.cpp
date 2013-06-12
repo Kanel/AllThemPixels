@@ -43,11 +43,7 @@ int main(int argc, char ** argv)
 					shape.setRadius(width / 2);
 					shape.setPosition(0, height / 2 - width / 2);
 				}
-<<<<<<< HEAD
 				shape.setPointCount(3.14 * 2 * shape.getRadius() / 6);
-=======
-				shape.setPointCount(3.14 * 2 * shape.getRadius() * 10);
->>>>>>> 2c82f69b28c5ede3be6da4aa26845675f95b0c21
 
 				videoMode.height = height;
 				videoMode.width = width;
