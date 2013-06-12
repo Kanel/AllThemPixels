@@ -1,4 +1,5 @@
 #include <SFML/Graphics.hpp>
+#include "Hexagon.h"
 
 using namespace sf;
 
@@ -6,11 +7,15 @@ int main(int argc, char ** argv)
 {
 	char * windowtitle = "All them Pixels!";
 	bool fullscreen = true;
-	Uint32 windowStyle = Style::Resize;
-	VideoMode videoMode(200, 200);
-    RenderWindow window(videoMode, windowtitle);
+	Uint32 windowStyle = Style::Resize;	
+	ContextSettings settings(0, 0, 8, 2, 0);
+	VideoMode videoMode(500, 500);
+    RenderWindow window(videoMode, windowtitle, 7, settings);
     CircleShape shape(100.f);
+	Hexagon hexagon(Vector2f(250, 250));
+	
     shape.setFillColor(Color::Green);
+	
 
     while (window.isOpen())
     {
@@ -52,8 +57,9 @@ int main(int argc, char ** argv)
 			}
         }
 		
-        window.clear();
+        window.clear();		
         window.draw(shape);
+		window.draw(hexagon.getShape());
         window.display();
     }
 
