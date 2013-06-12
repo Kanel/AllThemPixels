@@ -9,7 +9,8 @@ protected:
 	sf::VertexArray shape;
 
 public:
-	Hexagon(sf::Vector2f position);
+	Hexagon();
+	Hexagon(sf::Vector2f position, int radius);
 
 	sf::VertexArray getShape();
 };

@@ -21,9 +21,15 @@
     <ClCompile Include="Hexagon.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="HexagonGrid.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Hexagon.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="HexagonGrid.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

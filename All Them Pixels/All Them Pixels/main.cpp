@@ -1,5 +1,5 @@
 #include <SFML/Graphics.hpp>
-#include "Hexagon.h"
+#include "HexagonGrid.h"
 
 using namespace sf;
 
@@ -12,7 +12,7 @@ int main(int argc, char ** argv)
 	VideoMode videoMode(500, 500);
     RenderWindow window(videoMode, windowtitle, 7, settings);
     CircleShape shape(100.f);
-	Hexagon hexagon(Vector2f(250, 250));
+	HexagonGrid grid(Vector2f(250, 250), 5, 50, -6);
 	
     shape.setFillColor(Color::Green);
 	
@@ -59,7 +59,7 @@ int main(int argc, char ** argv)
 		
         window.clear();		
         window.draw(shape);
-		window.draw(hexagon.getShape());
+		grid.draw(&window);
         window.display();
     }
 
