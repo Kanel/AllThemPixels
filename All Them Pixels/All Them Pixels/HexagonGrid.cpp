@@ -11,22 +11,39 @@ int HexagonGrid::getNumberOfTilesInLayer(int layer)
 }
 
 HexagonGrid::HexagonGrid(sf::Vector2f position, int layers, int tileSize, int tileSpacing)
-{
+{	
+	float originDistance = 2 * sqrtf(powf(tileSize / 2, 2) - powf(tileSize / 4, 2)) + tileSpacing;
+	
 	tiles = getNumberOfTiles(layers);
 	shapes = new Hexagon[tiles];
 
-	for (int i = 0, j = 1, d = 0; j <= layers; j++, d += tileSize + tileSpacing)
+	for (int i = 0, j = 1, d = 0; j <= layers; j++, d += originDistance)
 	{
-		float l = 0;
+		float l =  M_PI_2 + (2 * 2 * M_PI / 6);	
+		int stepsTaken = 0;
+		sf::Vector2f current = position;
+		sf::Vector2f step;
 
-		for (int k = 0; k < getNumberOfTilesInLayer(j); i++, k++, l += 2 * M_PI / getNumberOfTilesInLayer(j))
+		current.x += cosf(M_PI_2) * d;
+		current.y += sinf(M_PI_2) * d;
+		step.x = cosf(l) * originDistance;
+		step.y = sinf(l) * originDistance;
+
+		for (int k = 0; k < getNumberOfTilesInLayer(j); i++, k++)
 		{
-			sf::Vector2f tilePosition = position;
+			shapes[i] = Hexagon(current, tileSize / 2);
 
-			tilePosition.x += cosf(l + M_PI_2) * d;
-			tilePosition.y += sinf(l + M_PI_2) * d;
+			current += step;
+			stepsTaken++;
 
-			shapes[i] = Hexagon(tilePosition, tileSize / 2);
+			if (stepsTaken == j - 1)
+			{
+				stepsTaken = 0;
+				l += 2 * M_PI / 6;
+
+				step.x = cosf(l) * originDistance;
+				step.y = sinf(l) * originDistance;
+			}
 		}
 	}
 }

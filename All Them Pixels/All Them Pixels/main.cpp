@@ -12,10 +12,9 @@ int main(int argc, char ** argv)
 	VideoMode videoMode(500, 500);
     RenderWindow window(videoMode, windowtitle, 7, settings);
     CircleShape shape(100.f);
-	HexagonGrid grid(Vector2f(250, 250), 5, 50, -6);
+	HexagonGrid grid(Vector2f(250, 250), 4, 60, 7);
 	
-    shape.setFillColor(Color::Green);
-	
+    shape.setFillColor(Color::Green);	
 
     while (window.isOpen())
     {
