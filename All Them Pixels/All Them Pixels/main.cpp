@@ -1,5 +1,6 @@
 #include <SFML/Graphics.hpp>
 #include "HexagonGrid.h"
+#include "GlareEffect.h"
 
 using namespace sf;
 
@@ -13,6 +14,7 @@ int main(int argc, char ** argv)
     RenderWindow window(videoMode, windowtitle, 7, settings);
     CircleShape shape(100.f);
 	HexagonGrid grid(Vector2f(250, 250), 4, 60, 7);
+	GlareEffect glare;
 	
     shape.setFillColor(Color::Green);	
 
@@ -58,7 +60,8 @@ int main(int argc, char ** argv)
 		
         window.clear();		
         window.draw(shape);
-		grid.draw(&window);
+		glare.draw(&window);
+		//grid.draw(&window);
         window.display();
     }
 

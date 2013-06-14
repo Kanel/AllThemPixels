@@ -83,11 +83,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="GlareEffect.cpp" />
     <ClCompile Include="Hexagon.cpp" />
     <ClCompile Include="HexagonGrid.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="GlareEffect.h" />
     <ClInclude Include="Hexagon.h" />
     <ClInclude Include="HexagonGrid.h" />
   </ItemGroup>
