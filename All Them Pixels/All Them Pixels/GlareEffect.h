@@ -6,7 +6,7 @@ using namespace sf;
 
 class GlareEffect
 {
-protected:
+public:
 	float hwd;
 	float hwod;
 	float hwid;
@@ -39,6 +39,7 @@ protected:
 	Vertex vwib;
 	VertexArray innerShape;
 	VertexArray outerShape;
+	VertexArray circle;
 
 public:
 	GlareEffect();

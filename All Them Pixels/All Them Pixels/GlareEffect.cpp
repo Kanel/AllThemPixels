@@ -3,18 +3,18 @@
 GlareEffect::GlareEffect()
 {	
 	Vector2f position(250, 250);
-	Color core(255, 0, 0, 255);
-	Color inner(255, 0, 0, 175);
+	Color core(255, 150, 150, 255);
+	Color inner(255, 0, 0, 170);
 	Color outer(255, 0, 0, 50);
 
 	hwd = 1;
 	hwod = 200;
-	hwid = 10;
-	ochd = 4;
+	hwid = 60;
+	ochd = 3;
 	ocvd = 3;
 	ichd = 1;
 	icvd = 1;
-	vwod = 40;
+	vwod = 20;
 	vwid = 20;
 	
 	o = Vertex(position, core);
@@ -82,9 +82,44 @@ GlareEffect::GlareEffect()
 	outerShape.append(iwcrb);
 	outerShape.append(vwob);
 	outerShape.append(vwib);
+
+	int x = position.x;
+	int y = position.y;
+	int size = 22;
+	int width = 3;
+	int vertices = 128;
+	float angleOffset = 6.28318530718 / vertices;
+	Vector2f * outerLayer = new Vector2f[vertices];
+	Vector2f * innerLayer = new Vector2f[vertices];
+
+	for (int i = 0; i < vertices; i++)
+	{
+		outerLayer[i].x = x + (cosf(angleOffset * i) * size);
+		outerLayer[i].y = y + (sinf(angleOffset * i) * size);
+	}
+
+	for (int i = 0; i < vertices; i++)
+	{
+		innerLayer[i].x = x + (cosf(angleOffset * i) * (size - width));
+		innerLayer[i].y = y + (sinf(angleOffset * i) * (size - width));
+	}
+
+	circle.setPrimitiveType(PrimitiveType::TrianglesStrip);
+
+	for (int i = 0; i < vertices; i++)
+	{
+		circle.append(Vertex(Vector2f(innerLayer[i].x, innerLayer[i].y), inner));
+		circle.append(Vertex(Vector2f(outerLayer[i].x, outerLayer[i].y), outer));
+	}
+	circle.append(Vertex(Vector2f(innerLayer[0].x, innerLayer[0].y), inner));
+	circle.append(Vertex(Vector2f(outerLayer[0].x, outerLayer[0].y), outer));
+
+	delete outerLayer;
+	delete innerLayer;
 }
 void GlareEffect::draw(RenderWindow * window)
 {
+	window->draw(circle);
 	window->draw(innerShape);
-	window->draw(outerShape);
+	window->draw(outerShape);	
 }
