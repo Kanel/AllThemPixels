@@ -16,7 +16,7 @@ public:
 	virtual Vector2f getPosition();
 	virtual void setPosition(Vector2f position);
 
-	virtual void applyTransform(Transform transform) = NULL;
+	virtual void applyTransform(Transform transform);
 	virtual void translate(Vector2f offset);
 	virtual void rotate(float angle, Vector2f center);
 	virtual void scale(Vector2f factors, Vector2f center);

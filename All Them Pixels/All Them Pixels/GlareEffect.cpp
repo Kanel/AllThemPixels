@@ -144,7 +144,7 @@ GlareEffect::GlareEffect(Vector2f position) : GlareEffect::Entity(position)
 
 void GlareEffect::applyTransform(Transform transform)
 {
-	position = transform.transformPoint(position);
+	Entity::applyTransform(transform);
 
 	applyTransform(transform, circle);
 	applyTransform(transform, innerShape);
@@ -160,5 +160,6 @@ void GlareEffect::draw(RenderWindow * window)
 
 void GlareEffect::update(UpdateInfo info)
 {
-	// Do nothing
+	rotate(0.5, position);
+	translate(Vector2f(0.5, 0.5));
 }

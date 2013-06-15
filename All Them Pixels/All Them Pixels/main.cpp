@@ -1,6 +1,8 @@
-#include <SFML/Graphics.hpp>
 #include "HexagonGrid.h"
 #include "GlareEffect.h"
+#include "GameCore.h"
+#include "UpdateInfo.h"
+#include <SFML/Graphics.hpp>
 
 using namespace sf;
 
@@ -13,10 +15,11 @@ int main(int argc, char ** argv)
 	VideoMode videoMode(500, 500);
     RenderWindow window(videoMode, windowtitle, 7, settings);
     CircleShape shape(100.f);
+	GameCore core;
 	sf::Clock c;
-	GlareEffect glare(Vector2f(0, 0));
 
-    shape.setFillColor(Color::Green);	
+	core.addEntity(new GlareEffect(Vector2f(0,0)));
+    shape.setFillColor(Color::Green);
 
     while (window.isOpen())
     {
@@ -60,16 +63,20 @@ int main(int argc, char ** argv)
 
 		if (c.getElapsedTime().asMilliseconds() >= 20)
 		{
-			glare.rotate(0.5, glare.getPosition());
-			glare.translate(Vector2f(0.5, 0.5));
+			UpdateInfo info;
+
+			info.elapsedSeconds = 20;
+
+			core.integrateSpawnQueue();
+			core.update(info);
+
+			window.clear();
+			window.draw(shape);
+			core.draw(&window);
+			window.display();
 
 			c.restart();
 		}
-
-        window.clear();
-        window.draw(shape);
-		glare.draw(&window);
-        window.display();
     }
 
     return 0;

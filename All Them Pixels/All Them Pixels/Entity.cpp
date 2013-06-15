@@ -15,6 +15,11 @@ void Entity::setPosition(Vector2f position)
 	this->position = position;
 }
 
+void Entity::applyTransform(Transform transform)
+{
+	position = transform.transformPoint(position);
+}
+
 void Entity::translate(Vector2f offset)
 {
 	Transform transform;
