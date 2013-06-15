@@ -1,8 +1,32 @@
 #include "GlareEffect.h"
 
-GlareEffect::GlareEffect()
-{	
-	Vector2f position(250, 250);
+		/*if (c1.getElapsedTime().asMilliseconds() >= 10)
+		{
+			Time t = c.getElapsedTime();
+			float a = 10 / t.asMilliseconds() + 0.1;
+			float b = 40 / t.asMilliseconds() + 2;
+
+			glare.outerShape[10].position.y += a;
+			glare.outerShape[0].position.y -= a;
+			glare.outerShape[20].position.y -= a;
+			glare.outerShape[6].position.x -= b;
+			glare.outerShape[4].position.x -= b;
+			glare.outerShape[14].position.x += b;
+			glare.outerShape[16].position.x += b;
+			
+			c1.restart();
+		}*/
+
+void GlareEffect::applyTransform(Transform transform, VertexArray &vertecies)
+{
+	for (int i = 0; i < vertecies.getVertexCount(); i++)
+	{
+		vertecies[i].position = transform.transformPoint(vertecies[i].position);
+	}
+}
+
+GlareEffect::GlareEffect(Vector2f position) : GlareEffect::Entity(position)
+{
 	Color core(255, 150, 150, 255);
 	Color inner(255, 0, 0, 170);
 	Color outer(255, 0, 0, 50);
@@ -10,8 +34,8 @@ GlareEffect::GlareEffect()
 	hwd = 1;
 	hwod = 200;
 	hwid = 60;
-	ochd = 3;
-	ocvd = 3;
+	ochd = 1;
+	ocvd = 1;
 	ichd = 1;
 	icvd = 1;
 	vwod = 20;
@@ -117,9 +141,24 @@ GlareEffect::GlareEffect()
 	delete outerLayer;
 	delete innerLayer;
 }
+
+void GlareEffect::applyTransform(Transform transform)
+{
+	position = transform.transformPoint(position);
+
+	applyTransform(transform, circle);
+	applyTransform(transform, innerShape);
+	applyTransform(transform, outerShape);
+}
+
 void GlareEffect::draw(RenderWindow * window)
 {
 	window->draw(circle);
 	window->draw(innerShape);
-	window->draw(outerShape);	
+	window->draw(outerShape);
+}
+
+void GlareEffect::update(UpdateInfo info)
+{
+	// Do nothing
 }

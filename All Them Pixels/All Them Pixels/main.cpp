@@ -13,12 +13,9 @@ int main(int argc, char ** argv)
 	VideoMode videoMode(500, 500);
     RenderWindow window(videoMode, windowtitle, 7, settings);
     CircleShape shape(100.f);
-	HexagonGrid grid(Vector2f(250, 250), 4, 60, 7);
-	GlareEffect glare;
 	sf::Clock c;
-	sf::Clock c1;
-	sf::Clock c2;
-	
+	GlareEffect glare(Vector2f(0, 0));
+
     shape.setFillColor(Color::Green);	
 
     while (window.isOpen())
@@ -61,36 +58,17 @@ int main(int argc, char ** argv)
 			}
         }
 
-		if (c1.getElapsedTime().asMilliseconds() >= 10)
+		if (c.getElapsedTime().asMilliseconds() >= 20)
 		{
-			/*Time t = c.getElapsedTime();
-			float a = 10 / t.asMilliseconds() + 0.1;
-			float b = 40 / t.asMilliseconds() + 2;
-
-			glare.outerShape[10].position.y += a;
-			glare.outerShape[0].position.y -= a;
-			glare.outerShape[20].position.y -= a;
-			glare.outerShape[6].position.x -= b;
-			glare.outerShape[4].position.x -= b;
-			glare.outerShape[14].position.x += b;
-			glare.outerShape[16].position.x += b;
-			
-			c1.restart();*/
-		}
-
-		if (c2.getElapsedTime().asSeconds() >= 2)
-		{
-			glare = GlareEffect();
+			glare.rotate(0.5, glare.getPosition());
+			glare.translate(Vector2f(0.5, 0.5));
 
 			c.restart();
-			c1.restart();
-			c2.restart();
 		}
 
         window.clear();
         window.draw(shape);
 		glare.draw(&window);
-		//grid.draw(&window);
         window.display();
     }
 

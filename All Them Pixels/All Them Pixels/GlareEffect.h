@@ -1,12 +1,13 @@
 #pragma once
 
+#include "Entity.h"
 #include <SFML\Graphics.hpp>
 
 using namespace sf;
 
-class GlareEffect
+class GlareEffect : public Entity
 {
-public:
+private:
 	float hwd;
 	float hwod;
 	float hwid;
@@ -41,8 +42,13 @@ public:
 	VertexArray outerShape;
 	VertexArray circle;
 
-public:
-	GlareEffect();
+protected:
+	void applyTransform(Transform transform, VertexArray &vertecies);
 
-	void draw(RenderWindow * window);
+public:
+	GlareEffect(Vector2f position);
+
+	void applyTransform(Transform transform) override;
+	void draw(RenderWindow * window) override;
+	void update(UpdateInfo info) override;
 };
