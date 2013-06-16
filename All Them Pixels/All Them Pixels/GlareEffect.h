@@ -48,6 +48,8 @@ protected:
 public:
 	GlareEffect(Vector2f position);
 
+	Rect<float> getBoundingBox() override;
+
 	void applyTransform(Transform transform) override;
 	void draw(RenderWindow * window) override;
 	void update(UpdateInfo info) override;

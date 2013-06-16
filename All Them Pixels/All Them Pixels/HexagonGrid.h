@@ -2,6 +2,7 @@
 
 #define _USE_MATH_DEFINES
 
+#include "Entity.h"
 #include "Hexagon.h"
 #include <math.h>
 
@@ -19,6 +20,8 @@ protected:
 public:
 	HexagonGrid(sf::Vector2f position, int layers, int tileSize, int tileSpacing);
 	~HexagonGrid();
+
+	void illuminate(Entity * entity);
 
 	void draw(sf::RenderWindow * window);
 };

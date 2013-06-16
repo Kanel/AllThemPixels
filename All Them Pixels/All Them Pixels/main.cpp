@@ -1,6 +1,6 @@
 #include "HexagonGrid.h"
 #include "GlareEffect.h"
-#include "GameCore.h"
+#include "Territory.h"
 #include "UpdateInfo.h"
 #include <SFML/Graphics.hpp>
 
@@ -15,7 +15,7 @@ int main(int argc, char ** argv)
 	VideoMode videoMode(500, 500);
     RenderWindow window(videoMode, windowtitle, 7, settings);
     CircleShape shape(100.f);
-	GameCore core;
+	Territory core(Vector2f(250, 250), 125);
 	sf::Clock c;
 
 	core.addEntity(new GlareEffect(Vector2f(0,0)));

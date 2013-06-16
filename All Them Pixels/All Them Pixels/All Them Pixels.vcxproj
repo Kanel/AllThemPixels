@@ -89,6 +89,7 @@
     <ClCompile Include="Hexagon.cpp" />
     <ClCompile Include="HexagonGrid.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Territory.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Entity.h" />
@@ -96,6 +97,7 @@
     <ClInclude Include="GlareEffect.h" />
     <ClInclude Include="Hexagon.h" />
     <ClInclude Include="HexagonGrid.h" />
+    <ClInclude Include="Territory.h" />
     <ClInclude Include="UpdateInfo.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

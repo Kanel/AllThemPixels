@@ -3,14 +3,21 @@
 #include <SFML\Graphics.hpp>
 #include <math.h>
 
+using namespace sf;
+
 class Hexagon
 {
 protected:
-	sf::VertexArray shape;
+	int radius;
+	Vector2f position;
+	VertexArray shape;
 
 public:
 	Hexagon();
-	Hexagon(sf::Vector2f position, int radius);
+	Hexagon(Vector2f position, int radius);
 
-	sf::VertexArray getShape();
+	Rect<float> getBoundingBox();
+	void setColor(Color color);
+
+	VertexArray getShape();
 };

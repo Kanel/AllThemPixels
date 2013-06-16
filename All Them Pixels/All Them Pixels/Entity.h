@@ -21,6 +21,8 @@ public:
 	virtual void rotate(float angle, Vector2f center);
 	virtual void scale(Vector2f factors, Vector2f center);
 
+	virtual Rect<float> getBoundingBox() = NULL;
+
 	virtual void draw(RenderWindow * window) = NULL;
 	virtual void update(UpdateInfo info) = NULL;
 };

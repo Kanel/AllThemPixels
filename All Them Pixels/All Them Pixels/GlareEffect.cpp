@@ -142,6 +142,11 @@ GlareEffect::GlareEffect(Vector2f position) : GlareEffect::Entity(position)
 	delete innerLayer;
 }
 
+Rect<float> GlareEffect::getBoundingBox()
+{
+	return Rect<float>(position.x - 10, position.y - 10, 20, 20);
+}
+
 void GlareEffect::applyTransform(Transform transform)
 {
 	Entity::applyTransform(transform);
