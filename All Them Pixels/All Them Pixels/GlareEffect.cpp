@@ -1,4 +1,5 @@
 #include "GlareEffect.h"
+#include "SFML\Window\Joystick.hpp"
 
 		/*if (c1.getElapsedTime().asMilliseconds() >= 10)
 		{
@@ -140,6 +141,13 @@ GlareEffect::GlareEffect(Vector2f position) : GlareEffect::Entity(position)
 
 	delete outerLayer;
 	delete innerLayer;
+
+	Vertex aimVertices[] =
+	{
+		Vertex(Vector2f(position.x,position.y)),
+		Vertex(Vector2f(position.x,position.y))
+	};
+
 }
 
 Rect<float> GlareEffect::getBoundingBox()
@@ -161,10 +169,52 @@ void GlareEffect::draw(RenderWindow * window)
 	window->draw(circle);
 	window->draw(innerShape);
 	window->draw(outerShape);
+	
+	window->draw(aimVertices, 2, sf::Lines);
+
 }
 
 void GlareEffect::update(UpdateInfo info)
 {
-	rotate(0.5, position);
-	translate(Vector2f(0.5, 0.5));
+	float leftStickY = sf::Joystick::getAxisPosition(0, sf::Joystick::Y);
+	float leftStickX = sf::Joystick::getAxisPosition(0, sf::Joystick::X);
+	float rightStickY = sf::Joystick::getAxisPosition(0, sf::Joystick::R);
+	float rightStickX = sf::Joystick::getAxisPosition(0, sf::Joystick::U);
+
+	Vector2f movement(0,0);
+	float rotation = 0;
+	/*
+	X  2
+	Y  3
+	B  1
+	A  
+	RB 5
+	LB 4
+	RT 
+	LT 
+	RS 
+	LS 
+	DL 
+	DR 
+	DU 
+	DD 
+	Back 6
+	Start 
+	*/
+	if (sf::Joystick::isButtonPressed(0, 5))
+	{
+		rotation = 10;
+	}
+	else if(sf::Joystick::isButtonPressed(0, 4))
+	{
+		rotation = -10;
+	}
+
+
+	aimVertices[0] = Vertex(Vector2f(position.x,position.y));
+	aimVertices[1] = Vertex(Vector2f(position.x+rightStickX*2,position.y+rightStickY*2));
+
+	rotate(rotation, position);
+
+	translate(Vector2f((leftStickX*leftStickX > 400) ? leftStickX/15 : 0, (leftStickY*leftStickY > 400) ? leftStickY/15 : 0));
 }

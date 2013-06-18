@@ -11,7 +11,7 @@ int HexagonGrid::getNumberOfTilesInLayer(int layer)
 }
 
 HexagonGrid::HexagonGrid(sf::Vector2f position, int layers, int tileSize, int tileSpacing)
-{	
+{
 	float originDistance = 2 * sqrtf(powf(tileSize / 2, 2) - powf(tileSize / 4, 2)) + tileSpacing;
 	
 	tiles = getNumberOfTiles(layers);
