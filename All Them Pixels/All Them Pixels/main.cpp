@@ -13,15 +13,12 @@ int main(int argc, char ** argv)
 	bool fullscreen = true;
 	Uint32 windowStyle = Style::Resize;	
 	ContextSettings settings(0, 0, 8, 2, 0);
-	VideoMode videoMode(500, 500);
+	VideoMode videoMode(1024, 1024);
     RenderWindow window(videoMode, windowtitle, 7, settings);
-    CircleShape shape(100.f);
-	Territory core(Vector2f(250, 250), 125);
+	Territory core(Vector2f(516, 516), 256);
 	sf::Clock c;
 
-	core.addEntity(new Player(100, Vector2f(250, 250)));
-	core.addEntity(new GlareEffect(Vector2f(400, 100)));
-    shape.setFillColor(Color::Green);
+	core.addEntity(new Player(&core, 100, Vector2f(512, 512)));
 
     while (window.isOpen())
     {
@@ -41,23 +38,8 @@ int main(int argc, char ** argv)
 			}
 			if (event.type == Event::Resized)
 			{
-				int height = event.size.height;
-				int width = event.size.width;
-
-				if (width > height)
-				{
-					shape.setRadius(height / 2);
-					shape.setPosition(width / 2 - height / 2, 0);
-				}
-				else
-				{
-					shape.setRadius(width / 2);
-					shape.setPosition(0, height / 2 - width / 2);
-				}
-				shape.setPointCount(3.14 * 2 * shape.getRadius() / 20);
-
-				videoMode.height = height;
-				videoMode.width = width;
+				videoMode.height = event.size.height;
+				videoMode.width = event.size.width;
 				
 				window.create(videoMode, windowtitle, windowStyle);
 			}
@@ -71,9 +53,9 @@ int main(int argc, char ** argv)
 
 			core.integrateSpawnQueue();
 			core.update(info);
+			core.cleanup();
 
 			window.clear();
-			window.draw(shape);
 			core.draw(&window);
 			window.display();
 

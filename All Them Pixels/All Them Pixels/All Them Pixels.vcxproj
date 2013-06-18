@@ -93,6 +93,8 @@
     <ClCompile Include="HexagonGrid.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Projectile.cpp" />
+    <ClCompile Include="Shapes.cpp" />
     <ClCompile Include="Territory.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -104,6 +106,8 @@
     <ClInclude Include="Hexagon.h" />
     <ClInclude Include="HexagonGrid.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="Projectile.h" />
+    <ClInclude Include="Shapes.h" />
     <ClInclude Include="Territory.h" />
     <ClInclude Include="UpdateInfo.h" />
   </ItemGroup>

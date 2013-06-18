@@ -62,9 +62,11 @@ void Player::updateAim()
 	aimDirection = direction;
 }
 
-Player::Player(unsigned int hp, Vector2f position) : Destructible(hp, position)
+Player::Player(Territory * removePlease, unsigned int hp, Vector2f position) : Destructible(hp, position)
 {
-	Color color(175, 175, 225);
+	Color color(255, 255, 255);
+
+	this->removePlease = removePlease;
 
 	shape.setPrimitiveType(PrimitiveType::Quads);
 	shape.append(Vertex(Vector2f(position.x - 20, position.y - 20), color));
@@ -96,7 +98,8 @@ void Player::applyTransform(Transform transform)
 
 Rect<float> Player::getBoundingBox()
 {
-	return Rect<float>();
+	// Todo: stop cheating
+	return Rect<float>(position.x - 20, position.y - 20, 40, 40);
 }
 
 void Player::draw(RenderWindow * window)
@@ -107,6 +110,21 @@ void Player::draw(RenderWindow * window)
 
 void Player::update(UpdateInfo info)
 {
+	Vector2f speed = getJoystickVector(Joystick::Axis::U, Joystick::Axis::R);
+	Vector2f spawn = aimBoxPosition;
+
+	
+
 	updateAim();
 	translate(getJoystickVector(Joystick::Axis::X, Joystick::Axis::Y));
+
+	if (sqrtf(powf(speed.x, 2) + powf(speed.y, 2)) > 0)
+	{
+		speed /= sqrtf(powf(speed.x, 2) + powf(speed.y, 2)) / 10;
+
+		for (int i = 0; i < 100; i++)
+		{
+			removePlease->addEntity(new Projectile(spawn, Vector2f(speed.x - 5 + rand() % 10, speed.y - 5 + rand() % 10)));
+		}
+	}
 }

@@ -1,8 +1,15 @@
 #include "Territory.h"
 
-Territory::Territory(Vector2f position, int radius) : grid(position, 5, 28, 2)
+Territory::Territory(Vector2f position, int radius)
 {
-	
+	shape.top = position.y - radius;
+	shape.left = position.x - radius;
+	shape.width = radius * 2;
+	shape.height = radius * 2;
+
+	Shapes::rectangle(border, 0, position, radius * 2, radius * 2);
+
+	border[4] = border[0];
 }
 
 Territory::~Territory()
@@ -52,9 +59,28 @@ void Territory::integrateSpawnQueue()
 	}
 }
 
+void Territory::cleanup()
+{
+	for (std::list<Entity *>::iterator it = entities.begin(); it != entities.end();)
+	{
+		if (!Shapes::contains(shape, (*it)->getBoundingBox()))
+		{
+			Entity * entity = *it;
+
+			it = entities.erase(it);
+
+			delete entity;
+		}
+		else
+		{
+			it++;
+		}
+	}
+}
+
 void Territory::draw(RenderWindow * window)
 {
-	grid.draw(window);
+	window->draw(border, 5, PrimitiveType::LinesStrip);
 
 	for (std::list<Entity *>::iterator it = entities.begin(); it != entities.end(); it++)
 	{
@@ -67,6 +93,5 @@ void Territory::update(UpdateInfo info)
 	for (std::list<Entity *>::iterator it = entities.begin(); it != entities.end(); it++)
 	{
 		(*it)->update(info);
-		grid.illuminate(*it);
 	}
 }

@@ -2,8 +2,12 @@
 
 #define _USE_MATH_DEFINES
 
+#include "Territory.h"
 #include "Destructible.h"
+#include "Projectile.h"
 #include <math.h>
+
+class Territory;
 
 class Player : public Destructible
 {
@@ -12,6 +16,7 @@ protected:
 	Vector2f aimBoxPosition;
 	VertexArray shape;
 	VertexArray aimBox;
+	Territory * removePlease;
 
 protected:
 	void applyTransform(Transform transform, VertexArray &vertecies);
@@ -20,7 +25,7 @@ protected:
 	void updateAim();
 
 public:
-	Player(unsigned int hp, Vector2f position);
+	Player(Territory * removePlease, unsigned int hp, Vector2f position);
 
 	void applyTransform(Transform transform) override;
 

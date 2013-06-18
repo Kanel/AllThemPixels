@@ -2,7 +2,8 @@
 
 #include "Entity.h"
 #include "UpdateInfo.h"
-#include "HexagonGrid.h"
+#include "Shapes.h"
+#include "Player.h"
 #include <SFML\Graphics.hpp>
 #include <list>
 #include <queue>
@@ -14,7 +15,8 @@ using namespace sf;
 class Territory
 {
 private:
-	HexagonGrid grid;
+	Rect<float> shape;
+	Vertex border[5];
 	queue<Entity *> spawnQueue;
 	list<Entity *> entities;
 
@@ -29,6 +31,7 @@ public:
 	void removeEntity(Entity * entity);
 	void integrateSpawnQueue();
 
+	void cleanup();
 	void draw(RenderWindow * window);
 	void update(UpdateInfo info);
 };

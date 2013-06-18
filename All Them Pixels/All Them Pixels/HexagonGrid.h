@@ -4,6 +4,7 @@
 
 #include "Entity.h"
 #include "Hexagon.h"
+#include "Shapes.h"
 #include <math.h>
 
 

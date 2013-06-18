@@ -51,6 +51,12 @@
     <ClCompile Include="Player.cpp">
       <Filter>Source Files\Entities</Filter>
     </ClCompile>
+    <ClCompile Include="Shapes.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Projectile.cpp">
+      <Filter>Source Files\Entities</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Hexagon.h">
@@ -81,6 +87,12 @@
       <Filter>Header Files\Entities</Filter>
     </ClInclude>
     <ClInclude Include="Destructible.h">
+      <Filter>Header Files\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Shapes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Projectile.h">
       <Filter>Header Files\Entities</Filter>
     </ClInclude>
   </ItemGroup>
