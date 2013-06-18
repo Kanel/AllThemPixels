@@ -1,5 +1,6 @@
 #include "HexagonGrid.h"
 #include "GlareEffect.h"
+#include "Player.h"
 #include "Territory.h"
 #include "UpdateInfo.h"
 #include <SFML/Graphics.hpp>
@@ -18,7 +19,8 @@ int main(int argc, char ** argv)
 	Territory core(Vector2f(250, 250), 125);
 	sf::Clock c;
 
-	core.addEntity(new GlareEffect(Vector2f(0,0)));
+	core.addEntity(new Player(100, Vector2f(250, 250)));
+	core.addEntity(new GlareEffect(Vector2f(400, 100)));
     shape.setFillColor(Color::Green);
 
     while (window.isOpen())
