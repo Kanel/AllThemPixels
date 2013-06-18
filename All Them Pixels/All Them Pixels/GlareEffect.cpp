@@ -166,19 +166,18 @@ void GlareEffect::draw(RenderWindow * window)
 	window->draw(innerShape);
 	window->draw(outerShape);
 	
-	window->draw(aimVertices, 2, sf::Lines);
+	window->draw(aimVertices, 2, PrimitiveType::Lines);
 
 }
 
 void GlareEffect::update(UpdateInfo info)
 {
-	float leftStickY = sf::Joystick::getAxisPosition(0, sf::Joystick::Y);
-	float leftStickX = sf::Joystick::getAxisPosition(0, sf::Joystick::X);
-	float rightStickY = sf::Joystick::getAxisPosition(0, sf::Joystick::R);
-	float rightStickX = sf::Joystick::getAxisPosition(0, sf::Joystick::U);
-
-	Vector2f movement(0,0);
+	float leftStickY = Joystick::getAxisPosition(0, Joystick::Y);
+	float leftStickX = Joystick::getAxisPosition(0, Joystick::X);
+	float rightStickY = Joystick::getAxisPosition(0, Joystick::R);
+	float rightStickX = Joystick::getAxisPosition(0, Joystick::U);
 	float rotation = 0;
+	Vector2f movement(0,0);
 	/*
 	X  2
 	Y  3
@@ -197,20 +196,20 @@ void GlareEffect::update(UpdateInfo info)
 	Back 6
 	Start 
 	*/
-	if (sf::Joystick::isButtonPressed(0, 5))
+	if (Joystick::isButtonPressed(0, 5))
 	{
 		rotation = 10;
 	}
-	else if(sf::Joystick::isButtonPressed(0, 4))
+	else if(Joystick::isButtonPressed(0, 4))
 	{
 		rotation = -10;
 	}
 
 
-	aimVertices[0] = Vertex(Vector2f(position.x,position.y));
-	aimVertices[1] = Vertex(Vector2f(position.x+rightStickX*2,position.y+rightStickY*2));
+	aimVertices[0] = Vertex(Vector2f(position.x, position.y));
+	aimVertices[1] = Vertex(Vector2f(position.x + rightStickX * 2, position.y + rightStickY * 2));
 
 	rotate(rotation, position);
 
-	translate(Vector2f((leftStickX*leftStickX > 400) ? leftStickX/15 : 0, (leftStickY*leftStickY > 400) ? leftStickY/15 : 0));
+	translate(Vector2f((leftStickX * leftStickX > 400) ? leftStickX / 15 : 0, (leftStickY * leftStickY > 400) ? leftStickY / 15 : 0));
 }
