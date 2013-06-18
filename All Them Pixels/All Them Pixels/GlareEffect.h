@@ -42,7 +42,7 @@ private:
 	VertexArray outerShape;
 	VertexArray circle;
 
-	Vertex aimVertices[];
+	Vertex aimVertices[2];
 
 protected:
 	void applyTransform(Transform transform, VertexArray &vertecies);

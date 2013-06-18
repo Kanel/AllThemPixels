@@ -142,12 +142,8 @@ GlareEffect::GlareEffect(Vector2f position) : GlareEffect::Entity(position)
 	delete outerLayer;
 	delete innerLayer;
 
-	Vertex aimVertices[] =
-	{
-		Vertex(Vector2f(position.x,position.y)),
-		Vertex(Vector2f(position.x,position.y))
-	};
-
+	aimVertices[0] = Vertex(Vector2f(position.x,position.y));
+	aimVertices[1] = Vertex(Vector2f(position.x,position.y));
 }
 
 Rect<float> GlareEffect::getBoundingBox()
