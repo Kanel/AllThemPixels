@@ -1,5 +1,4 @@
 #include "GlareEffect.h"
-#include "SFML\Window\Joystick.hpp"
 
 		/*if (c1.getElapsedTime().asMilliseconds() >= 10)
 		{

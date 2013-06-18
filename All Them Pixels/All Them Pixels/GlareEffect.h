@@ -2,6 +2,7 @@
 
 #include "Entity.h"
 #include <SFML\Graphics.hpp>
+#include <SFML\Window\Joystick.hpp>
 
 using namespace sf;
 
