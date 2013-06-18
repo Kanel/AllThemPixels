@@ -10,7 +10,6 @@ protected:
 	unsigned int hp;
 
 public:
-	Destructible(usngined int);
 
 
 	int getHP();
