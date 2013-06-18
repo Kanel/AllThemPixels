@@ -1,10 +1,12 @@
 #pragma once
 
-#include "Entity.h"
+#include "Destructible.h"
 
-class Enemy : Entity
+class Enemy : public Destructible
 {
 public:
+	Enemy(unsigned int hp, Vector2f position);
+
 	void applyTransform(Transform transform) override;
 
 	Rect<float> getBoundingBox() override;

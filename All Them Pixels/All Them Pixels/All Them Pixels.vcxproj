@@ -85,12 +85,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Destructible.cpp" />
+    <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="GameCore.cpp" />
     <ClCompile Include="GlareEffect.cpp" />
     <ClCompile Include="Hexagon.cpp" />
     <ClCompile Include="HexagonGrid.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Player.cpp" />
     <ClCompile Include="Territory.cpp" />
   </ItemGroup>
   <ItemGroup>

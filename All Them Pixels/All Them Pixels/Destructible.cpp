@@ -1,5 +1,10 @@
 #include "Destructible.h"
 
+Destructible::Destructible(unsigned int hp, Vector2f position) : Entity(position)
+{
+	this->hp = hp;
+}
+
 int Destructible::getHP()
 {
 	return hp;

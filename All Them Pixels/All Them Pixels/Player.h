@@ -1,11 +1,11 @@
 #pragma once
 
-#include "Entity.h"
+#include "Destructible.h"
 
-class Player : Entity
+class Player : public Destructible
 {
 public:
-	Player();
+	Player(unsigned int hp, Vector2f position);
 
 	void applyTransform(Transform transform) override;
 
