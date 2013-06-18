@@ -42,6 +42,8 @@ private:
 	VertexArray outerShape;
 	VertexArray circle;
 
+	Vertex aimVertices[];
+
 protected:
 	void applyTransform(Transform transform, VertexArray &vertecies);
 
