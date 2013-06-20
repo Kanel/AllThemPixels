@@ -7,6 +7,13 @@ Projectile::Projectile(Vector2f position, Vector2f speed, int ttl) : Entity(posi
 	
 	this->ttl = ttl;
 	this->speed = speed;
+	this->type = EntityTypes::ProjectileEntity;
+	this->expended = false;
+}
+
+bool Projectile::isExpended()
+{
+	return expended;
 }
 
 void Projectile::applyTransform(Transform transform)
@@ -32,7 +39,8 @@ void Projectile::draw(RenderWindow * window)
 void Projectile::update(UpdateInfo info)
 {
 	ttl--;
-	if (ttl < 1) alive = false;
+	
+	expended = !(ttl < 1);
 
 	translate(speed);
 }

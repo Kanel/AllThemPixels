@@ -1,5 +1,7 @@
 #pragma once
 
+#include "EntityTypes.h"
+#include "Shapes.h"
 #include "UpdateInfo.h"
 #include <SFML\Graphics.hpp>
 
@@ -9,14 +11,16 @@ class Entity
 {
 protected:
 	Vector2f position;
-	bool alive;
+	EntityTypes type;
 
 public:
 	Entity(Vector2f position);
 
 	virtual Vector2f getPosition();
 	virtual void setPosition(Vector2f position);
-	virtual bool isAlive();
+
+	EntityTypes getType();
+	virtual bool isExpended() = NULL;
 
 	virtual void applyTransform(Transform transform);
 	virtual void translate(Vector2f offset);
@@ -24,6 +28,7 @@ public:
 	virtual void scale(Vector2f factors, Vector2f center);
 
 	virtual Rect<float> getBoundingBox() = NULL;
+	virtual bool collidesWith(Entity * other);
 
 	virtual void draw(RenderWindow * window) = NULL;
 	virtual void update(UpdateInfo info) = NULL;

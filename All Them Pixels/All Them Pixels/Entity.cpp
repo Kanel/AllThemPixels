@@ -3,6 +3,8 @@
 Entity::Entity(Vector2f position)
 {
 	setPosition(position);
+
+	type = EntityTypes::UnknownEntity;
 }
 
 Vector2f Entity::getPosition()
@@ -10,14 +12,14 @@ Vector2f Entity::getPosition()
 	return position;
 }
 
+EntityTypes Entity::getType()
+{
+	return type;
+}
+
 void Entity::setPosition(Vector2f position)
 {
 	this->position = position;
-}
-
-bool Entity::isAlive()
-{
-	return alive;
 }
 
 void Entity::applyTransform(Transform transform)
@@ -50,4 +52,10 @@ void Entity::scale(Vector2f factors, Vector2f center)
 	transform.scale(factors, center);
 
 	applyTransform(transform);
+}
+
+
+bool Entity::collidesWith(Entity * other)
+{
+	return Shapes::contains(getBoundingBox(), other->getBoundingBox());
 }

@@ -15,7 +15,7 @@ void Destructible::setHP(int hp)
 	this->hp = hp;
 }
 
-bool Destructible::isAlive()
+bool Destructible::isExpended()
 {
-	return hp > 0;
+	return !(hp > 0);
 }

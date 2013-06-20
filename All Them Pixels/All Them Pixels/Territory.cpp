@@ -72,10 +72,10 @@ void Territory::cleanup()
 {
 	for (std::list<Entity *>::iterator it = entities.begin(); it != entities.end();)
 	{
-		if (!(*it)->isAlive())
-		{
-			Entity * entity = *it;
+		Entity * entity = *it;
 
+		if (!Shapes::contains(shape, entity->getBoundingBox()) || entity->isExpended())
+		{
 			it = entities.erase(it);
 
 			delete entity;

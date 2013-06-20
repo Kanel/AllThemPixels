@@ -12,5 +12,6 @@ public:
 
 	int getHP();
 	void setHP(int hp);
-	bool isAlive();
+
+	bool isExpended() override;
 };

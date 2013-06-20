@@ -67,6 +67,7 @@ Player::Player(Territory * removePlease, unsigned int hp, Vector2f position) : D
 	Color color(255, 255, 255);
 
 	this->removePlease = removePlease;
+	type = EntityTypes::PlayerEntity;
 
 	shape.setPrimitiveType(PrimitiveType::Quads);
 	shape.append(Vertex(Vector2f(position.x - 20, position.y - 20), color));
