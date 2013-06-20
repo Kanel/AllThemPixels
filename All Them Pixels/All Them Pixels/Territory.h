@@ -4,6 +4,7 @@
 #include "UpdateInfo.h"
 #include "Shapes.h"
 #include "Player.h"
+#include "FloorTiles.h"
 #include <SFML\Graphics.hpp>
 #include <list>
 #include <queue>
@@ -16,9 +17,10 @@ class Territory
 {
 private:
 	Rect<float> shape;
-	Vertex border[5];
+	Vertex border[7];
 	queue<Entity *> spawnQueue;
 	list<Entity *> entities;
+	FloorTiles floorTiles;
 
 public:
 	bool active;

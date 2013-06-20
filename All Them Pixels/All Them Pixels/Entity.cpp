@@ -15,6 +15,11 @@ void Entity::setPosition(Vector2f position)
 	this->position = position;
 }
 
+bool Entity::isAlive()
+{
+	return alive;
+}
+
 void Entity::applyTransform(Transform transform)
 {
 	position = transform.transformPoint(position);

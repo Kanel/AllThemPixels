@@ -1,9 +1,11 @@
 #include  "Projectile.h"
 
-Projectile::Projectile(Vector2f position, Vector2f speed) : Entity(position)
+Projectile::Projectile(Vector2f position, Vector2f speed, int ttl) : Entity(position)
 {
-	Shapes::rectangle(shape, 0, position, 10, 10);
-
+	Shapes::hexagon(shape,0,position,5,Color(250,250,250,100));
+	//Shapes::rectangle(shape, 0, position, 10, 10);
+	
+	this->ttl = ttl;
 	this->speed = speed;
 }
 
@@ -11,7 +13,7 @@ void Projectile::applyTransform(Transform transform)
 {
 	Entity::applyTransform(transform);
 
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < 6; i++)
 	{
 		shape[i].position = transform.transformPoint(shape[i].position);
 	}
@@ -24,10 +26,13 @@ Rect<float> Projectile::getBoundingBox()
 
 void Projectile::draw(RenderWindow * window)
 {
-	window->draw(shape, 4, PrimitiveType::Quads);
+	window->draw(shape, 6, PrimitiveType::TrianglesFan);
 }
 
 void Projectile::update(UpdateInfo info)
 {
+	ttl--;
+	if (ttl < 1) alive = false;
+
 	translate(speed);
 }

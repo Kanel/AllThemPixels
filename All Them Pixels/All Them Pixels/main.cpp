@@ -1,5 +1,5 @@
-#include "HexagonGrid.h"
-#include "GlareEffect.h"
+//#include "HexagonGrid.h"
+//#include "GlareEffect.h"
 #include "Player.h"
 #include "Territory.h"
 #include "UpdateInfo.h"
@@ -50,6 +50,7 @@ int main(int argc, char ** argv)
 			UpdateInfo info;
 
 			info.elapsedSeconds = 20;
+			info.ticks = 0;
 
 			core.integrateSpawnQueue();
 			core.update(info);

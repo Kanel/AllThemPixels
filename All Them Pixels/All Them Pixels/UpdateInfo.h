@@ -3,4 +3,5 @@
 struct UpdateInfo
 {
 	int elapsedSeconds;
+	int ticks;
 };

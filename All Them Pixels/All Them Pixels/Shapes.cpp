@@ -7,6 +7,14 @@ void Shapes::hexagon(Vertex vertecies[], int start, Vector2f position, float rad
 
 void Shapes::hexagon(Vertex vertecies[], int start, Vector2f position, float radius, Color color)
 {
+	float width = sqrt(3 * (radius * radius) / 4);
+	vertecies[start + 0] = Vertex(Vector2f(position.x, position.y - radius), color);
+	vertecies[start + 1] = Vertex(Vector2f(position.x + width, position.y - (radius/2)), color);
+	vertecies[start + 2] = Vertex(Vector2f(position.x + width, position.y + (radius/2)), color);
+	vertecies[start + 3] = Vertex(Vector2f(position.x, position.y + radius), color);
+	vertecies[start + 4] = Vertex(Vector2f(position.x - width, position.y + (radius/2)), color);
+	vertecies[start + 5] = Vertex(Vector2f(position.x - width, position.y - (radius/2)), color);
+	/*
 	for (int i = 0; i < 7; i++)
 	{
 		float x = position.x + cosf(1.0472 * i) * radius;
@@ -14,6 +22,7 @@ void Shapes::hexagon(Vertex vertecies[], int start, Vector2f position, float rad
 
 		vertecies[start + i] = Vertex(Vector2f(x, y), color);
 	}
+	*/
 }
 
 void Shapes::rectangle(Vertex vertecies[], int start, Vector2f position, float height, float width)

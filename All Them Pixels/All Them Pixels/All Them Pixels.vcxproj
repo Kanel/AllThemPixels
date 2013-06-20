@@ -87,6 +87,7 @@
     <ClCompile Include="Destructible.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Entity.cpp" />
+    <ClCompile Include="FloorTiles.cpp" />
     <ClCompile Include="GameCore.cpp" />
     <ClCompile Include="GlareEffect.cpp" />
     <ClCompile Include="Hexagon.cpp" />
@@ -101,6 +102,7 @@
     <ClInclude Include="Destructible.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Entity.h" />
+    <ClInclude Include="FloorTiles.h" />
     <ClInclude Include="GameCore.h" />
     <ClInclude Include="GlareEffect.h" />
     <ClInclude Include="Hexagon.h" />

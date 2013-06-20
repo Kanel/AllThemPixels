@@ -9,12 +9,14 @@ class Entity
 {
 protected:
 	Vector2f position;
+	bool alive;
 
 public:
 	Entity(Vector2f position);
 
 	virtual Vector2f getPosition();
 	virtual void setPosition(Vector2f position);
+	virtual bool isAlive();
 
 	virtual void applyTransform(Transform transform);
 	virtual void translate(Vector2f offset);

@@ -113,18 +113,20 @@ void Player::update(UpdateInfo info)
 	Vector2f speed = getJoystickVector(Joystick::Axis::U, Joystick::Axis::R);
 	Vector2f spawn = aimBoxPosition;
 
-	
+	int range = sqrt(speed.x * speed.x + speed.y * speed.y) * 4;
 
 	updateAim();
-	translate(getJoystickVector(Joystick::Axis::X, Joystick::Axis::Y));
+	translate(Vector2f(Joystick::getAxisPosition(0, Joystick::Axis::X) / 200, 
+					Joystick::getAxisPosition(0, Joystick::Axis::Y) / 200));
+//	translate(getJoystickVector(Joystick::Axis::X, Joystick::Axis::Y));
 
 	if (sqrtf(powf(speed.x, 2) + powf(speed.y, 2)) > 0)
 	{
 		speed /= sqrtf(powf(speed.x, 2) + powf(speed.y, 2)) / 10;
 
-		for (int i = 0; i < 100; i++)
+		for (int i = 0; i < 20; i++)
 		{
-			removePlease->addEntity(new Projectile(spawn, Vector2f(speed.x - 5 + rand() % 10, speed.y - 5 + rand() % 10)));
+			removePlease->addEntity(new Projectile(spawn, Vector2f(speed.x - 5 + rand() % 10, speed.y - 5 + rand() % 10), range));
 		}
 	}
 }
