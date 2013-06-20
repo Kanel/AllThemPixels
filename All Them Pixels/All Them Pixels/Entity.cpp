@@ -1,4 +1,3 @@
-//THIS IS A COMMENT ON LINE ZERO
 #include "Entity.h"
 
 Entity::Entity(Vector2f position)
