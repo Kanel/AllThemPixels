@@ -85,7 +85,7 @@ void Territory::cleanup()
 		Entity * entity = *it;
 
 		//if (!Shapes::contains(shape, entity->getBoundingBox()) || entity->isExpended())
-		if (!entity->collidesWith(convexHull))
+		if (!entity->collidesWith(convexHull) || entity->isExpended())
 		{
 			it = entities.erase(it);
 
