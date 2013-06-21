@@ -4,6 +4,7 @@
 #include "Destructible.h"
 #include <SFML\Graphics\Vertex.hpp>
 
+using std::vector;
 using namespace sf;
 
 class Enemy : public Destructible
@@ -17,6 +18,7 @@ public:
 	void applyTransform(Transform transform) override;
 
 	Rect<float> getBoundingBox() override;
+	ConvexHull getConvexHull() override;
 
 	void draw(RenderWindow * window) override;
 	void update(UpdateInfo info) override;

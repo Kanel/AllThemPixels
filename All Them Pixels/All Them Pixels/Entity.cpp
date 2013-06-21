@@ -54,8 +54,16 @@ void Entity::scale(Vector2f factors, Vector2f center)
 	applyTransform(transform);
 }
 
-
 bool Entity::collidesWith(Entity * other)
 {
-	return Shapes::contains(getBoundingBox(), other->getBoundingBox());
+	bool collision = Shapes::contains(getBoundingBox(), other->getBoundingBox());
+	
+	return collision && collidesWith(other->getConvexHull());
+}
+
+bool Entity::collidesWith(ConvexHull convexHull)
+{
+	list<Vector2f> penetration;
+
+	return SAT::collides(getConvexHull(), convexHull, Vector2f(), penetration);
 }

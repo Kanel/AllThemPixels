@@ -17,6 +17,18 @@ Rect<float> Enemy::getBoundingBox()
 	return Rect<float>(position.x - 10, position.y - 10, 20, 20);
 }
 
+ConvexHull Enemy::getConvexHull()
+{
+	vector<Vector2f> vertecies;
+
+	for (int i = 0; i < 4; i++)
+	{
+		vertecies.push_back(shape[i].position);
+	}
+
+	return MonotoneChain::getConvexHull(vertecies);
+}
+
 void Enemy::draw(RenderWindow * window)
 {
 	window->draw(shape, 4, PrimitiveType::Quads);

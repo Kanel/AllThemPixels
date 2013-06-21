@@ -19,3 +19,8 @@ bool Destructible::isExpended()
 {
 	return !(hp > 0);
 }
+
+bool Destructible::isEtheral()
+{
+	return false;
+}

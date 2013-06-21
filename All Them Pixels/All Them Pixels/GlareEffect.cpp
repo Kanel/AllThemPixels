@@ -145,6 +145,11 @@ GlareEffect::GlareEffect(Vector2f position) : GlareEffect::Entity(position)
 	aimVertices[1] = Vertex(Vector2f(position.x,position.y));
 }
 
+bool GlareEffect::isEtheral()
+{
+	return true;
+}
+
 Rect<float> GlareEffect::getBoundingBox()
 {
 	return Rect<float>(position.x - 10, position.y - 10, 20, 20);

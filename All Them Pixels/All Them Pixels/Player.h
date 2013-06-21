@@ -7,6 +7,8 @@
 #include "Projectile.h"
 #include <math.h>
 
+using std::vector;
+
 class Territory;
 
 class Player : public Destructible
@@ -30,6 +32,7 @@ public:
 	void applyTransform(Transform transform) override;
 
 	Rect<float> getBoundingBox() override;
+	ConvexHull getConvexHull() override;
 
 	void draw(RenderWindow * window) override;
 	void update(UpdateInfo info) override;

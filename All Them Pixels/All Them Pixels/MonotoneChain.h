@@ -9,16 +9,13 @@ using namespace sf;
 
 typedef std::vector<Vector2f> ConvexHull;
 
-namespace Geometry
+static class MonotoneChain
 {
-	static class MonotoneChain
-	{
-	private:
-		static bool compare(Vector2f a, Vector2f b);
-		static float cross(std::vector<Vector2f> verticies, Vector2f next);
-		static void clean(std::vector<Vector2f> &verticies, Vector2f next);
+private:
+	static bool compare(Vector2f a, Vector2f b);
+	static float cross(std::vector<Vector2f> verticies, Vector2f next);
+	static void clean(std::vector<Vector2f> &verticies, Vector2f next);
 
-	public:
-		static ConvexHull getConvexHull(std::vector<Vector2f> verticies);
-	};
-}
+public:
+	static ConvexHull getConvexHull(std::vector<Vector2f> verticies);
+};

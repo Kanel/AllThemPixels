@@ -70,11 +70,22 @@ void Territory::integrateSpawnQueue()
 
 void Territory::cleanup()
 {
+	vector<Vector2f> vertecies;
+	ConvexHull convexHull;
+
+	for (int i = 0; i < 6; i++)
+	{
+		vertecies.push_back(border[i].position);
+	}
+
+	convexHull = MonotoneChain::getConvexHull(vertecies);
+
 	for (std::list<Entity *>::iterator it = entities.begin(); it != entities.end();)
 	{
 		Entity * entity = *it;
 
-		if (!Shapes::contains(shape, entity->getBoundingBox()) || entity->isExpended())
+		//if (!Shapes::contains(shape, entity->getBoundingBox()) || entity->isExpended())
+		if (!entity->collidesWith(convexHull))
 		{
 			it = entities.erase(it);
 

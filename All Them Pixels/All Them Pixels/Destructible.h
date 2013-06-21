@@ -14,4 +14,5 @@ public:
 	void setHP(int hp);
 
 	bool isExpended() override;
+	bool isEtheral() override;
 };

@@ -16,6 +16,11 @@ bool Projectile::isExpended()
 	return expended;
 }
 
+bool Projectile::isEtheral()
+{
+	return false;
+}
+
 void Projectile::applyTransform(Transform transform)
 {
 	Entity::applyTransform(transform);
@@ -29,6 +34,18 @@ void Projectile::applyTransform(Transform transform)
 Rect<float> Projectile::getBoundingBox()
 {
 	return Rect<float>(position.x - 5, position.y - 5, 10, 10);
+}
+
+ConvexHull Projectile::getConvexHull()
+{
+	vector<Vector2f> vertecies;
+
+	for (int i = 0; i < 6; i++)
+	{
+		vertecies.push_back(shape[i].position);
+	}
+
+	return MonotoneChain::getConvexHull(vertecies);
 }
 
 void Projectile::draw(RenderWindow * window)

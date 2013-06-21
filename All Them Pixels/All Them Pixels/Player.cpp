@@ -103,6 +103,18 @@ Rect<float> Player::getBoundingBox()
 	return Rect<float>(position.x - 20, position.y - 20, 40, 40);
 }
 
+ConvexHull Player::getConvexHull()
+{
+	vector<Vector2f> vertecies;
+
+	for (int i = 0; i < shape.getVertexCount(); i++)
+	{
+		vertecies.push_back(shape[i].position);
+	}
+
+	return MonotoneChain::getConvexHull(vertecies);
+}
+
 void Player::draw(RenderWindow * window)
 {
 	window->draw(shape);

@@ -51,6 +51,8 @@ protected:
 public:
 	GlareEffect(Vector2f position);
 
+	bool isEtheral() override;
+
 	Rect<float> getBoundingBox() override;
 
 	void applyTransform(Transform transform) override;
