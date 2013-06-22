@@ -48,11 +48,11 @@ int main(int argc, char ** argv)
 			}
         }
 
-		if (c.getElapsedTime().asMilliseconds() >= 20)
+		if (c.getElapsedTime().asMilliseconds() >= 10)
 		{
 			UpdateInfo info;
 
-			info.elapsedSeconds = 20;
+			info.elapsedSeconds = 10;
 			info.ticks = 0;
 
 			core.integrateSpawnQueue();
