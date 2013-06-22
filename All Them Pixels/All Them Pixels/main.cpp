@@ -4,6 +4,7 @@
 #include "Territory.h"
 #include "UpdateInfo.h"
 #include <SFML/Graphics.hpp>
+#include <iostream>
 
 using namespace sf;
 
@@ -17,6 +18,8 @@ int main(int argc, char ** argv)
     RenderWindow window(videoMode, windowtitle, 7, settings);
 	Territory core(Vector2f(516, 516), 256);
 	sf::Clock c;
+	sf::Clock elapsedTime;
+	int fps = 0;
 
 	core.addEntity(new Player(&core, 100, Vector2f(512, 512)));
 
@@ -60,7 +63,18 @@ int main(int argc, char ** argv)
 			core.draw(&window);
 			window.display();
 
+			fps++;
+
 			c.restart();
+		}
+
+		if (elapsedTime.getElapsedTime().asMilliseconds() >= 1000)
+		{
+			std::cout << "FPS: " << fps << "\n";
+
+			fps = 0;
+
+			elapsedTime.restart();
 		}
     }
 
