@@ -86,11 +86,26 @@ void Territory::cleanup()
 
 	for (std::list<Entity *>::iterator it = entities.begin(); it != entities.end();)
 	{
+		bool clean = false;
 		Entity * entity = *it;
-		float distanceToCenter = Vector2fMath::distance(position, entity->getPosition());
+
+		if (entity->isExpended())
+		{
+			clean = true;
+		}
+		else if (!Enum::isFlagSet(entity->getType(), EntityTypes::ProjectileEntity))
+		{
+			float distanceToCenter = Vector2fMath::distance(position, entity->getPosition());
+
+			if (distanceToCenter >= threshold && !entity->collidesWith(convexHull))
+			{
+				clean = true;
+			}
+		}
+		
 
 		//if (!Shapes::contains(shape, entity->getBoundingBox()) || entity->isExpended())
-		if (distanceToCenter >= threshold && (entity->isExpended() || !entity->collidesWith(convexHull)))
+		if (clean)
 		{
 			it = entities.erase(it);
 
