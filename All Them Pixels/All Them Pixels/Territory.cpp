@@ -2,12 +2,15 @@
 
 Territory::Territory(Vector2f position, int radius)
 {
+	this->position = position;
+	this->radius = radius;
+
 	shape.top = position.y - radius;
 	shape.left = position.x - radius;
 	shape.width = radius * 2;
 	shape.height = radius * 2;
 
-	Shapes::hexagon(border,0,position,400,Color(250,250,250,100));
+	Shapes::hexagon(border, 0, position, 400, Color(250,250,250,100));
 	//Shapes::rectangle(border, 0, position, radius * 2, radius * 2);
 
 	border[6] = border[0];
@@ -70,6 +73,7 @@ void Territory::integrateSpawnQueue()
 
 void Territory::cleanup()
 {
+	float threshold = radius * 0.8;
 	vector<Vector2f> vertecies;
 	ConvexHull convexHull;
 
@@ -83,9 +87,10 @@ void Territory::cleanup()
 	for (std::list<Entity *>::iterator it = entities.begin(); it != entities.end();)
 	{
 		Entity * entity = *it;
+		float distanceToCenter = Vector2fMath::distance(position, entity->getPosition());
 
 		//if (!Shapes::contains(shape, entity->getBoundingBox()) || entity->isExpended())
-		if (!entity->collidesWith(convexHull) || entity->isExpended())
+		if (distanceToCenter >= threshold && (entity->isExpended() || !entity->collidesWith(convexHull)))
 		{
 			it = entities.erase(it);
 
