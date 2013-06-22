@@ -5,6 +5,7 @@
 #include "Territory.h"
 #include "Destructible.h"
 #include "Projectile.h"
+#include "UserInput.h"
 #include <math.h>
 
 using std::vector;

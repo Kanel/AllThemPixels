@@ -100,6 +100,7 @@
     <ClCompile Include="SAT.cpp" />
     <ClCompile Include="Shapes.cpp" />
     <ClCompile Include="Territory.cpp" />
+    <ClCompile Include="UserInput.cpp" />
     <ClCompile Include="Vector2fMath.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -120,6 +121,7 @@
     <ClInclude Include="Shapes.h" />
     <ClInclude Include="Territory.h" />
     <ClInclude Include="UpdateInfo.h" />
+    <ClInclude Include="UserInput.h" />
     <ClInclude Include="Vector2fMath.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

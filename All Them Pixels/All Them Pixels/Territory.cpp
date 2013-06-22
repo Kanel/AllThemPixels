@@ -123,8 +123,7 @@ void Territory::draw(RenderWindow * window)
 
 void Territory::update(UpdateInfo info)
 {
-	Vector2f vector(Joystick::getAxisPosition(0, Joystick::Axis::X), 
-					Joystick::getAxisPosition(0, Joystick::Axis::Y));
+	Vector2f vector = UserInput::getJoystickVector(0, Joystick::Axis::X, Joystick::Axis::Y);
 
 	vector.x = (powf(vector.x, 2) > 400) ? -vector.x / 15 : 0;
 	vector.y = (powf(vector.y, 2) > 400) ? -vector.y / 15 : 0;

@@ -10,8 +10,8 @@ void Player::applyTransform(Transform transform, VertexArray &vertecies)
 
 float Player::getDirection(Joystick::Axis axisX, Joystick::Axis axisY)
 {
-	float x = Joystick::getAxisPosition(0, axisX); 
-	float y = -Joystick::getAxisPosition(0, axisY); 
+	float x = UserInput::getJoystickPosition(0, axisX); 
+	float y = -UserInput::getJoystickPosition(0, axisY); 
 	float distance = sqrtf(powf(x, 2) + powf(y, 2));	
 	float direction;
 
@@ -41,8 +41,7 @@ float Player::getDirection(Joystick::Axis axisX, Joystick::Axis axisY)
 
 Vector2f Player::getJoystickVector(Joystick::Axis x, Joystick::Axis y)
 {
-	Vector2f vector(Joystick::getAxisPosition(0, x), 
-					Joystick::getAxisPosition(0, y));
+	Vector2f vector= UserInput::getJoystickVector(0, x, y);
 
 	vector.x = (powf(vector.x, 2) > 400) ? vector.x / 15 : 0;
 	vector.y = (powf(vector.y, 2) > 400) ? vector.y / 15 : 0;
@@ -129,15 +128,14 @@ void Player::update(UpdateInfo info)
 	int range = sqrt(speed.x * speed.x + speed.y * speed.y) * 4;
 
 	updateAim();
-	translate(Vector2f(Joystick::getAxisPosition(0, Joystick::Axis::X) / 200, 
-					Joystick::getAxisPosition(0, Joystick::Axis::Y) / 200));
+	translate(UserInput::getJoystickVector(0, Joystick::Axis::X, Joystick::Axis::Y) / 200.0f);
 //	translate(getJoystickVector(Joystick::Axis::X, Joystick::Axis::Y));
 
 	if (sqrtf(powf(speed.x, 2) + powf(speed.y, 2)) > 0)
 	{
 		speed /= sqrtf(powf(speed.x, 2) + powf(speed.y, 2)) / 10;
 
-		for (int i = 0; i < 2; i++)
+		for (int i = 0; i < 20; i++)
 		{
 			removePlease->addEntity(new Projectile(spawn, Vector2f(speed.x - 5 + rand() % 10, speed.y - 5 + rand() % 10), range));
 		}

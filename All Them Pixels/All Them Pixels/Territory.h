@@ -6,6 +6,7 @@
 #include "Shapes.h"
 #include "Player.h"
 #include "FloorTiles.h"
+#include "UserInput.h"
 #include <SFML\Graphics.hpp>
 #include <list>
 #include <queue>
