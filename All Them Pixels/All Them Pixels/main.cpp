@@ -20,8 +20,9 @@ int main(int argc, char ** argv)
 	sf::Clock c;
 	sf::Clock elapsedTime;
 	int fps = 0;
+	Player * player = new Player(&core, 100, Vector2f(512, 512));
 
-	core.addEntity(new Player(&core, 100, Vector2f(512, 512)));
+	core.addEntity(player);
 
     while (window.isOpen())
     {
@@ -51,6 +52,7 @@ int main(int argc, char ** argv)
 		if (c.getElapsedTime().asMilliseconds() >= 10)
 		{
 			UpdateInfo info;
+			View view = window.getView();
 
 			info.elapsedSeconds = 10;
 			info.ticks = 0;
@@ -59,9 +61,14 @@ int main(int argc, char ** argv)
 			core.update(info);
 			core.cleanup();
 
+			view.setCenter(player->getPosition());
+
+			window.setView(view);
 			window.clear();
 			core.draw(&window);
 			window.display();
+
+			
 
 			fps++;
 
