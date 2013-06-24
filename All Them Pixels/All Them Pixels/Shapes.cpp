@@ -7,22 +7,38 @@ void Shapes::hexagon(Vertex vertecies[], int start, Vector2f position, float rad
 
 void Shapes::hexagon(Vertex vertecies[], int start, Vector2f position, float radius, Color color)
 {
-	float width = sqrt(3 * (radius * radius) / 4);
-	vertecies[start + 0] = Vertex(Vector2f(position.x, position.y - radius), color);
-	vertecies[start + 1] = Vertex(Vector2f(position.x + width, position.y - (radius/2)), color);
-	vertecies[start + 2] = Vertex(Vector2f(position.x + width, position.y + (radius/2)), color);
-	vertecies[start + 3] = Vertex(Vector2f(position.x, position.y + radius), color);
-	vertecies[start + 4] = Vertex(Vector2f(position.x - width, position.y + (radius/2)), color);
-	vertecies[start + 5] = Vertex(Vector2f(position.x - width, position.y - (radius/2)), color);
-	/*
-	for (int i = 0; i < 7; i++)
+	if (false)
 	{
-		float x = position.x + cosf(1.0472 * i) * radius;
-		float y = position.y + sinf(1.0472 * i) * radius;
+		// Pointy topped
+		float quarterHeight = radius / 2;
+		float halfHeight = radius;
+		float height = radius * 2;
+		float width = sqrtf(3) / 2 * height;
+		float halfWidth = width / 2;
 
-		vertecies[start + i] = Vertex(Vector2f(x, y), color);
+		vertecies[start + 0] = Vertex(Vector2f(position.x, position.y - halfHeight), color);
+		vertecies[start + 1] = Vertex(Vector2f(position.x + halfWidth, position.y - quarterHeight), color);
+		vertecies[start + 2] = Vertex(Vector2f(position.x + halfWidth, position.y + quarterHeight), color);
+		vertecies[start + 3] = Vertex(Vector2f(position.x, position.y + halfHeight), color);
+		vertecies[start + 4] = Vertex(Vector2f(position.x - halfWidth, position.y + quarterHeight), color);
+		vertecies[start + 5] = Vertex(Vector2f(position.x - halfWidth, position.y - quarterHeight), color);
 	}
-	*/
+	else
+	{
+		// Flat topped
+		float width = radius * 2;
+		float halfWidth = radius;
+		float quarterWidth = radius / 2;
+		float height = sqrt(3)/2 * width;
+		float halfHeight = height / 2;
+
+		vertecies[start + 0] = Vertex(Vector2f(position.x - quarterWidth, position.y - halfHeight), color);
+		vertecies[start + 1] = Vertex(Vector2f(position.x + quarterWidth, position.y - halfHeight), color);
+		vertecies[start + 2] = Vertex(Vector2f(position.x + halfWidth, position.y), color);
+		vertecies[start + 3] = Vertex(Vector2f(position.x + quarterWidth, position.y + halfHeight), color);
+		vertecies[start + 4] = Vertex(Vector2f(position.x - quarterWidth, position.y + halfHeight), color);
+		vertecies[start + 5] = Vertex(Vector2f(position.x - halfWidth, position.y), color);
+	}
 }
 
 void Shapes::rectangle(Vertex vertecies[], int start, Vector2f position, float height, float width)

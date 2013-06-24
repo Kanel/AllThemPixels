@@ -4,6 +4,9 @@
 
 #include "Entity.h"
 #include "Shapes.h"
+#include <vector>
+
+using std::vector;
 
 struct SimpleHexagon
 {
@@ -14,13 +17,15 @@ class FloorTiles
 {
 protected:
 	Vector2i windowSize;
-	SimpleHexagon tiles[100];
+	//SimpleHexagon tiles[100];
+	vector<SimpleHexagon> tiles;
+	int tileCount;
 
 protected:
 
 public:
 	FloorTiles();
-	FloorTiles(Vector2i windowSize, Color colors[3], int tileSize = 100);
+	FloorTiles(Vector2i windowSize, Vector2f position, Color colors[3], int layers, int tileSize = 100);
 	~FloorTiles();
 
 	void move(Vector2f movement);

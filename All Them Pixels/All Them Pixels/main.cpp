@@ -16,11 +16,11 @@ int main(int argc, char ** argv)
 	ContextSettings settings(0, 0, 8, 2, 0);
 	VideoMode videoMode(1024, 1024);
     RenderWindow window(videoMode, windowtitle, 7, settings);
-	Territory core(Vector2f(516, 516), 256);
+	Territory core(Vector2f(0, 0), 512);
 	sf::Clock c;
 	sf::Clock elapsedTime;
 	int fps = 0;
-	Player * player = new Player(&core, 100, Vector2f(512, 512));
+	Player * player = new Player(&core, 100, Vector2f(0, 0));
 
 	core.addEntity(player);
 
@@ -66,9 +66,7 @@ int main(int argc, char ** argv)
 			window.setView(view);
 			window.clear();
 			core.draw(&window);
-			window.display();
-
-			
+			window.display();			
 
 			fps++;
 
