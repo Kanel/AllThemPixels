@@ -60,10 +60,7 @@ int FloorTiles::getNumberOfTiles(int layers)
 	return (layers == 1) ? 1 : getNumberOfTiles(layers - 1) + (layers - 1) * 6;
 }
 
-FloorTiles::FloorTiles()
-{
-
-}
+FloorTiles::FloorTiles() { }
 
 FloorTiles::FloorTiles(Vector2i windowSize, Vector2f position, Color colors[3], int layers, int tileSize)
 {
