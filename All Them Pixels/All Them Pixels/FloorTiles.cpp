@@ -62,7 +62,7 @@ int FloorTiles::getNumberOfTiles(int layers)
 
 FloorTiles::FloorTiles() { }
 
-FloorTiles::FloorTiles(Vector2i windowSize, Vector2f position, Color colors[3], int layers, int tileSize)
+FloorTiles::FloorTiles(Vector2i windowSize, Vector2f position, int layers, int tileSize)
 {
 	int line, column, offset;
 	float width = sqrt(3 * (tileSize * tileSize) / 4);
@@ -74,7 +74,7 @@ FloorTiles::FloorTiles(Vector2i windowSize, Vector2f position, Color colors[3], 
 	tileCount = 0;
 
 	// Generate center hexagon.
-	Shapes::hexagon(tiles[tileCount++].corners, 0, position, tileSize, colors[tileCount % 3]);
+	Shapes::hexagon(tiles[tileCount++].corners, 0, position, tileSize - 1);
 
 	// Walk through every hexagon one layer at a time.
 	for (int k = 1; k < layers; k++)
@@ -85,7 +85,7 @@ FloorTiles::FloorTiles(Vector2i windowSize, Vector2f position, Color colors[3], 
 		{
 			for (int j = 0; j < k; j++)
 			{
-				Shapes::hexagon(tiles[tileCount++].corners, 0, position + getHexagonPosition(hexagon.x, hexagon.y, tileSize), tileSize, colors[k % 3]);
+				Shapes::hexagon(tiles[tileCount++].corners, 0, position + getHexagonPosition(hexagon.x, hexagon.y, tileSize), tileSize - 1);
 
 				hexagon = Vector2i(hexagon.x + neighbors[i][0], hexagon.y + neighbors[i][1]);
 			}

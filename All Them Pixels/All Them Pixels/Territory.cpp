@@ -18,17 +18,10 @@ Territory::Territory(Vector2f position, int radius)
 	shape.height = radius * 2;
 
 	Shapes::hexagon(border, 0, position, radius, Color(250,250,250,100));
-	//Shapes::rectangle(border, 0, position, radius * 2, radius * 2);
 
 	border[6] = border[0];
-	Color colors[4] = 
-	{
-		Color(250,0,0,30),
-		Color(0,250,0,30),
-		Color(0,0,250,30),
-		Color(100,100,100,30)
-	};
-	floorTiles = FloorTiles(Vector2i(2 * radius, 2 * radius), position, colors, layers, hexagonRadius);
+
+	floorTiles = FloorTiles(Vector2i(2 * radius, 2 * radius), position, layers, hexagonRadius);
 }
 
 Territory::~Territory()
@@ -109,9 +102,7 @@ void Territory::cleanup()
 				clean = true;
 			}
 		}
-		
 
-		//if (!Shapes::contains(shape, entity->getBoundingBox()) || entity->isExpended())
 		if (clean)
 		{
 			it = entities.erase(it);
@@ -127,18 +118,6 @@ void Territory::cleanup()
 
 void Territory::draw(RenderWindow * window)
 {
-	/*int radius = 900;
-	float width = sqrt(3 * (radius * radius) / 4);
-	Vertex background[6] = 
-	{
-		Vertex(Vector2f(512, 512 - radius), Color::Blue),
-		Vertex(Vector2f(512 + width, 512 - (radius/2)), Color::Green),
-		Vertex(Vector2f(512 + width, 512 + (radius/2)), Color::Magenta),
-		Vertex(Vector2f(512, 512 + radius), Color::Red),
-		Vertex(Vector2f(512 - width, 512 + (radius/2)), Color::Yellow),
-		Vertex(Vector2f(512 - width, 512 - (radius/2)), Color::Black)
-	};
-	window->draw(background, 6, PrimitiveType::TrianglesFan);*/
 	window->draw(border, 7, PrimitiveType::LinesStrip);
 	floorTiles.draw(window);
 
@@ -155,7 +134,6 @@ void Territory::update(UpdateInfo info)
 	vector.x = (powf(vector.x, 2) > 400) ? -vector.x / 15 : 0;
 	vector.y = (powf(vector.y, 2) > 400) ? -vector.y / 15 : 0;
 
-	//floorTiles.move(vector);
 	for (std::list<Entity *>::iterator it = entities.begin(); it != entities.end(); it++)
 	{
 		(*it)->update(info);

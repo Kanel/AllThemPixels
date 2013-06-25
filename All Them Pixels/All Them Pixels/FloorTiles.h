@@ -29,7 +29,7 @@ protected:
 
 public:
 	FloorTiles();
-	FloorTiles(Vector2i windowSize, Vector2f position, Color colors[3], int layers, int tileSize = 100);
+	FloorTiles(Vector2i windowSize, Vector2f position, int layers, int tileSize = 100);
 
 	void draw(sf::RenderWindow * window);
 };
