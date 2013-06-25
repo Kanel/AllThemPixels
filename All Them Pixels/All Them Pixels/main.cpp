@@ -22,6 +22,7 @@ int main(int argc, char ** argv)
 	int fps = 0;
 	Player * player = new Player(&core, 100, Vector2f(0, 0));
 
+	core.player = player;
 	core.addEntity(player);
 
     while (window.isOpen())

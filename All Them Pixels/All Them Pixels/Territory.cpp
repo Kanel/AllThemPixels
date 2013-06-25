@@ -132,6 +132,11 @@ void Territory::update(UpdateInfo info)
 	for (std::list<Entity *>::iterator it = entities.begin(); it != entities.end(); it++)
 	{
 		(*it)->update(info);
+
+		if (Enum::isFlagSet((*it)->getType(), EntityTypes::EnemyEntity))
+		{
+			AI::update(this, (Enemy *)(*it), player, info);
+		}
 	}
 
 	// Spawn enemies

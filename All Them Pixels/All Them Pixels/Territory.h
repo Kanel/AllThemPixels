@@ -8,6 +8,7 @@
 #include "Enemy.h"
 #include "FloorTiles.h"
 #include "UserInput.h"
+#include "AI.h"
 #include <SFML\Graphics.hpp>
 #include <list>
 #include <queue>
@@ -15,6 +16,8 @@
 using std::list;
 using std::queue;
 using namespace sf;
+
+class Player;
 
 class Territory
 {
@@ -28,6 +31,7 @@ private:
 
 public:
 	bool active;
+	Player * player;
 
 public:
 	Territory(Vector2f position, int radius);

@@ -9,7 +9,12 @@ Enemy::Enemy(unsigned int hp, Vector2f position) : Destructible(hp, position)
 
 void Enemy::applyTransform(Transform transform)
 {
-	
+	Destructible::applyTransform(transform);
+
+	for (int i = 0; i < 4; i++)
+	{
+		shape[i].position = transform.transformPoint(shape[i].position);
+	}
 }
 
 Rect<float> Enemy::getBoundingBox()

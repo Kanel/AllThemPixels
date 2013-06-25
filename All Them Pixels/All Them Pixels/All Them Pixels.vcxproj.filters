@@ -81,6 +81,9 @@
     <ClCompile Include="UserInput.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="AI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Hexagon.h">
@@ -138,6 +141,9 @@
       <Filter>Header Files\Geometry</Filter>
     </ClInclude>
     <ClInclude Include="UserInput.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AI.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
