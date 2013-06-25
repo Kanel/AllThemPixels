@@ -5,6 +5,7 @@
 #include "UpdateInfo.h"
 #include "Shapes.h"
 #include "Player.h"
+#include "Enemy.h"
 #include "FloorTiles.h"
 #include "UserInput.h"
 #include <SFML\Graphics.hpp>

@@ -133,4 +133,12 @@ void Territory::update(UpdateInfo info)
 	{
 		(*it)->update(info);
 	}
+
+	// Spawn enemies
+	for (int i = 0; i < 1; i++)
+	{
+		Enemy * enemy = new Enemy(100, position + Vector2f(512 - rand() % 1024, 512 - rand() % 1024));
+	
+		addEntity(enemy);
+	}
 }

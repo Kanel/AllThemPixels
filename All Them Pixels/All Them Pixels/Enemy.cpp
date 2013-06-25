@@ -2,7 +2,7 @@
 
 Enemy::Enemy(unsigned int hp, Vector2f position) : Destructible(hp, position)
 {
-	Shapes::rectangle(shape, 0, position, 20, 20);
+	Shapes::rectangle(shape, 0, position, 20, 20, Color(0, 0, 0, 255));
 
 	type = EntityTypes::EnemyEntity;
 }
