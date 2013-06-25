@@ -20,7 +20,6 @@ class Territory
 private:
 	Vector2f position;
 	int radius;
-	Rect<float> shape;
 	Vertex border[7];
 	queue<Entity *> spawnQueue;
 	list<Entity *> entities;

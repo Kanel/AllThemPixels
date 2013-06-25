@@ -63,7 +63,7 @@ void Player::updateAim()
 
 Player::Player(Territory * removePlease, unsigned int hp, Vector2f position) : Destructible(hp, position)
 {
-	Color color(255, 255, 255);
+	Color color(0, 0, 0);
 
 	this->removePlease = removePlease;
 	type = EntityTypes::PlayerEntity;
@@ -129,7 +129,6 @@ void Player::update(UpdateInfo info)
 
 	updateAim();
 	translate(UserInput::getJoystickVector(0, Joystick::Axis::X, Joystick::Axis::Y) / 200.0f);
-//	translate(getJoystickVector(Joystick::Axis::X, Joystick::Axis::Y));
 
 	if (sqrtf(powf(speed.x, 2) + powf(speed.y, 2)) > 0)
 	{

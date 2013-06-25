@@ -12,11 +12,6 @@ Territory::Territory(Vector2f position, int radius)
 	this->position = position;
 	this->radius = radius;
 
-	shape.top = position.y - radius;
-	shape.left = position.x - radius;
-	shape.width = radius * 2;
-	shape.height = radius * 2;
-
 	Shapes::hexagon(border, 0, position, radius, Color(250,250,250,100));
 
 	border[6] = border[0];
