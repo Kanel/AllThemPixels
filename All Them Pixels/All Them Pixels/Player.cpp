@@ -128,7 +128,7 @@ void Player::update(UpdateInfo info)
 	int range = sqrt(speed.x * speed.x + speed.y * speed.y) * 4;
 
 	updateAim();
-	translate(UserInput::getJoystickVector(0, Joystick::Axis::X, Joystick::Axis::Y) / 200.0f);
+	translate(UserInput::getJoystickVector(0, Joystick::Axis::X, Joystick::Axis::Y) / 20.0f);
 
 	if (sqrtf(powf(speed.x, 2) + powf(speed.y, 2)) > 0)
 	{

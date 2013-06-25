@@ -9,6 +9,9 @@ using namespace sf;
 
 class Enemy : public Destructible
 {
+public:
+	int cooldownThisShouldNotBePublic;
+
 protected:
 	Vertex shape[4];
 
