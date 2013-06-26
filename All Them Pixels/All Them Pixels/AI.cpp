@@ -2,9 +2,9 @@
 
 void AI::update(Territory * territory, Enemy * target, Player * player, UpdateInfo info)
 {
-	float projectileSpeed = 10;
+	float projectileSpeed = 4;
 	float speed = 2;
-	int ttl = 55;
+	int ttl = 50;
 	Vector2f direction = Vector2fMath::unitVector(player->getPosition() - target->getPosition());
 
 	target->translate(direction * speed);
@@ -13,7 +13,7 @@ void AI::update(Territory * territory, Enemy * target, Player * player, UpdateIn
 
 	if (target->cooldownThisShouldNotBePublic <= 0)
 	{
-		target->cooldownThisShouldNotBePublic = 250;
-		territory->addEntity(new Projectile(target->getPosition(), direction * projectileSpeed, ttl));
+		target->cooldownThisShouldNotBePublic = 2000;
+	//	territory->addEntity(new Projectile(target->getPosition(), direction * projectileSpeed, ttl));
 	}
 }

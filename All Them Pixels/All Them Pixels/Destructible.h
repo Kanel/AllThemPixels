@@ -5,13 +5,14 @@
 class Destructible : public Entity
 {
 protected:
-	unsigned int hp;
+	int hp;
 
 public:
 	Destructible(unsigned int hp, Vector2f position);
 
 	int getHP();
 	void setHP(int hp);
+	void modHP(int hp);
 
 	bool isExpended() override;
 	bool isEtheral() override;

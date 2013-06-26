@@ -15,6 +15,11 @@ void Destructible::setHP(int hp)
 	this->hp = hp;
 }
 
+void Destructible::modHP(int hp)
+{
+	this->hp += hp;
+}
+
 bool Destructible::isExpended()
 {
 	return !(hp > 0);

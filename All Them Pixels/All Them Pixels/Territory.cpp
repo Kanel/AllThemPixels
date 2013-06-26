@@ -78,17 +78,17 @@ void Territory::cleanup()
 	}
 
 	convexHull = MonotoneChain::getConvexHull(vertecies);
-
+	bool clean = false;
 	for (std::list<Entity *>::iterator it = entities.begin(); it != entities.end();)
 	{
-		bool clean = false;
+		clean = false;
 		Entity * entity = *it;
 
 		if (entity->isExpended())
 		{
 			clean = true;
 		}
-		else if (!Enum::isFlagSet(entity->getType(), EntityTypes::ProjectileEntity))
+		/*else if (!Enum::isFlagSet(entity->getType(), EntityTypes::ProjectileEntity))
 		{
 			float distanceToCenter = Vector2fMath::distance(position, entity->getPosition());
 
@@ -96,7 +96,7 @@ void Territory::cleanup()
 			{
 				clean = true;
 			}
-		}
+		}*/
 
 		if (clean)
 		{
@@ -132,15 +132,36 @@ void Territory::update(UpdateInfo info)
 	for (std::list<Entity *>::iterator it = entities.begin(); it != entities.end(); it++)
 	{
 		(*it)->update(info);
-
+		if(Enum::isFlagSet((*it)->getType(), EntityTypes::EnemyProjectileEntity))
+		{
+			if (Collision::isClose(player, (*it))) //DIE();
+			continue;
+		}
+		if(Enum::isFlagSet((*it)->getType(), EntityTypes::ProjectileEntity))
+		{
+			for (std::list<Entity *>::iterator it2 = entities.begin(); it2 != entities.end(); it2++) //can has enemy list?
+			{
+				if(Enum::isFlagSet((*it2)->getType(), EntityTypes::EnemyEntity))
+				{
+					if (Collision::isClose((*it2), (*it)))
+					{
+						((Enemy *)(*it2))->modHP(-50);
+						continue;
+					}
+				}
+			}
+			continue;
+		}
 		if (Enum::isFlagSet((*it)->getType(), EntityTypes::EnemyEntity))
 		{
 			AI::update(this, (Enemy *)(*it), player, info);
+			continue;
 		}
+
 	}
 
 	// Spawn enemies
-	for (int i = 0; i < 1; i++)
+	if (rand() % 5 == 1)
 	{
 		Enemy * enemy = new Enemy(100, position + Vector2f(512 - rand() % 1024, 512 - rand() % 1024));
 	

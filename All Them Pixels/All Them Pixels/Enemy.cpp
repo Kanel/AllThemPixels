@@ -42,5 +42,5 @@ void Enemy::draw(RenderWindow * window)
 
 void Enemy::update(UpdateInfo info)
 {
-
+	
 }

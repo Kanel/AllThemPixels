@@ -33,7 +33,7 @@ void Projectile::applyTransform(Transform transform)
 
 Rect<float> Projectile::getBoundingBox()
 {
-	return Rect<float>(position.x - 5, position.y - 5, 10, 10);
+	return Rect<float>(position.x - 3, position.y - 3, 6, 6);
 }
 
 ConvexHull Projectile::getConvexHull()

@@ -134,9 +134,9 @@ void Player::update(UpdateInfo info)
 	{
 		speed /= sqrtf(powf(speed.x, 2) + powf(speed.y, 2)) / 10;
 
-		for (int i = 0; i < 20; i++)
+		for (int i = 0; i < 2; i++)
 		{
-			removePlease->addEntity(new Projectile(spawn, Vector2f(speed.x - 5 + rand() % 10, speed.y - 5 + rand() % 10), range));
+			removePlease->addEntity(new Projectile(spawn, Vector2f(speed.x - 1 + rand() % 2, speed.y - 1 + rand() % 2), range));
 		}
 	}
 }

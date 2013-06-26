@@ -85,6 +85,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AI.cpp" />
+    <ClCompile Include="Collision.cpp" />
     <ClCompile Include="Destructible.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Entity.cpp" />
@@ -106,6 +107,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AI.h" />
+    <ClInclude Include="Collision.h" />
     <ClInclude Include="Destructible.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Entity.h" />

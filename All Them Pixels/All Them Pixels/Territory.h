@@ -9,6 +9,7 @@
 #include "FloorTiles.h"
 #include "UserInput.h"
 #include "AI.h"
+#include "Collision.h"
 #include <SFML\Graphics.hpp>
 #include <list>
 #include <queue>
