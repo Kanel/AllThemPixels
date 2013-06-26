@@ -84,6 +84,7 @@ Player::Player(Territory * removePlease, unsigned int hp, Vector2f position) : D
 	aimBox.append(Vertex(Vector2f(aimBoxPosition.x + 4, aimBoxPosition.y + 4), color));
 	aimBox.append(Vertex(Vector2f(aimBoxPosition.x - 4, aimBoxPosition.y + 4), color));
 	
+	this->hp = 1000;
 }
 
 void Player::applyTransform(Transform transform)
@@ -136,7 +137,7 @@ void Player::update(UpdateInfo info)
 
 		for (int i = 0; i < 2; i++)
 		{
-			removePlease->addEntity(new Projectile(spawn, Vector2f(speed.x - 1 + rand() % 2, speed.y - 1 + rand() % 2), range));
+			removePlease->addEntity(new Projectile(spawn, Vector2f(speed.x - 1 + rand() % 2, speed.y - 1 + rand() % 2), 50.0, range));
 		}
 	}
 }

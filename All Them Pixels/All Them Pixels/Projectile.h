@@ -12,9 +12,12 @@ protected:
 	Vertex shape[6];
 	Vector2f speed;
 	int ttl;
+	float damage;
 
 public:
-	Projectile(Vector2f position, Vector2f speed, int ttl);
+	Projectile(Vector2f position, Vector2f speed, float damage, int ttl,Color color = Color(0,0,0,255), EntityTypes type = EntityTypes::ProjectileEntity);
+
+	float getDamage();
 
 	bool isExpended() override;
 	bool isEtheral() override;

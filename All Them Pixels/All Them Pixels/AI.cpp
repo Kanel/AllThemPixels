@@ -14,6 +14,6 @@ void AI::update(Territory * territory, Enemy * target, Player * player, UpdateIn
 	if (target->cooldownThisShouldNotBePublic <= 0)
 	{
 		target->cooldownThisShouldNotBePublic = 2000;
-	//	territory->addEntity(new Projectile(target->getPosition(), direction * projectileSpeed, ttl));
+		territory->addEntity(new Projectile(target->getPosition(), direction * projectileSpeed, 20.0, ttl, Color::Blue, EnemyProjectileEntity));
 	}
 }

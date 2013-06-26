@@ -134,18 +134,19 @@ void Territory::update(UpdateInfo info)
 		(*it)->update(info);
 		if(Enum::isFlagSet((*it)->getType(), EntityTypes::EnemyProjectileEntity))
 		{
-			if (Collision::isClose(player, (*it))) //DIE();
+			if (Collision::isClose(player, (*it))) player->modHP(-((Projectile*)(*it))->getDamage()); //DIE();
 			continue;
 		}
 		if(Enum::isFlagSet((*it)->getType(), EntityTypes::ProjectileEntity))
 		{
+			Projectile* projectile = (Projectile*)*it;
 			for (std::list<Entity *>::iterator it2 = entities.begin(); it2 != entities.end(); it2++) //can has enemy list?
 			{
 				if(Enum::isFlagSet((*it2)->getType(), EntityTypes::EnemyEntity))
 				{
-					if (Collision::isClose((*it2), (*it)))
+					if (Collision::isClose((*it2), projectile))
 					{
-						((Enemy *)(*it2))->modHP(-50);
+						((Enemy *)(*it2))->modHP(-projectile->getDamage());
 						continue;
 					}
 				}

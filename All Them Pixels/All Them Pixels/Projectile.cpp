@@ -1,14 +1,20 @@
 #include  "Projectile.h"
 
-Projectile::Projectile(Vector2f position, Vector2f speed, int ttl) : Entity(position)
+Projectile::Projectile(Vector2f position, Vector2f speed, float damage, int ttl, Color color, EntityTypes type) : Entity(position)
 {
-	Shapes::hexagon(shape,0,position,5,Color(0,0,0,255));
+	Shapes::hexagon(shape,0,position,5,color);
 	//Shapes::rectangle(shape, 0, position, 10, 10);
 	
 	this->ttl = ttl;
 	this->speed = speed;
-	this->type = EntityTypes::ProjectileEntity;
+	this->type = type;
 	this->expended = false;
+	this->damage = damage;
+}
+
+float Projectile::getDamage()
+{
+	return this->damage;
 }
 
 bool Projectile::isExpended()
