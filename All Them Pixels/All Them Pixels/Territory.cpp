@@ -132,6 +132,7 @@ void Territory::update(UpdateInfo info)
 	for (std::list<Entity *>::iterator it = entities.begin(); it != entities.end(); it++)
 	{
 		(*it)->update(info);
+
 		if(Enum::isFlagSet((*it)->getType(), EntityTypes::EnemyProjectileEntity))
 		{
 			if (Collision::isClose(player, (*it))) player->modHP(-((Projectile*)(*it))->getDamage()); //DIE();

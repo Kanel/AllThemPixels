@@ -7,22 +7,59 @@
 #include "Shapes.h"
 #include <math.h>
 
+class AxialCoordinates
+{
+public:
+	int q;
+	int r;
+
+public:
+	AxialCoordinates() 
+	{
+		this->q = 0;
+		this->r = 0;
+	}
+
+	AxialCoordinates(int q, int r)
+	{
+		this->q = q;
+		this->r = r;
+	}
+
+	AxialCoordinates operator+(AxialCoordinates &other)
+	{
+		return AxialCoordinates(q + other.q, r + other.r);
+	}
+};
 
 class HexagonGrid
 {
-protected:
-	int tiles;
-	Hexagon * shapes;
+public:
+	AxialCoordinates neighbors[6];
 
-protected:
+private:
+	Vector3f convertToCubeCoordinates(AxialCoordinates axialCoordinates);
+	AxialCoordinates convertToAxialCoordinates(Vector3i cubeCoordinates);
+	Vector3i hexRound(Vector3f cubeCoordiantes);
+
+public:
+	enum HexagonDirection 
+	{
+		Up = 1,
+		UpRight = 0,
+		DownRight = 5,
+		Down = 4,
+		DownLeft = 3,
+		UpLeft = 2
+	};
+
+public:
+	HexagonGrid();
+
 	int getNumberOfTiles(int layers);
 	int getNumberOfTilesInLayer(int layer);
 
-public:
-	HexagonGrid(sf::Vector2f position, int layers, int tileSize, int tileSpacing);
-	~HexagonGrid();
-
-	void illuminate(Entity * entity);
-
-	void draw(sf::RenderWindow * window);
+	Vector2f getPosition(AxialCoordinates axialCoordinates, float size);
+	AxialCoordinates getAxialCoordinates(Vector2f position, float size);
+	AxialCoordinates step(AxialCoordinates axialCoordinates, HexagonDirection direction);
 };
