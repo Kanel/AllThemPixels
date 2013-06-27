@@ -10,13 +10,23 @@ Territory::Territory(Vector2f position, float radius, World * world)
 	int numberOfLayersHorizontal = (((radius * 2) - hexagonWidth) / (hexagonWidth * 1.5f)) + 1;
 	int numberOfLayersVertical = (((radius * 2) / hexagonHeight) / 2) + 1;
 	int layers = (numberOfLayersHorizontal < numberOfLayersVertical) ? numberOfLayersHorizontal : numberOfLayersVertical;
-
+	HexagonGrid grid(Hexagon::FlatTopped);
+	
 	this->position = position;
 	this->radius = radius;
 	this->world = world;
 	this->player = NULL;
+	this->offset.x = layers;
+	this->offset.y = layers;
+	this->matrixLength = (layers * 2) + 1;
 
-	floorTiles = FloorTiles(Vector2i(2 * radius, 2 * radius), position, layers, hexagonRadius);
+	gridMatrix = grid.generateGrid(position, hexagonRadius, layers);
+	borderCoordinates = grid.getRingCoordinates(layers);
+
+	for (int i = 0; i < borderCoordinates.size(); i++)
+	{
+		gridMatrix[offset.x + borderCoordinates[i].q][offset.y + borderCoordinates[i].r]->setColor(Color(255, 0, 0));
+	}
 }
 
 Territory::~Territory()
@@ -109,7 +119,16 @@ void Territory::cleanup()
 
 void Territory::draw(RenderWindow * window)
 {
-	floorTiles.draw(window);
+	for (int i = 0; i < matrixLength; i++)
+	{
+		for (int j = 0; j < matrixLength; j++)
+		{
+			if (gridMatrix[i][j] != NULL)
+			{
+				gridMatrix[i][j]->draw(window);
+			}
+		}
+	}
 
 	for (std::list<Entity *>::iterator it = entities.begin(); it != entities.end(); it++)
 	{
@@ -159,12 +178,17 @@ void Territory::update(UpdateInfo info)
 
 	if (player != NULL)
 	{
-		if (floorTiles.intersectsBorder(player))
+		for (int i = 0; i < borderCoordinates.size(); i++)
 		{
-			Vector2f direction = Vector2fMath::unitVector(player->getPosition() - position);
-			Vector2f seekPosition = position + (direction * radius * 1.5f);
+			if (Shapes::contains(gridMatrix[offset.x + borderCoordinates[i].q][offset.y + borderCoordinates[i].r]->getBoundingBox(), player->getBoundingBox()))
+			{
+				Vector2f direction = Vector2fMath::unitVector(player->getPosition() - position);
+				Vector2f seekPosition = position + (direction * radius * 1.5f);
 
-			world->changeTerritory(seekPosition);
+				world->changeTerritory(seekPosition);
+
+				break;
+			}
 		}
 	}
 

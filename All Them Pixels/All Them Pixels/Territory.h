@@ -29,7 +29,10 @@ private:
 	float radius;
 	queue<Entity *> spawnQueue;
 	list<Entity *> entities;
-	FloorTiles floorTiles;
+	int matrixLength;
+	Vector2i offset;
+	Hexagon *** gridMatrix;
+	vector<AxialCoordinates> borderCoordinates;
 	World * world;
 
 public:

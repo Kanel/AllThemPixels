@@ -7,7 +7,7 @@ FloorTiles::FloorTiles(Vector2i windowSize, Vector2f position, int layers, int t
 {
 	int borderLayer = layers - 1;
 	int tileDimension = tileSize - 1;
-	HexagonGrid grid(HexagonStyle::FlatTopped);
+	HexagonGrid grid(Hexagon::FlatTopped);
 	AxialCoordinates hexagon;
 
 	tiles.resize(grid.getNumberOfTiles(layers));

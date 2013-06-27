@@ -4,7 +4,11 @@
 
 #include "Entity.h"
 #include "Shapes.h"
+#include "Hexagon.h"
 #include <math.h>
+#include <vector>
+
+using std::vector;
 
 class AxialCoordinates
 {
@@ -31,17 +35,11 @@ public:
 	}
 };
 
-enum HexagonStyle
-{
-	FlatTopped,
-	PointyTopped
-};
-
 class HexagonGrid
 {
 public:
 	AxialCoordinates neighbors[6];
-	HexagonStyle style;
+	Hexagon::Style style;
 
 private:
 	Vector3f convertToCubeCoordinates(Vector2f axialCoordinates);
@@ -60,7 +58,7 @@ public:
 	};
 
 public:
-	HexagonGrid(HexagonStyle style);
+	HexagonGrid(Hexagon::Style style);
 
 	int getNumberOfTiles(int layers);
 	int getNumberOfTilesInLayer(int layer);
@@ -68,4 +66,8 @@ public:
 	Vector2f getPosition(AxialCoordinates axialCoordinates, float size);
 	AxialCoordinates getAxialCoordinates(Vector2f position, float size);
 	AxialCoordinates step(AxialCoordinates axialCoordinates, HexagonDirection direction);
+
+	//vector<AxialCoordinates> getCornerRegionCoordinates(int corner);
+	vector<AxialCoordinates> getRingCoordinates(int layer);
+	Hexagon *** generateGrid(Vector2f position, float hexagonRadius, int layers);
 };

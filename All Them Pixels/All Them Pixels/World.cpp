@@ -3,14 +3,14 @@
 World::World()
 {
 	Vector2f position(0, 0);
-	HexagonGrid grid(HexagonStyle::PointyTopped);
+	HexagonGrid grid(Hexagon::PointyTopped);
 
 	territoryRadius = 256;
 	territorySpacing = 0;
-	layers = 3;
+	layers = 2;
 	tileSize = territoryRadius + (territorySpacing / 2);
-	matrixSize = (layers * 2) - 1;
-	offset = Vector2i(layers - 1, layers - 1);
+	matrixSize = (layers * 2) + 1;
+	offset = Vector2i(layers, layers);
 
 	territories = new Territory**[matrixSize];
 
@@ -31,7 +31,7 @@ World::World()
 	territories[offset.x][offset.y] = new Territory(position, territoryRadius, this);
 
 	// Layer Territories
-	for (int k = 1; k < layers; k++)
+	for (int k = 1; k <= layers; k++)
 	{
 		AxialCoordinates hexagon(-k, k);
 
@@ -54,7 +54,7 @@ Territory * World::getTerritory(AxialCoordinates coordinates)
 
 void World::changeTerritory(Vector2f position)
 {
-	HexagonGrid grid(HexagonStyle::PointyTopped);
+	HexagonGrid grid(Hexagon::PointyTopped);
 	AxialCoordinates nextCoordinates = grid.getAxialCoordinates(position, tileSize);
 	Territory * current = getTerritory(currentTerritoryCoordinates);
 	Territory * next = getTerritory(nextCoordinates);
