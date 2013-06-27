@@ -2,11 +2,11 @@
 
 int neighbors[6][2];
 
-Vector3f HexagonGrid::convertToCubeCoordinates(AxialCoordinates axialCoordinates)
+Vector3f HexagonGrid::convertToCubeCoordinates(Vector2f axialCoordinates)
 {
-	int x = axialCoordinates.q;
-	int z = axialCoordinates.r;
-	int y = -x - z;
+	float x = axialCoordinates.x;
+	float z = axialCoordinates.y;
+	float y = -x - z;
 
 	return Vector3f(x, y, z);
 }
@@ -42,8 +42,10 @@ Vector3i HexagonGrid::hexRound(Vector3f cubeCoordiantes)
 	return Vector3i(rx, ry, rz);
 }
 
-HexagonGrid::HexagonGrid()
+HexagonGrid::HexagonGrid(HexagonStyle style)
 {
+	this->style = style;
+
 	neighbors[Up]		 = AxialCoordinates(0, -1);
 	neighbors[UpRight]	 = AxialCoordinates(1, -1);
 	neighbors[DownRight] = AxialCoordinates(1, 0);
@@ -64,17 +66,41 @@ int HexagonGrid::getNumberOfTilesInLayer(int layer)
 
 Vector2f HexagonGrid::getPosition(AxialCoordinates axialCoordinates, float size)
 {
-	return Vector2f(size * (3.0f / 2.0f) * axialCoordinates.q, size * sqrt(3) * (axialCoordinates.r + (axialCoordinates.q / 2.0f)));
+	float x;
+	float y;
+
+	if (style == HexagonStyle::FlatTopped)
+	{
+		x = size * (3.0f / 2.0f) * axialCoordinates.q;
+		y = size * sqrt(3) * (axialCoordinates.r + (axialCoordinates.q / 2.0f));
+	}
+	else
+	{
+		x = size * sqrt(3) * (axialCoordinates.q + axialCoordinates.r / 2.0f);
+		y = size * (3.0f / 2.0f) * axialCoordinates.r;
+	}
+	return Vector2f(x, y);
 }
 
 AxialCoordinates HexagonGrid::getAxialCoordinates(Vector2f position, float size)
 {
-	float q = position.x / (size * 3.0f/2.0f);
-	float r = position.y / (size * sqrt(3)) - (position.x / (size * 3.0f/2.0f)) / 2.0f;
-	Vector3f cubeCoordiantes = convertToCubeCoordinates(AxialCoordinates(q, r));
-	Vector3i actualCubeCoordinates = hexRound(cubeCoordiantes);
+	float q;
+	float r;
+	Vector3f cubeCoordiantes;
 
-	return convertToAxialCoordinates(actualCubeCoordinates);
+	if (style == HexagonStyle::FlatTopped)
+	{
+		q = position.x / (size * (3.0f / 2.0f));
+		r = position.y / (size * sqrt(3)) - ((position.x / (size * 3.0f / 2.0f)) / 2.0f);
+	}
+	else
+	{
+		q = position.x / (size * sqrt(3)) - ((position.y / (size * (3.0f / 2.0f))) / 2.0f);
+		r = position.y / (size * (3.0f / 2.0f));	
+	}
+	cubeCoordiantes = convertToCubeCoordinates(Vector2f(q, r));
+
+	return convertToAxialCoordinates(hexRound(cubeCoordiantes));
 }
 
 AxialCoordinates HexagonGrid::step(AxialCoordinates axialCoordinates, HexagonDirection direction)

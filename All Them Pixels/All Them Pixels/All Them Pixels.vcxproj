@@ -93,7 +93,6 @@
     <ClCompile Include="Enum.cpp" />
     <ClCompile Include="GameCore.cpp" />
     <ClCompile Include="GlareEffect.cpp" />
-    <ClCompile Include="Hexagon.cpp" />
     <ClCompile Include="HexagonGrid.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MontoneChain.cpp" />
@@ -104,6 +103,7 @@
     <ClCompile Include="Territory.cpp" />
     <ClCompile Include="UserInput.cpp" />
     <ClCompile Include="Vector2fMath.cpp" />
+    <ClCompile Include="World.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AI.h" />
@@ -116,7 +116,6 @@
     <ClInclude Include="Enum.h" />
     <ClInclude Include="GameCore.h" />
     <ClInclude Include="GlareEffect.h" />
-    <ClInclude Include="Hexagon.h" />
     <ClInclude Include="HexagonGrid.h" />
     <ClInclude Include="MonotoneChain.h" />
     <ClInclude Include="Player.h" />
@@ -127,6 +126,7 @@
     <ClInclude Include="UpdateInfo.h" />
     <ClInclude Include="UserInput.h" />
     <ClInclude Include="Vector2fMath.h" />
+    <ClInclude Include="World.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

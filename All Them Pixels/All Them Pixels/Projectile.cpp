@@ -2,7 +2,7 @@
 
 Projectile::Projectile(Vector2f position, Vector2f speed, float damage, int ttl, Color color, EntityTypes type) : Entity(position)
 {
-	Shapes::hexagon(shape,0,position,5,color);
+	Shapes::hexagon(shape, 0, position, 5, color, true);
 	//Shapes::rectangle(shape, 0, position, 10, 10);
 	
 	this->ttl = ttl;

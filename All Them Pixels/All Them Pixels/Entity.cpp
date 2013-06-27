@@ -2,7 +2,7 @@
 
 Entity::Entity(Vector2f position)
 {
-	setPosition(position);
+	this->position = position;
 
 	type = EntityTypes::UnknownEntity;
 }
@@ -19,7 +19,9 @@ EntityTypes Entity::getType()
 
 void Entity::setPosition(Vector2f position)
 {
-	this->position = position;
+	Vector2f diffrence = position - this->position;
+
+	translate(diffrence);
 }
 
 void Entity::applyTransform(Transform transform)

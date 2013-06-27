@@ -3,6 +3,7 @@
 #include "Player.h"
 #include "Territory.h"
 #include "UpdateInfo.h"
+#include "World.h"
 #include <SFML/Graphics.hpp>
 #include <iostream>
 
@@ -16,14 +17,15 @@ int main(int argc, char ** argv)
 	ContextSettings settings(0, 0, 8, 2, 0);
 	VideoMode videoMode(1024, 1024);
     RenderWindow window(videoMode, windowtitle, 7, settings);
-	Territory core(Vector2f(0, 0), 512);
+	World world;
 	sf::Clock c;
 	sf::Clock elapsedTime;
 	int fps = 0;
-	Player * player = new Player(&core, 100, Vector2f(0, 0));
+	Territory * t = world.getTerritory(AxialCoordinates(0, 0));
+	Player * player = new Player(t, 100, Vector2f(0, 0));
 
-	core.player = player;
-	core.addEntity(player);
+	t->player = player;
+	t->addEntity(player);
 
     while (window.isOpen())
     {
@@ -58,15 +60,13 @@ int main(int argc, char ** argv)
 			info.elapsedSeconds = 10;
 			info.ticks = 0;
 
-			core.integrateSpawnQueue();
-			core.update(info);
-			core.cleanup();
+			world.update(info);
 
 			view.setCenter(player->getPosition());
 
 			window.setView(view);
 			window.clear();
-			core.draw(&window);
+			world.draw(&window);
 			window.display();			
 
 			fps++;

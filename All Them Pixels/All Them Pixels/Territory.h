@@ -10,6 +10,7 @@
 #include "UserInput.h"
 #include "AI.h"
 #include "Collision.h"
+#include "World.h"
 #include <SFML\Graphics.hpp>
 #include <list>
 #include <queue>
@@ -19,24 +20,28 @@ using std::queue;
 using namespace sf;
 
 class Player;
+class World;
 
 class Territory
 {
 private:
 	Vector2f position;
-	int radius;
-	Vertex border[7];
+	float radius;
 	queue<Entity *> spawnQueue;
 	list<Entity *> entities;
 	FloorTiles floorTiles;
+	World * world;
 
 public:
 	bool active;
 	Player * player;
 
 public:
-	Territory(Vector2f position, int radius);
+	Territory();
+	Territory(Vector2f position, float radius, World * world);
 	~Territory();
+
+	Vector2f getPosition();
 
 	void addEntity(Entity * entity);
 	void removeEntity(Entity * entity);

@@ -14,8 +14,8 @@ public:
 	};
 
 public:
-	static void hexagon(Vertex vertecies[], int start, Vector2f position, float radius);
-	static void hexagon(Vertex vertecies[], int start, Vector2f position, float radius, Color color);
+	static void hexagon(Vertex vertecies[], int start, Vector2f position, float radius, bool flatTopped);
+	static void hexagon(Vertex vertecies[], int start, Vector2f position, float radius, Color color, bool flatTopped);
 	static void rectangle(Vertex vertecies[], int start, Vector2f position, float height, float width);
 	static void rectangle(Vertex vertecies[], int start, Vector2f position, float height, float width, Color color);
 

@@ -1,20 +1,20 @@
 #include "Territory.h"
 
-Territory::Territory(Vector2f position, int radius)
+Territory::Territory() { }
+
+Territory::Territory(Vector2f position, float radius, World * world)
 {
 	float hexagonRadius = 10;
 	float hexagonWidth = hexagonRadius * 2;
 	float hexagonHeight = sqrt(3)/2 * hexagonWidth;
 	int numberOfLayersHorizontal = (((radius * 2) - hexagonWidth) / (hexagonWidth * 1.5f)) + 1;
-	int numberOfLayersVertical = (radius * 2) / hexagonHeight;
+	int numberOfLayersVertical = (((radius * 2) / hexagonHeight) / 2) + 1;
 	int layers = (numberOfLayersHorizontal < numberOfLayersVertical) ? numberOfLayersHorizontal : numberOfLayersVertical;
 
 	this->position = position;
 	this->radius = radius;
-
-	Shapes::hexagon(border, 0, position, radius, Color(250,250,250,100));
-
-	border[6] = border[0];
+	this->world = world;
+	this->player = NULL;
 
 	floorTiles = FloorTiles(Vector2i(2 * radius, 2 * radius), position, layers, hexagonRadius);
 }
@@ -33,6 +33,11 @@ Territory::~Territory()
 	}
 }
 
+Vector2f Territory::getPosition()
+{
+	return position;
+}
+
 void Territory::addEntity(Entity * entity)
 {
 	spawnQueue.push(entity);
@@ -44,11 +49,9 @@ void Territory::removeEntity(Entity * entity)
 	{
 		if ((*it) == entity)
 		{
-			Entity * entity = *it;
+			entities.erase(it);
 
-			it = entities.erase(it);
-
-			delete entity;
+			break;
 		}
 		else
 		{
@@ -70,15 +73,8 @@ void Territory::cleanup()
 {
 	float threshold = radius * 0.8;
 	vector<Vector2f> vertecies;
-	ConvexHull convexHull;
-
-	for (int i = 0; i < 6; i++)
-	{
-		vertecies.push_back(border[i].position);
-	}
-
-	convexHull = MonotoneChain::getConvexHull(vertecies);
 	bool clean = false;
+
 	for (std::list<Entity *>::iterator it = entities.begin(); it != entities.end();)
 	{
 		clean = false;
@@ -113,7 +109,6 @@ void Territory::cleanup()
 
 void Territory::draw(RenderWindow * window)
 {
-	window->draw(border, 7, PrimitiveType::LinesStrip);
 	floorTiles.draw(window);
 
 	for (std::list<Entity *>::iterator it = entities.begin(); it != entities.end(); it++)
@@ -162,11 +157,22 @@ void Territory::update(UpdateInfo info)
 
 	}
 
+	if (player != NULL)
+	{
+		if (floorTiles.intersectsBorder(player))
+		{
+			Vector2f direction = Vector2fMath::unitVector(player->getPosition() - position);
+			Vector2f seekPosition = position + (direction * radius * 1.5f);
+
+			world->changeTerritory(seekPosition);
+		}
+	}
+
 	// Spawn enemies
 	if (rand() % 5 == 1)
 	{
 		Enemy * enemy = new Enemy(100, position + Vector2f(512 - rand() % 1024, 512 - rand() % 1024));
 	
-		addEntity(enemy);
+		//addEntity(enemy);
 	}
 }
