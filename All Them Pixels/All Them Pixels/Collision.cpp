@@ -10,4 +10,5 @@ bool Collision::isClose(Entity * entity1, Entity * entity2)
 	if (hitbox1.left + hitbox1.width < hitbox2.left) return false; //entity1 is to the left of entity2
 	if (hitbox1.left > hitbox2.left + hitbox2.width) return false; //entity1 is to the right of entity2
 	return true; // entity1 is preeetty close to entity 2
+	             //                     ^ and how close it that exactly?
 }

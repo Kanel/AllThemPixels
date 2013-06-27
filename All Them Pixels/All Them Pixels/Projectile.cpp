@@ -17,6 +17,12 @@ float Projectile::getDamage()
 	return this->damage;
 }
 
+void Projectile::expend()
+{
+	expended = true;;
+}
+
+
 bool Projectile::isExpended()
 {
 	return expended;

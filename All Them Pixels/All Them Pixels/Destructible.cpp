@@ -1,6 +1,6 @@
 #include "Destructible.h"
 
-Destructible::Destructible(unsigned int hp, Vector2f position) : Entity(position)
+Destructible::Destructible(int hp, Vector2f position) : Entity(position)
 {
 	this->hp = hp;
 }
@@ -18,6 +18,11 @@ void Destructible::setHP(int hp)
 void Destructible::modHP(int hp)
 {
 	this->hp += hp;
+}
+
+void Destructible::expend()
+{
+	hp = 0;
 }
 
 bool Destructible::isExpended()

@@ -12,6 +12,7 @@ Territory::Territory(Vector2f position, float radius, World * world)
 	int layers = (numberOfLayersHorizontal < numberOfLayersVertical) ? numberOfLayersHorizontal : numberOfLayersVertical;
 	HexagonGrid grid(Hexagon::FlatTopped);
 	
+	this->active = false;
 	this->position = position;
 	this->radius = radius;
 	this->world = world;
@@ -149,12 +150,17 @@ void Territory::update(UpdateInfo info)
 
 		if(Enum::isFlagSet((*it)->getType(), EntityTypes::EnemyProjectileEntity))
 		{
-			if (Collision::isClose(player, (*it))) player->modHP(-((Projectile*)(*it))->getDamage()); //DIE();
+			if (Collision::isClose(player, (*it)))
+			{
+				player->modHP(-((Projectile*)(*it))->getDamage()); //DIE();
+				(*it)->expend();
+			}
 			continue;
 		}
 		if(Enum::isFlagSet((*it)->getType(), EntityTypes::ProjectileEntity))
 		{
 			Projectile* projectile = (Projectile*)*it;
+
 			for (std::list<Entity *>::iterator it2 = entities.begin(); it2 != entities.end(); it2++) //can has enemy list?
 			{
 				if(Enum::isFlagSet((*it2)->getType(), EntityTypes::EnemyEntity))
@@ -162,7 +168,9 @@ void Territory::update(UpdateInfo info)
 					if (Collision::isClose((*it2), projectile))
 					{
 						((Enemy *)(*it2))->modHP(-projectile->getDamage());
-						continue;
+						//projectile->expend();
+
+						break;
 					}
 				}
 			}
@@ -180,14 +188,22 @@ void Territory::update(UpdateInfo info)
 	{
 		for (int i = 0; i < borderCoordinates.size(); i++)
 		{
-			if (Shapes::contains(gridMatrix[offset.x + borderCoordinates[i].q][offset.y + borderCoordinates[i].r]->getBoundingBox(), player->getBoundingBox()))
+			Hexagon * hexagon = gridMatrix[offset.x + borderCoordinates[i].q][offset.y + borderCoordinates[i].r];
+
+			if (Shapes::contains(hexagon->getBoundingBox(), player->getBoundingBox()))
 			{
 				Vector2f direction = Vector2fMath::unitVector(player->getPosition() - position);
 				Vector2f seekPosition = position + (direction * radius * 1.5f);
+				std::list<Vector2f> penetration;
 
-				world->changeTerritory(seekPosition);
+				if (SAT::collides(player->getConvexHull(), hexagon->getConvexHull(), penetration))
+				{
+					//player->translate(SAT::getShortestPenetration(penetration));
 
-				break;
+					world->changeTerritory(seekPosition);
+
+					break;
+				}				
 			}
 		}
 	}
@@ -197,6 +213,6 @@ void Territory::update(UpdateInfo info)
 	{
 		Enemy * enemy = new Enemy(100, position + Vector2f(512 - rand() % 1024, 512 - rand() % 1024));
 	
-		//addEntity(enemy);
+		addEntity(enemy);
 	}
 }

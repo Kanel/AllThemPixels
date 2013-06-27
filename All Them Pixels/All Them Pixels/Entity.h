@@ -23,6 +23,7 @@ public:
 	virtual void setPosition(Vector2f position);
 
 	EntityTypes getType();
+	virtual void expend() = NULL;// not at all a strange name...
 	virtual bool isExpended() = NULL;
 	virtual bool isEtheral() = NULL;
 

@@ -19,6 +19,7 @@ public:
 
 	float getDamage();
 
+	void expend() override;
 	bool isExpended() override;
 	bool isEtheral() override;
 

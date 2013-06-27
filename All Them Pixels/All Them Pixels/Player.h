@@ -14,12 +14,14 @@ class Territory;
 
 class Player : public Destructible
 {
+public:
+	Territory * removePlease;
+
 protected:
 	float aimDirection;
 	Vector2f aimBoxPosition;
 	VertexArray shape;
 	VertexArray aimBox;
-	Territory * removePlease;
 
 protected:
 	void applyTransform(Transform transform, VertexArray &vertecies);

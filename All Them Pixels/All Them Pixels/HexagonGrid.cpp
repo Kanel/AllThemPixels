@@ -108,10 +108,10 @@ AxialCoordinates HexagonGrid::step(AxialCoordinates axialCoordinates, HexagonDir
 	return axialCoordinates + neighbors[direction]; 
 }
 
-/*vector<AxialCoordinates> HexagonGrid::getCornerRegionCoordinates(int corner)
+vector<AxialCoordinates> HexagonGrid::getCornerRegionCoordinates(int corner)
 {
-
-}*/
+	return vector<AxialCoordinates>();
+}
 
 vector<AxialCoordinates> HexagonGrid::getRingCoordinates(int layer)
 {

@@ -8,12 +8,13 @@ protected:
 	int hp;
 
 public:
-	Destructible(unsigned int hp, Vector2f position);
+	Destructible(int hp, Vector2f position);
 
 	int getHP();
 	void setHP(int hp);
 	void modHP(int hp);
 
+	void expend() override;
 	bool isExpended() override;
 	bool isEtheral() override;
 };

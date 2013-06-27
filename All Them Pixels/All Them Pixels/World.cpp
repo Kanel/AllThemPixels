@@ -5,9 +5,9 @@ World::World()
 	Vector2f position(0, 0);
 	HexagonGrid grid(Hexagon::PointyTopped);
 
-	territoryRadius = 256;
+	territoryRadius = 512;
 	territorySpacing = 0;
-	layers = 2;
+	layers = 1;
 	tileSize = territoryRadius + (territorySpacing / 2);
 	matrixSize = (layers * 2) + 1;
 	offset = Vector2i(layers, layers);
@@ -63,6 +63,11 @@ void World::changeTerritory(Vector2f position)
 	current->player = NULL;
 	next->player = player;
 
+	player->removePlease = next;
+
+	current->active = false;
+	next->active = true;
+
 	current->removeEntity(player);
 	next->addEntity(player);
 
@@ -93,7 +98,7 @@ void World::update(UpdateInfo info)
 	{
 		for (int j = 0; j < matrixSize; j++)
 		{
-			if (territories[i][j] != NULL)
+			if (territories[i][j] != NULL && territories[i][j]->active)
 			{
 				territories[i][j]->integrateSpawnQueue();
 				territories[i][j]->update(info);

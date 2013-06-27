@@ -22,8 +22,9 @@ int main(int argc, char ** argv)
 	sf::Clock elapsedTime;
 	int fps = 0;
 	Territory * t = world.getTerritory(AxialCoordinates(0, 0));
-	Player * player = new Player(t, 100, Vector2f(0, 0));
+	Player * player = new Player(t, 100000000, Vector2f(0, 0));
 
+	t->active = true;
 	t->player = player;
 	t->addEntity(player);
 

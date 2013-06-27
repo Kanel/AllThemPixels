@@ -16,7 +16,7 @@ public:
 
 private:
 	Style style;
-	Vertex corners[6];
+	Vertex corners[7];
 	Rect<float> boundingBox;
 	ConvexHull convexHull;
 

@@ -3,6 +3,7 @@
 
 std::vector<Vector2f> SAT::getVectors(std::vector<Vector2f> vertices)
 {
+	int index = 0;
 	std::vector<Vector2f> vectors(vertices.size());
 
 	for (int i = 0; i < vertices.size() - 1; i++)
@@ -10,9 +11,9 @@ std::vector<Vector2f> SAT::getVectors(std::vector<Vector2f> vertices)
 		Vector2f a = vertices[i];
 		Vector2f b = vertices[i + 1];
 		
-		vectors.push_back(Vector2fMath::leftNormal(b - a));
+		vectors[index++] = Vector2fMath::leftNormal(b - a);
 	}
-	vectors.push_back(Vector2fMath::leftNormal(vertices[0] - vertices[vertices.size() - 1]));
+	vectors[index] = Vector2fMath::leftNormal(vertices[0] - vertices[vertices.size() - 1]);
 
 	return vectors;
 }
