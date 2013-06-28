@@ -4,10 +4,10 @@ void AI::update(Territory * territory, Enemy * target, Player * player, UpdateIn
 {
 	float projectileSpeed = 4;
 	float speed = 2;
-	int range = 50;
+	int range = 100;
 	Vector2f direction = Vector2fMath::unitVector(player->getPosition() - target->getPosition());
 
-	if (Vector2fMath::distance(player->getPosition(), target->getPosition()) < range)
+	if (Vector2fMath::distance(player->getPosition(), target->getPosition()) < range * 2)
 	{
 		float t = direction.x;
 		direction.x = direction.y;
