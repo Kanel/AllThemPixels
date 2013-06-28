@@ -93,22 +93,7 @@ void Territory::cleanup()
 
 		if (entity->isExpended())
 		{
-			clean = true;
-		}
-		/*else if (!Enum::isFlagSet(entity->getType(), EntityTypes::ProjectileEntity))
-		{
-			float distanceToCenter = Vector2fMath::distance(position, entity->getPosition());
-
-			if (distanceToCenter >= threshold && !entity->collidesWith(convexHull))
-			{
-				clean = true;
-			}
-		}*/
-
-		if (clean)
-		{
 			it = entities.erase(it);
-
 			delete entity;
 		}
 		else
@@ -126,14 +111,16 @@ void Territory::draw(RenderWindow * window)
 		{
 			if (gridMatrix[i][j] != NULL)
 			{
-				gridMatrix[i][j]->draw(window);
+				if (Collision::isWithinWindow(gridMatrix[i][j]->getBoundingBox(), window))
+					gridMatrix[i][j]->draw(window);
 			}
 		}
 	}
 
 	for (std::list<Entity *>::iterator it = entities.begin(); it != entities.end(); it++)
 	{
-		(*it)->draw(window);
+		if (Collision::isWithinWindow((*it)->getBoundingBox(), window))
+			(*it)->draw(window);
 	}
 }
 
@@ -153,6 +140,7 @@ void Territory::update(UpdateInfo info)
 			if (Collision::isClose(player, (*it)))
 			{
 				player->modHP(-((Projectile*)(*it))->getDamage()); //DIE();
+				player->fade();
 				(*it)->expend();
 			}
 			continue;
@@ -190,7 +178,7 @@ void Territory::update(UpdateInfo info)
 		{
 			Hexagon * hexagon = gridMatrix[offset.x + borderCoordinates[i].q][offset.y + borderCoordinates[i].r];
 
-			if (Shapes::contains(hexagon->getBoundingBox(), player->getBoundingBox()))
+			if (Collision::hitBoxesOverlap(hexagon->getBoundingBox(), player->getBoundingBox()))
 			{
 				Vector2f direction = Vector2fMath::unitVector(player->getPosition() - position);
 				Vector2f seekPosition = position + (direction * radius * 1.5f);

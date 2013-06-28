@@ -1,5 +1,3 @@
-//#include "HexagonGrid.h"
-//#include "GlareEffect.h"
 #include "Player.h"
 #include "Territory.h"
 #include "UpdateInfo.h"

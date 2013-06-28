@@ -115,6 +115,14 @@ ConvexHull Player::getConvexHull()
 	return MonotoneChain::getConvexHull(vertecies);
 }
 
+void Player::fade()
+{
+	for (int i = 0; i < shape.getVertexCount(); i++)
+	{
+		shape[i].color.a -= 10;
+	}
+}
+
 void Player::draw(RenderWindow * window)
 {
 	window->draw(shape);

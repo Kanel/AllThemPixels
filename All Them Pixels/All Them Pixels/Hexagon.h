@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Collision.h"
 #include "SAT.h"
 #include <SFML\Graphics.hpp>
 

@@ -62,7 +62,7 @@ bool FloorTiles::intersectsBorder(Entity * entity)
 {
 	for (int i = 0; i < borderCount; i++)
 	{
-		if (Shapes::contains(border[i].boundingBox, entity->getBoundingBox()))
+		if (Collision::hitBoxesOverlap(border[i].boundingBox, entity->getBoundingBox()))
 		{
 			// Todo: more accurate collision.
 
