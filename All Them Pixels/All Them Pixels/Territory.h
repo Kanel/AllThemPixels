@@ -35,6 +35,7 @@ private:
 	vector<AxialCoordinates> borderCoordinates;
 	World * world;
 	Rect<float> boundingBox;
+	vector<AxialCoordinates> drawGrid;
 
 public:
 	bool active;

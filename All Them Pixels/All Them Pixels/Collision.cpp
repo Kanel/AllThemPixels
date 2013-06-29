@@ -20,6 +20,7 @@ bool Collision::isClose(Entity * entity1, Entity * entity2)
 bool Collision::isWithinWindow(Rect<float> hitbox1, View view)
 {
 	Rect<float> hitbox2;
+
 	hitbox2.height = view.getSize().y;
 	hitbox2.width = view.getSize().x;
 	hitbox2.top = view.getCenter().y - hitbox2.height / 2;

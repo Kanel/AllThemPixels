@@ -6,6 +6,7 @@ Territory::Territory(Vector2f position, float radius, World * world)
 {
 	// Flat topped hexagons
 	// Todo: clean it a bit
+	// Todo: figure out number of layers
 	float hexagonRadius = 10;
 	float hexagonWidth = hexagonRadius * 2;
 	float hexagonHeight = sqrt(3)/2 * hexagonWidth;
@@ -23,7 +24,7 @@ Territory::Territory(Vector2f position, float radius, World * world)
 	offset.x = layers;
 	offset.y = layers;
 	matrixLength = (layers * 2) + 1;
-	boundingBox.width = ((layers * 2) * hexagonWidth * 1.5f) + hexagonWidth;
+	boundingBox.width = (layers * hexagonWidth * 1.5f) + hexagonWidth;
 	boundingBox.height = ((layers * 2) + 1) * hexagonHeight;
 	boundingBox.left = position.x - (boundingBox.width / 2);
 	boundingBox.top = position.y - (boundingBox.height / 2);
@@ -34,6 +35,30 @@ Territory::Territory(Vector2f position, float radius, World * world)
 	for (int i = 0; i < borderCoordinates.size(); i++)
 	{
 		gridMatrix[offset.x + borderCoordinates[i].q][offset.y + borderCoordinates[i].r]->setColor(Color(255, 0, 0));
+	}
+
+	// Pre compute values!?!
+	int index = 0;
+	
+	layers = 47;
+	
+	drawGrid.resize(grid.getNumberOfTiles(layers));
+
+	drawGrid[index++] = AxialCoordinates(offset.x, offset.y);
+
+	// Layer Territories
+	for (int k = 1; k <= layers; k++)
+	{
+		AxialCoordinates hexagon(offset.x + -k, offset.y + k);
+
+		for (int i = 0; i < 6; i++)
+		{
+			for (int j = 0; j < k; j++)
+			{
+				drawGrid[index++] = hexagon;
+				hexagon = grid.step(hexagon, (HexagonGrid::HexagonDirection)((HexagonGrid::DownRight + i) % 6));
+			}
+		}
 	}
 }
 
@@ -117,14 +142,40 @@ void Territory::cleanup()
 
 void Territory::draw(RenderWindow * window)
 {
-	for (int i = 0; i < matrixLength; i++)
+	if (active)
 	{
-		for (int j = 0; j < matrixLength; j++)
+		int layers = 47;
+		HexagonGrid grid(Hexagon::FlatTopped);
+		AxialCoordinates origin = grid.getAxialCoordinates(player->getPosition() - position, 10);
+
+		gridMatrix[offset.x + origin.q][offset.y + origin.r]->draw(window);
+
+		// Layer Territories
+		for (int i = 0; i < drawGrid.size(); i++)
 		{
-			if (gridMatrix[i][j] != NULL)
+			int q = origin.q + drawGrid[i].q;
+			int r = origin.r + drawGrid[i].r;
+					
+			if (0 <= q && q < matrixLength && 0 <= r && r < matrixLength)
 			{
-				if (Collision::isWithinWindow(gridMatrix[i][j]->getBoundingBox(), window->getView()))
-					gridMatrix[i][j]->draw(window);
+				if (gridMatrix[q][r] != NULL)
+				{
+					gridMatrix[q][r]->draw(window);
+				}		
+			}
+		}
+	}
+	else
+	{
+		for (int i = 0; i < matrixLength; i++)
+		{
+			for (int j = 0; j < matrixLength; j++)
+			{
+				if (gridMatrix[i][j] != NULL)
+				{
+					if (Collision::isWithinWindow(gridMatrix[i][j]->getBoundingBox(), window->getView()))
+						gridMatrix[i][j]->draw(window);
+				}
 			}
 		}
 	}
@@ -181,7 +232,6 @@ void Territory::update(UpdateInfo info)
 			AI::update(this, (Enemy *)(*it), player, info);
 			continue;
 		}
-
 	}
 
 	if (player != NULL)

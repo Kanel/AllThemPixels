@@ -86,6 +86,8 @@ void World::draw(RenderWindow * window)
 		{
 			if (territories[i][j] != NULL)
 			{
+				Rect<float> gröt = territories[i][j]->getBoundingBox();
+
 				if (Collision::isWithinWindow(territories[i][j]->getBoundingBox(), window->getView()))
 				{
 					territories[i][j]->draw(window);
