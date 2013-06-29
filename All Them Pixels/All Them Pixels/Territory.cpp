@@ -4,6 +4,8 @@ Territory::Territory() { }
 
 Territory::Territory(Vector2f position, float radius, World * world)
 {
+	// Flat topped hexagons
+	// Todo: clean it a bit
 	float hexagonRadius = 10;
 	float hexagonWidth = hexagonRadius * 2;
 	float hexagonHeight = sqrt(3)/2 * hexagonWidth;
@@ -12,14 +14,19 @@ Territory::Territory(Vector2f position, float radius, World * world)
 	int layers = (numberOfLayersHorizontal < numberOfLayersVertical) ? numberOfLayersHorizontal : numberOfLayersVertical;
 	HexagonGrid grid(Hexagon::FlatTopped);
 	
-	this->active = false;
 	this->position = position;
 	this->radius = radius;
 	this->world = world;
-	this->player = NULL;
-	this->offset.x = layers;
-	this->offset.y = layers;
-	this->matrixLength = (layers * 2) + 1;
+
+	active = false;	
+	player = NULL;
+	offset.x = layers;
+	offset.y = layers;
+	matrixLength = (layers * 2) + 1;
+	boundingBox.width = ((layers * 2) * hexagonWidth * 1.5f) + hexagonWidth;
+	boundingBox.height = ((layers * 2) + 1) * hexagonHeight;
+	boundingBox.left = position.x - (boundingBox.width / 2);
+	boundingBox.top = position.y - (boundingBox.height / 2);
 
 	gridMatrix = grid.generateGrid(position, hexagonRadius, layers);
 	borderCoordinates = grid.getRingCoordinates(layers);
@@ -80,6 +87,11 @@ void Territory::integrateSpawnQueue()
 	}
 }
 
+Rect<float> Territory::getBoundingBox()
+{
+	return boundingBox;
+}
+
 void Territory::cleanup()
 {
 	float threshold = radius * 0.8;
@@ -111,7 +123,7 @@ void Territory::draw(RenderWindow * window)
 		{
 			if (gridMatrix[i][j] != NULL)
 			{
-				if (Collision::isWithinWindow(gridMatrix[i][j]->getBoundingBox(), window))
+				if (Collision::isWithinWindow(gridMatrix[i][j]->getBoundingBox(), window->getView()))
 					gridMatrix[i][j]->draw(window);
 			}
 		}
@@ -119,9 +131,9 @@ void Territory::draw(RenderWindow * window)
 
 	for (std::list<Entity *>::iterator it = entities.begin(); it != entities.end(); it++)
 	{
-		if (Collision::isWithinWindow((*it)->getBoundingBox(), window))
+		if (Collision::isWithinWindow((*it)->getBoundingBox(), window->getView()))
 			(*it)->draw(window);
-	}
+	}	
 }
 
 void Territory::update(UpdateInfo info)
@@ -156,7 +168,7 @@ void Territory::update(UpdateInfo info)
 					if (Collision::isClose((*it2), projectile))
 					{
 						((Enemy *)(*it2))->modHP(-projectile->getDamage());
-						//projectile->expend();
+						projectile->expend();
 
 						break;
 					}
@@ -201,6 +213,6 @@ void Territory::update(UpdateInfo info)
 	{
 		Enemy * enemy = new Enemy(100, position + Vector2f(512 - rand() % 1024, 512 - rand() % 1024));
 	
-		addEntity(enemy);
+		//addEntity(enemy);
 	}
 }

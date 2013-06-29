@@ -17,14 +17,13 @@ bool Collision::isClose(Entity * entity1, Entity * entity2)
 	return hitBoxesOverlap(hitbox1, hitbox2);
 }
 
-bool Collision::isWithinWindow(Rect<float> hitbox1, RenderWindow * window)
+bool Collision::isWithinWindow(Rect<float> hitbox1, View view)
 {
 	Rect<float> hitbox2;
-	hitbox2.height = window->getView().getSize().y;
-	hitbox2.width = window->getView().getSize().x;
-	hitbox2.top = window->getView().getCenter().y - hitbox2.height / 2;
-	hitbox2.left = window->getView().getCenter().x - hitbox2.width / 2;
-	hitbox2.width -= 100; //for demonstration
+	hitbox2.height = view.getSize().y;
+	hitbox2.width = view.getSize().x;
+	hitbox2.top = view.getCenter().y - hitbox2.height / 2;
+	hitbox2.left = view.getCenter().x - hitbox2.width / 2;
 
 	return hitBoxesOverlap(hitbox1, hitbox2);
 }

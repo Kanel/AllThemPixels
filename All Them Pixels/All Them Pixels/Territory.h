@@ -34,6 +34,7 @@ private:
 	Hexagon *** gridMatrix;
 	vector<AxialCoordinates> borderCoordinates;
 	World * world;
+	Rect<float> boundingBox;
 
 public:
 	bool active;
@@ -49,6 +50,8 @@ public:
 	void addEntity(Entity * entity);
 	void removeEntity(Entity * entity);
 	void integrateSpawnQueue();
+
+	Rect<float> getBoundingBox();
 
 	void cleanup();
 	void draw(RenderWindow * window);

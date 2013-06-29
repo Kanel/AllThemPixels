@@ -86,7 +86,10 @@ void World::draw(RenderWindow * window)
 		{
 			if (territories[i][j] != NULL)
 			{
-				territories[i][j]->draw(window);
+				if (Collision::isWithinWindow(territories[i][j]->getBoundingBox(), window->getView()))
+				{
+					territories[i][j]->draw(window);
+				}
 			}
 		}
 	}

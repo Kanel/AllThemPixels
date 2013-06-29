@@ -15,9 +15,9 @@ int main(int argc, char ** argv)
 	ContextSettings settings(0, 0, 8, 2, 0);
 	VideoMode videoMode(1024, 1024);
     RenderWindow window(videoMode, windowtitle, 7, settings);
-	World world(Vector2f(), 512, 0, 3);
-	sf::Clock c;
-	sf::Clock elapsedTime;
+	World world(Vector2f(), 2048, 0, 1);
+	Clock c;
+	Clock elapsedTime;
 	int fps = 0;
 	Territory * t = world.getTerritory(AxialCoordinates(0, 0));
 	Player * player = new Player(t, 100000000, Vector2f(0, 0));
