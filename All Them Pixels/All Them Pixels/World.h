@@ -24,7 +24,7 @@ private:
 	Territory *** territories;
 
 public:
-	World();
+	World(Vector2f position, float territoryRadius, float territorySpacing, int layers);
 
 	Territory * getTerritory(AxialCoordinates coordinates);
 	void changeTerritory(Vector2f position);

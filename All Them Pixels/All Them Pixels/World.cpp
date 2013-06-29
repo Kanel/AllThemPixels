@@ -1,13 +1,13 @@
 #include "World.h"
 
-World::World()
+World::World(Vector2f position, float territoryRadius, float territorySpacing, int layers)
 {
-	Vector2f position(0, 0);
 	HexagonGrid grid(Hexagon::PointyTopped);
 
-	territoryRadius = 512;
-	territorySpacing = 0;
-	layers = 1;
+	this->territoryRadius = territoryRadius;
+	this->territorySpacing = territorySpacing;
+	this->layers = layers;
+
 	tileSize = territoryRadius + (territorySpacing / 2);
 	matrixSize = (layers * 2) + 1;
 	offset = Vector2i(layers, layers);
