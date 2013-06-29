@@ -8,7 +8,7 @@ Territory::Territory(Vector2f position, float radius, World * world)
 	float hexagonWidth = hexagonRadius * 2;
 	float hexagonHeight = sqrt(3)/2 * hexagonWidth;
 	int numberOfLayersHorizontal = (((radius * 2) - hexagonWidth) / (hexagonWidth * 1.5f)) + 1;
-	int numberOfLayersVertical = (((radius * 2) / hexagonHeight) / 2) + 1;
+	int numberOfLayersVertical = ((((sqrt(3) / 2) *  radius * 2) / hexagonHeight) - 1) / 2;
 	int layers = (numberOfLayersHorizontal < numberOfLayersVertical) ? numberOfLayersHorizontal : numberOfLayersVertical;
 	HexagonGrid grid(Hexagon::FlatTopped);
 	
