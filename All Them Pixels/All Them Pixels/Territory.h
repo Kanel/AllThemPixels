@@ -6,11 +6,11 @@
 #include "Shapes.h"
 #include "Player.h"
 #include "Enemy.h"
-#include "FloorTiles.h"
 #include "UserInput.h"
 #include "AI.h"
 #include "Collision.h"
 #include "World.h"
+#include "HexagonGrid.h"
 #include <SFML\Graphics.hpp>
 #include <list>
 #include <queue>
