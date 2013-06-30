@@ -21,7 +21,7 @@ void Enemy::setCooldown(int cooldown)
 
 int Enemy::getLastShootFired()
 {
-	return cooldown;
+	return lastShootFired;
 }
 
 void Enemy::setLastShootFired(int lastShootFired)
