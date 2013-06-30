@@ -86,6 +86,7 @@ void Territory::addEntity(Entity * entity)
 	spawnQueue.push(entity);
 }
 
+// Note: Does not delete entities.
 void Territory::removeEntity(Entity * entity)
 {
 	for (std::list<Entity *>::iterator it = entities.begin(); it != entities.end();)
@@ -189,11 +190,6 @@ void Territory::draw(RenderWindow * window)
 
 void Territory::update(UpdateInfo info)
 {
-	Vector2f vector = UserInput::getJoystickVector(0, Joystick::Axis::X, Joystick::Axis::Y);
-
-	vector.x = (powf(vector.x, 2) > 400) ? -vector.x / 15 : 0;
-	vector.y = (powf(vector.y, 2) > 400) ? -vector.y / 15 : 0;
-
 	for (std::list<Entity *>::iterator it = entities.begin(); it != entities.end(); it++)
 	{
 		(*it)->update(info);
@@ -263,6 +259,6 @@ void Territory::update(UpdateInfo info)
 	{
 		Enemy * enemy = new Enemy(100, position + Vector2f(512 - rand() % 1024, 512 - rand() % 1024));
 	
-		//addEntity(enemy);
+		addEntity(enemy);
 	}
 }

@@ -4,8 +4,29 @@ Enemy::Enemy(unsigned int hp, Vector2f position) : Destructible(hp, position)
 {
 	Shapes::rectangle(shape, 0, position, 20, 20, Color(0, 0, 160, 255));
 
-	cooldownThisShouldNotBePublic = 0;
+	cooldown = 500 + rand() % 256;
+	lastShootFired = 0;
 	type = EntityTypes::EnemyEntity;
+}
+
+int Enemy::getCooldown()
+{
+	return cooldown;
+}
+
+void Enemy::setCooldown(int cooldown)
+{
+	this->cooldown = cooldown;
+}
+
+int Enemy::getLastShootFired()
+{
+	return cooldown;
+}
+
+void Enemy::setLastShootFired(int lastShootFired)
+{
+	this->lastShootFired = lastShootFired;
 }
 
 void Enemy::applyTransform(Transform transform)

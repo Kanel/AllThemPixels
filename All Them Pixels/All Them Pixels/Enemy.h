@@ -9,14 +9,19 @@ using namespace sf;
 
 class Enemy : public Destructible
 {
-public:
-	int cooldownThisShouldNotBePublic;
-
 protected:
+	int cooldown;
+	int lastShootFired;
 	Vertex shape[4];
 
 public:
 	Enemy(unsigned int hp, Vector2f position);
+
+	int getCooldown();
+	void setCooldown(int cooldown);
+
+	int getLastShootFired();
+	void setLastShootFired(int lastShootFired);
 
 	void applyTransform(Transform transform) override;
 

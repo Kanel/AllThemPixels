@@ -16,11 +16,9 @@ void AI::update(Territory * territory, Enemy * target, Player * player, UpdateIn
 
 	target->translate(direction * speed);
 
-	target->cooldownThisShouldNotBePublic -= info.elapsedSeconds;
-
-	if (target->cooldownThisShouldNotBePublic <= 0)
+	if (target->getLastShootFired() + target->getCooldown() <= info.elapsedGameTime)
 	{
-		target->cooldownThisShouldNotBePublic = 2000;
+		target->setLastShootFired(info.elapsedGameTime);
 		territory->addEntity(new Projectile(target->getPosition(), direction * projectileSpeed, 20.0, range, Color::Blue, EnemyProjectileEntity));
 	}
 }

@@ -2,6 +2,6 @@
 
 struct UpdateInfo
 {
-	int elapsedSeconds;
-	int ticks;
+	int updateInterval;
+	int elapsedGameTime;
 };

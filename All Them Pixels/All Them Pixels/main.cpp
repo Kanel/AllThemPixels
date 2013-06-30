@@ -9,6 +9,8 @@ using namespace sf;
 
 int main(int argc, char ** argv)
 {
+	int elapsedGameTime = 0;
+	int updateInterval = 10;
 	char * windowtitle = "All them Pixels!";
 	bool fullscreen = true;
 	Uint32 windowStyle = Style::Resize;	
@@ -51,13 +53,15 @@ int main(int argc, char ** argv)
 			}
         }
 
-		if (c.getElapsedTime().asMilliseconds() >= 10)
+		if (c.getElapsedTime().asMilliseconds() >= updateInterval)
 		{
 			UpdateInfo info;
 			View view = window.getView();
 
-			info.elapsedSeconds = 10;
-			info.ticks = 0;
+			elapsedGameTime += updateInterval;
+
+			info.updateInterval = updateInterval;
+			info.elapsedGameTime = elapsedGameTime;
 
 			world.update(info);
 
