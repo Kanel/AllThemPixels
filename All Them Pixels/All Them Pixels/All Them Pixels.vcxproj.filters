@@ -33,9 +33,6 @@
     <ClCompile Include="HexagonGrid.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GameCore.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Entity.cpp">
       <Filter>Source Files\Entities</Filter>
     </ClCompile>
@@ -59,9 +56,6 @@
     </ClCompile>
     <ClCompile Include="Projectile.cpp">
       <Filter>Source Files\Entities</Filter>
-    </ClCompile>
-    <ClCompile Include="FloorTiles.cpp">
-      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Enum.cpp">
       <Filter>Source Files</Filter>
@@ -98,9 +92,6 @@
     <ClInclude Include="UpdateInfo.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GameCore.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Entity.h">
       <Filter>Header Files\Entities</Filter>
     </ClInclude>
@@ -124,9 +115,6 @@
     </ClInclude>
     <ClInclude Include="Projectile.h">
       <Filter>Header Files\Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="FloorTiles.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="EntityTypes.h">
       <Filter>Header Files</Filter>
