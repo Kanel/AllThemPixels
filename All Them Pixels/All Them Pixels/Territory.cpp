@@ -64,16 +64,17 @@ Territory::Territory(Vector2f position, float radius, World * world)
 
 Territory::~Territory()
 {
+	// Todo: fix
 	integrateSpawnQueue();
 
-	for (std::list<Entity *>::iterator it = entities.begin(); it != entities.end();)
+	/*for (std::list<Entity *>::iterator it = entities.begin(); it != entities.end();)
 	{
 		Entity * entity = *it;
 
 		it = entities.erase(it);
 
 		delete entity;
-	}
+	}*/
 }
 
 Vector2f Territory::getPosition()
@@ -89,17 +90,52 @@ void Territory::addEntity(Entity * entity)
 // Note: Does not delete entities.
 void Territory::removeEntity(Entity * entity)
 {
-	for (std::list<Entity *>::iterator it = entities.begin(); it != entities.end();)
+	if(Enum::isFlagSet(entity->getType(), EntityTypes::EnemyProjectileEntity))
 	{
-		if ((*it) == entity)
+		for (std::list<Projectile *>::iterator it = enemyProjectiles.begin(); it != enemyProjectiles.end();)
 		{
-			entities.erase(it);
+			if ((*it) == entity)
+			{
+				enemyProjectiles.erase(it);
 
-			break;
+				break;
+			}
+			else
+			{
+				it++;
+			}
 		}
-		else
+	}
+	else if(Enum::isFlagSet(entity->getType(), EntityTypes::ProjectileEntity))
+	{
+		for (std::list<Projectile *>::iterator it = playerProjectile.begin(); it != playerProjectile.end();)
 		{
-			it++;
+			if ((*it) == entity)
+			{
+				playerProjectile.erase(it);
+
+				break;
+			}
+			else
+			{
+				it++;
+			}
+		}
+	}
+	else if(Enum::isFlagSet(entity->getType(), EntityTypes::EnemyEntity))
+	{
+		for (std::list<Enemy *>::iterator it = enemies.begin(); it != enemies.end();)
+		{
+			if ((*it) == entity)
+			{
+				enemies.erase(it);
+
+				break;
+			}
+			else
+			{
+				it++;
+			}
 		}
 	}
 }
@@ -108,7 +144,20 @@ void Territory::integrateSpawnQueue()
 {
 	while(spawnQueue.size() > 0)
 	{
-		entities.push_back(spawnQueue.front());
+		Entity * entity = spawnQueue.front();
+
+		if(Enum::isFlagSet(entity->getType(), EntityTypes::EnemyProjectileEntity))
+		{
+			enemyProjectiles.push_back((Projectile *)entity);
+		}
+		else if(Enum::isFlagSet(entity->getType(), EntityTypes::ProjectileEntity))
+		{
+			playerProjectile.push_back((Projectile *)entity);
+		}
+		else if(Enum::isFlagSet(entity->getType(), EntityTypes::EnemyEntity))
+		{
+			enemies.push_back((Enemy *)entity);
+		}
 		spawnQueue.pop();
 	}
 }
@@ -120,18 +169,43 @@ Rect<float> Territory::getBoundingBox()
 
 void Territory::cleanup()
 {
-	float threshold = radius * 0.8;
-	vector<Vector2f> vertecies;
-	bool clean = false;
-
-	for (std::list<Entity *>::iterator it = entities.begin(); it != entities.end();)
+	for (std::list<Projectile *>::iterator it = enemyProjectiles.begin(); it != enemyProjectiles.end();)
 	{
-		clean = false;
 		Entity * entity = *it;
 
 		if (entity->isExpended())
 		{
-			it = entities.erase(it);
+			it = enemyProjectiles.erase(it);
+			delete entity;
+		}
+		else
+		{
+			it++;
+		}
+	}
+
+	for (std::list<Projectile *>::iterator it = playerProjectile.begin(); it != playerProjectile.end();)
+	{
+		Entity * entity = *it;
+
+		if (entity->isExpended())
+		{
+			it = playerProjectile.erase(it);
+			delete entity;
+		}
+		else
+		{
+			it++;
+		}
+	}
+
+	for (std::list<Enemy *>::iterator it = enemies.begin(); it != enemies.end();)
+	{
+		Entity * entity = *it;
+
+		if (entity->isExpended())
+		{
+			it = enemies.erase(it);
 			delete entity;
 		}
 		else
@@ -181,57 +255,76 @@ void Territory::draw(RenderWindow * window)
 		}
 	}
 
-	for (std::list<Entity *>::iterator it = entities.begin(); it != entities.end(); it++)
+	for (std::list<Projectile *>::iterator it = enemyProjectiles.begin(); it != enemyProjectiles.end(); it++)
 	{
 		if (Collision::isWithinWindow((*it)->getBoundingBox(), window->getView()))
+		{
 			(*it)->draw(window);
-	}	
+		}
+	}
+
+	for (std::list<Projectile *>::iterator it = playerProjectile.begin(); it != playerProjectile.end(); it++)
+	{
+		if (Collision::isWithinWindow((*it)->getBoundingBox(), window->getView()))
+		{
+			(*it)->draw(window);
+		}
+	}
+
+	for (std::list<Enemy *>::iterator it = enemies.begin(); it != enemies.end(); it++)
+	{
+		if (Collision::isWithinWindow((*it)->getBoundingBox(), window->getView()))
+		{
+			(*it)->draw(window);
+		}
+	}
+
+	if (active)
+	{
+		player->draw(window);
+	}
 }
 
 void Territory::update(UpdateInfo info)
 {
-	for (std::list<Entity *>::iterator it = entities.begin(); it != entities.end(); it++)
+	if (active)
 	{
-		(*it)->update(info);
-
-		if(Enum::isFlagSet((*it)->getType(), EntityTypes::EnemyProjectileEntity))
+		for (std::list<Projectile *>::iterator it = enemyProjectiles.begin(); it != enemyProjectiles.end(); it++)
 		{
+			(*it)->update(info);
+
 			if (Collision::isClose(player, (*it)))
 			{
 				player->modHP(-((Projectile*)(*it))->getDamage()); //DIE();
 				player->fade();
 				(*it)->expend();
 			}
-			continue;
-		}
-		if(Enum::isFlagSet((*it)->getType(), EntityTypes::ProjectileEntity))
-		{
-			Projectile* projectile = (Projectile*)*it;
-
-			for (std::list<Entity *>::iterator it2 = entities.begin(); it2 != entities.end(); it2++) //can has enemy list?
-			{
-				if(Enum::isFlagSet((*it2)->getType(), EntityTypes::EnemyEntity))
-				{
-					if (Collision::isClose((*it2), projectile))
-					{
-						((Enemy *)(*it2))->modHP(-projectile->getDamage());
-						projectile->expend();
-
-						break;
-					}
-				}
-			}
-			continue;
-		}
-		if (Enum::isFlagSet((*it)->getType(), EntityTypes::EnemyEntity))
-		{
-			AI::update(this, (Enemy *)(*it), player, info);
-			continue;
 		}
 	}
 
-	if (player != NULL)
+	for (std::list<Projectile *>::iterator it = playerProjectile.begin(); it != playerProjectile.end(); it++)
 	{
+		(*it)->update(info);
+
+		for (std::list<Enemy *>::iterator itEnemies = enemies.begin(); itEnemies != enemies.end(); itEnemies++)
+		{
+			if (Collision::isClose(*itEnemies, *it))
+			{
+				(*itEnemies)->modHP(-(*it)->getDamage());
+				(*it)->expend();
+			}
+		}
+	}
+
+	for (std::list<Enemy *>::iterator it = enemies.begin(); it != enemies.end(); it++)
+	{
+		AI::update(this, *it, player, info);
+	}	
+
+	if (active)
+	{
+		player->update(info);
+
 		for (int i = 0; i < borderCoordinates.size(); i++)
 		{
 			Hexagon * hexagon = gridMatrix[offset.x + borderCoordinates[i].q][offset.y + borderCoordinates[i].r];
@@ -244,14 +337,12 @@ void Territory::update(UpdateInfo info)
 
 				if (SAT::collides(player->getConvexHull(), hexagon->getConvexHull(), penetration))
 				{
-					//player->translate(SAT::getShortestPenetration(penetration));
-
 					world->changeTerritory(seekPosition);
 
 					break;
 				}				
 			}
-		}
+		}		
 	}
 
 	// Spawn enemies

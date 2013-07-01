@@ -19,8 +19,11 @@ using std::list;
 using std::queue;
 using namespace sf;
 
+class AI;
 class Player;
 class World;
+class Projectile;
+class Enemy;
 
 class Territory
 {
@@ -28,7 +31,9 @@ private:
 	Vector2f position;
 	float radius;
 	queue<Entity *> spawnQueue;
-	list<Entity *> entities;
+	list<Projectile *> enemyProjectiles;
+	list<Projectile *> playerProjectile;
+	list<Enemy *> enemies;
 	int matrixLength;
 	Vector2i offset;
 	Hexagon *** gridMatrix;
