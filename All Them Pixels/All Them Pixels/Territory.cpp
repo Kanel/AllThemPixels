@@ -31,6 +31,8 @@ Territory::Territory(Vector2f position, float radius, World * world)
 
 	gridMatrix = grid.generateGrid(position, hexagonRadius, layers);
 	borderCoordinates = grid.getRingCoordinates(layers);
+	layers = 47;
+	spawnGrid = grid.getRingCoordinates(layers + 2);
 
 	for (int i = 0; i < borderCoordinates.size(); i++)
 	{
@@ -40,7 +42,7 @@ Territory::Territory(Vector2f position, float radius, World * world)
 	// Pre compute values!?!
 	int index = 0;
 	
-	layers = 47;
+	
 	
 	drawGrid.resize(grid.getNumberOfTiles(layers));
 
@@ -160,6 +162,33 @@ void Territory::integrateSpawnQueue()
 		}
 		spawnQueue.pop();
 	}
+}
+
+Vector2f Territory::getSpawnLocation()
+{
+	bool found = false;	
+	HexagonGrid grid(Hexagon::FlatTopped);
+	AxialCoordinates origin = grid.getAxialCoordinates(player->getPosition() - position, 10);
+	Vector2f spawnPosition = position;
+
+	while(!found)
+	{
+		int i = rand() % spawnGrid.size();
+		int q = origin.q + spawnGrid[i].q;
+		int r = origin.r + spawnGrid[i].r;
+		int x = offset.x + q;
+		int y = offset.y + r;
+
+		if (0 <= x && x <= matrixLength && 0 <= y && y <= matrixLength)
+		{
+			if (gridMatrix[x][y] != NULL)
+			{
+				found = true;
+				spawnPosition += grid.getPosition(AxialCoordinates(q, r), 10);
+			}
+		}
+	}
+	return spawnPosition;
 }
 
 Rect<float> Territory::getBoundingBox()
@@ -346,10 +375,10 @@ void Territory::update(UpdateInfo info)
 	}
 
 	// Spawn enemies
-	if (rand() % 5 == 1)
+	if (true || rand() % 5 == 1)
 	{
-		Enemy * enemy = new Enemy(100, position + Vector2f(512 - rand() % 1024, 512 - rand() % 1024));
-	
+		Enemy * enemy = new Enemy(100, getSpawnLocation());
+			
 		addEntity(enemy);
 	}
 }

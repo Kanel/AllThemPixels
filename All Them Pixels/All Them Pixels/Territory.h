@@ -41,6 +41,7 @@ private:
 	World * world;
 	Rect<float> boundingBox;
 	vector<AxialCoordinates> drawGrid;
+	vector<AxialCoordinates> spawnGrid;
 
 public:
 	bool active;
@@ -56,6 +57,8 @@ public:
 	void addEntity(Entity * entity);
 	void removeEntity(Entity * entity);
 	void integrateSpawnQueue();
+
+	Vector2f getSpawnLocation();
 
 	Rect<float> getBoundingBox();
 

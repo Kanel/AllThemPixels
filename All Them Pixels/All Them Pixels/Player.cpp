@@ -61,7 +61,7 @@ void Player::updateAim()
 	aimDirection = direction;
 }
 
-Player::Player(Territory * removePlease, unsigned int hp, Vector2f position) : Destructible(hp, position), weapon(0, 20, 1000, 1, 10, 100)
+Player::Player(Territory * removePlease, unsigned int hp, Vector2f position) : Destructible(hp, position), weapon(0, 30, 1000, 1, 10, 100)
 {
 	Color color(0, 0, 0);
 

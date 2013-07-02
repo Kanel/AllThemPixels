@@ -25,9 +25,9 @@ Projectile * Weapon::fire(Vector2f position, Vector2f direction, int gameTime)
 	colorComposite += speed;
 	colorComposite += ttl;
 
-	color.r = ((colorComposite & 0x0000000F) >> 0) * 10;
-	color.g = ((colorComposite & 0x000000F0) >> 4) * 10;
-	color.b = ((colorComposite & 0x00000F00) >> 8) * 10;
+	color.r = (colorComposite & 0x000000FF) >> 0;
+	color.g = (colorComposite & 0x0000FF00) >> 8;
+	color.b = (colorComposite & 0x00FF0000) >> 16;
 
 	transform.rotate(spread - rand() % (spread * 2));
 
