@@ -19,7 +19,7 @@ float Projectile::getDamage()
 
 void Projectile::expend()
 {
-	expended = true;;
+	expended = true;
 }
 
 

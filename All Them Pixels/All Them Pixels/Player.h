@@ -6,6 +6,7 @@
 #include "Destructible.h"
 #include "Projectile.h"
 #include "UserInput.h"
+#include "Weapon.h"
 #include <math.h>
 
 using std::vector;
@@ -22,6 +23,7 @@ protected:
 	Vector2f aimBoxPosition;
 	VertexArray shape;
 	VertexArray aimBox;
+	Weapon weapon;
 
 protected:
 	void applyTransform(Transform transform, VertexArray &vertecies);

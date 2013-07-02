@@ -61,7 +61,7 @@ void Player::updateAim()
 	aimDirection = direction;
 }
 
-Player::Player(Territory * removePlease, unsigned int hp, Vector2f position) : Destructible(hp, position)
+Player::Player(Territory * removePlease, unsigned int hp, Vector2f position) : Destructible(hp, position), weapon(0, 20, 1000, 1, 10, 100)
 {
 	Color color(0, 0, 0);
 
@@ -131,21 +131,14 @@ void Player::draw(RenderWindow * window)
 
 void Player::update(UpdateInfo info)
 {
-	Vector2f speed = getJoystickVector(Joystick::Axis::U, Joystick::Axis::R);
 	Vector2f spawn = aimBoxPosition;
-
-	int range = sqrt(speed.x * speed.x + speed.y * speed.y) * 4;
-
+	Vector2f direction = Vector2fMath::unitVector(UserInput::getJoystickVector(0, Joystick::Axis::U, Joystick::Axis::R));
+	
 	updateAim();
 	translate(UserInput::getJoystickVector(0, Joystick::Axis::X, Joystick::Axis::Y) / 20.0f);
-
-	if (sqrtf(powf(speed.x, 2) + powf(speed.y, 2)) > 0)
+	
+	if (weapon.isReady(info.elapsedGameTime) && !_isnan(direction.x) && !_isnan(direction.y))
 	{
-		speed /= sqrtf(powf(speed.x, 2) + powf(speed.y, 2)) / 10;
-
-		for (int i = 0; i < 20; i++)
-		{
-			removePlease->addEntity(new Projectile(spawn, Vector2f(speed.x - 1 + rand() % 8, speed.y - 1 + rand() % 8), 50.0, range));
-		}
+		removePlease->addEntity(weapon.fire(aimBoxPosition, direction, info.elapsedGameTime));
 	}
 }
