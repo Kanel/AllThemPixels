@@ -22,13 +22,13 @@ int main(int argc, char ** argv)
 	Clock elapsedTime;
 	int fps = 0;
 	Territory * t = world.getTerritory(AxialCoordinates(0, 0));
-	Player * player = new Player(t, 100000000, Vector2f(0, 0));
+	Player * player = new Player(t, 1000, Vector2f(0, 0));
 
 	t->active = true;
 	t->player = player;
 	t->addEntity(player);
 
-    while (window.isOpen())
+	while (world.isActive())
     {
         Event event;
 
@@ -56,18 +56,14 @@ int main(int argc, char ** argv)
 		if (c.getElapsedTime().asMilliseconds() >= updateInterval)
 		{
 			UpdateInfo info;
-			View view = window.getView();
 
 			elapsedGameTime += updateInterval;
 
 			info.updateInterval = updateInterval;
 			info.elapsedGameTime = elapsedGameTime;
 
-			world.update(info);
-
-			view.setCenter(player->getPosition());
-
-			window.setView(view);
+			world.update(info);			
+			window.setView(world.getView(window.getView()));
 			window.clear();
 			world.draw(&window);
 			window.display();			

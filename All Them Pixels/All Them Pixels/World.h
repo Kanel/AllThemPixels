@@ -29,6 +29,9 @@ public:
 	Territory * getTerritory(AxialCoordinates coordinates);
 	void changeTerritory(Vector2f position);
 
+	bool isActive();
+
 	void draw(RenderWindow * window);
 	void update(UpdateInfo info);
+	View getView(View reference);
 };

@@ -3,6 +3,7 @@
 Destructible::Destructible(int hp, Vector2f position) : Entity(position)
 {
 	this->hp = hp;
+	this->originalHp = hp;
 }
 
 int Destructible::getHP()
@@ -27,7 +28,7 @@ void Destructible::expend()
 
 bool Destructible::isExpended()
 {
-	return !(hp > 0);
+	return hp <= 0;
 }
 
 bool Destructible::isEtheral()

@@ -242,6 +242,14 @@ void Territory::cleanup()
 			it++;
 		}
 	}
+
+	if (player->isExpended())
+	{
+		delete player;
+
+		active = false;
+		player = NULL;
+	}
 }
 
 void Territory::draw(RenderWindow * window)

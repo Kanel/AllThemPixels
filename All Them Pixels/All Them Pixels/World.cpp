@@ -71,11 +71,14 @@ void World::changeTerritory(Vector2f position)
 	current->removeEntity(player);
 	next->addEntity(player);
 
-	Vector2f what = next->getPosition();
-
 	player->setPosition(next->getPosition());
 
 	currentTerritoryCoordinates = nextCoordinates;
+}
+
+bool World::isActive()
+{
+	return getTerritory(currentTerritoryCoordinates)->active;
 }
 
 void World::draw(RenderWindow * window)
@@ -109,4 +112,15 @@ void World::update(UpdateInfo info)
 			}
 		}
 	}
+}
+
+View World::getView(View reference)
+{
+	Territory * current = getTerritory(currentTerritoryCoordinates);
+
+	if (current->active)
+	{
+		reference.setCenter(current->player->getPosition());
+	}
+	return reference;
 }

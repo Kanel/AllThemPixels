@@ -119,7 +119,7 @@ void Player::fade()
 {
 	for (int i = 0; i < shape.getVertexCount(); i++)
 	{
-		shape[i].color.a -= 10;
+		shape[i].color.a -= 255 * (hp / originalHp);
 	}
 }
 

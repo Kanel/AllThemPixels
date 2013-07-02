@@ -6,6 +6,7 @@ class Destructible : public Entity
 {
 protected:
 	int hp;
+	int originalHp;
 
 public:
 	Destructible(int hp, Vector2f position);
