@@ -70,3 +70,9 @@ bool Collision::isWithinWindow(Rect<float> hitbox1, View view)
 
 	return hitBoxesOverlap(hitbox1, hitbox2);
 }
+
+bool Collision::containsPoint(Rect<float> boundingBox, Vector2f point)
+{
+	return boundingBox.left <= point.x && point.x <= boundingBox.left + boundingBox.width &&
+		   boundingBox.top <= point.y  && point.y <= boundingBox.top + boundingBox.height;
+}

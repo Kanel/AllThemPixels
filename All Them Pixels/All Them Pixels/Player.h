@@ -48,6 +48,7 @@ public:
 
 	Rect<float> getBoundingBox() override;
 	ConvexHull getConvexHull() override;
+	void setConfiguration(PlayerConfiguration config);
 
 	void fade();
 

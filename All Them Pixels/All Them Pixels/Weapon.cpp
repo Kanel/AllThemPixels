@@ -6,6 +6,11 @@ Weapon::Weapon(WeaponConfiguration config)
 	this->lastFired = 0;
 }
 
+void Weapon::setConfiguration(WeaponConfiguration config)
+{
+	this->config = config;
+}
+
 Projectile * Weapon::fire(Vector2f position, Vector2f direction, int gameTime)
 {
 	Transform transform;

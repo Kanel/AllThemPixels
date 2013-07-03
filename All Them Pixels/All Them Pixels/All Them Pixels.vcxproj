@@ -96,6 +96,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MontoneChain.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="PlayerCustomizationUI.cpp" />
     <ClCompile Include="Projectile.cpp" />
     <ClCompile Include="SAT.cpp" />
     <ClCompile Include="Shapes.cpp" />
@@ -118,6 +119,7 @@
     <ClInclude Include="HexagonGrid.h" />
     <ClInclude Include="MonotoneChain.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="PlayerCustomizationUI.h" />
     <ClInclude Include="Projectile.h" />
     <ClInclude Include="SAT.h" />
     <ClInclude Include="Shapes.h" />

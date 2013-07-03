@@ -108,6 +108,13 @@ ConvexHull Player::getConvexHull()
 	return Collision::getConvexHull(shape, shapeCount);
 }
 
+void Player::setConfiguration(PlayerConfiguration config)
+{
+	this->config = config;
+
+	weapon.setConfiguration(config.weaponConfig);
+}
+
 void Player::fade()
 {
 	float a = 255.0f * ((float)hp / (float)originalHp);
@@ -132,7 +139,7 @@ void Player::update(UpdateInfo info)
 	updateAim();
 	translate(Vector2fMath::unitVector(UserInput::getJoystickVector(0, Joystick::Axis::X, Joystick::Axis::Y)) * config.speed);
 	
-	if (weapon.isReady(info.elapsedGameTime) && direction.x + direction.y != 0)
+	if (weapon.isReady(info.elapsedGameTime) && abs(direction.x) + abs(direction.y) != 0)
 	{
 		removePlease->addEntity(weapon.fire(aimBoxPosition, direction, info.elapsedGameTime));
 	}

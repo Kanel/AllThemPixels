@@ -22,6 +22,8 @@ public:
 public:
 	Weapon(WeaponConfiguration config);
 
+	void setConfiguration(WeaponConfiguration config);
+
 	Projectile * fire(Vector2f position, Vector2f direction, int gameTime);
 	bool isReady(int gameTime);
 };
