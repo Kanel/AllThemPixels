@@ -15,7 +15,7 @@ static class SAT
 {
 private:
 	static std::vector<Vector2f> getVectors(std::vector<Vector2f> vertices);
-	static void getMinMax(std::vector<Vector2f> vertecies, Vector2f axis, float &min, float &max);
+	static void getMinMax(std::vector<Vector2f> vertices, Vector2f axis, float &min, float &max);
 	static Vector2f getPenetrationVector(float polygonAMin, float polygonAMax, float polygonBMin, float polygonBMax, float projectedMovement, Vector2f axis, float axisMagnitude);
 	static bool isSeparated(std::vector<Vector2f> polygonAVertices, std::vector<Vector2f> polygonBVertices, Vector2f movement, std::list<Vector2f> &penetration, bool isReference);
 

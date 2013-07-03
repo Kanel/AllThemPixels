@@ -18,14 +18,14 @@ std::vector<Vector2f> SAT::getVectors(std::vector<Vector2f> vertices)
 	return vectors;
 }
 
-void SAT::getMinMax(std::vector<Vector2f> vertecies, Vector2f axis, float &min, float &max)
+void SAT::getMinMax(std::vector<Vector2f> vertices, Vector2f axis, float &min, float &max)
 {
-	min = Vector2fMath::dot(vertecies[0], axis);
+	min = Vector2fMath::dot(vertices[0], axis);
 	max = min;
 
-	for (int i = 1; i < vertecies.size(); i++)
+	for (int i = 1; i < vertices.size(); i++)
 	{
-		float projectedValue = Vector2fMath::dot(vertecies[i], axis);
+		float projectedValue = Vector2fMath::dot(vertices[i], axis);
 
 		min = (min > projectedValue) ? projectedValue : min;
 		max = (max < projectedValue) ? projectedValue : max;

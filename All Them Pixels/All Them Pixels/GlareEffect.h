@@ -46,7 +46,7 @@ private:
 	Vertex aimVertices[2];
 
 protected:
-	void applyTransform(Transform transform, VertexArray &vertecies);
+	void applyTransform(Transform transform, VertexArray &vertices);
 
 public:
 	GlareEffect(Vector2f position);

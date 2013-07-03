@@ -1,5 +1,47 @@
 #include "Collision.h"
 
+Rect<float> Collision::getHitBox(Vertex vertices[], int count)
+{
+	float minX = vertices[0].position.x;
+	float maxX = vertices[0].position.x;
+	float minY = vertices[0].position.y;
+	float maxY = vertices[0].position.y;
+
+	for (int i = 1; i < count; i++)
+	{
+		if (vertices[i].position.x < minX)
+		{
+			minX = vertices[i].position.x;
+		}
+		else if (maxX < vertices[i].position.x)
+		{
+			maxX = vertices[i].position.x;
+		}
+
+		if (vertices[i].position.y < minY)
+		{
+			minY = vertices[i].position.y;
+		}
+		else if (maxY < vertices[i].position.y)
+		{
+			maxY = vertices[i].position.y;
+		}
+	}
+	return Rect<float>(minX, minY, maxX - minX, maxY - minY);
+}
+
+ConvexHull Collision::getConvexHull(Vertex vertices[], int count)
+{
+	vector<Vector2f> positions(count);
+
+	for (int i = 0; i < count; i++)
+	{
+		positions[i] = vertices[i].position;
+	}
+
+	return MonotoneChain::getConvexHull(positions);
+}
+
 bool Collision::hitBoxesOverlap(Rect<float> hitbox1, Rect<float> hitbox2)
 {
 	if (hitbox1.top > hitbox2.top + hitbox2.height) return false;

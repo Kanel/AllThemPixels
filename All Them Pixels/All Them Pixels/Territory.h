@@ -42,6 +42,7 @@ private:
 	Rect<float> boundingBox;
 	vector<AxialCoordinates> drawGrid;
 	vector<AxialCoordinates> spawnGrid;
+	float hexagonRadius;
 
 public:
 	bool active;

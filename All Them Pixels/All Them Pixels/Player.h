@@ -19,14 +19,16 @@ public:
 	Territory * removePlease;
 
 protected:
+	int shapeCount;
+	int aimboxShapeCount;
 	float aimDirection;
 	Vector2f aimBoxPosition;
-	VertexArray shape;
-	VertexArray aimBox;
+	Vertex shape[4];
+	Vertex aimBoxShape[4];
 	Weapon weapon;
 
 protected:
-	void applyTransform(Transform transform, VertexArray &vertecies);
+	void applyTransform(Transform transform, Vertex vertices[], int count);
 	float getDirection(Joystick::Axis axisX, Joystick::Axis axisY);
 	Vector2f getJoystickVector(Joystick::Axis x, Joystick::Axis y);
 	void updateAim();

@@ -50,14 +50,14 @@ Rect<float> Projectile::getBoundingBox()
 
 ConvexHull Projectile::getConvexHull()
 {
-	vector<Vector2f> vertecies;
+	vector<Vector2f> vertices;
 
 	for (int i = 0; i < 6; i++)
 	{
-		vertecies.push_back(shape[i].position);
+		vertices.push_back(shape[i].position);
 	}
 
-	return MonotoneChain::getConvexHull(vertecies);
+	return MonotoneChain::getConvexHull(vertices);
 }
 
 void Projectile::draw(RenderWindow * window)

@@ -17,11 +17,11 @@
 			c1.restart();
 		}*/
 
-void GlareEffect::applyTransform(Transform transform, VertexArray &vertecies)
+void GlareEffect::applyTransform(Transform transform, VertexArray &vertices)
 {
-	for (int i = 0; i < vertecies.getVertexCount(); i++)
+	for (int i = 0; i < vertices.getVertexCount(); i++)
 	{
-		vertecies[i].position = transform.transformPoint(vertecies[i].position);
+		vertices[i].position = transform.transformPoint(vertices[i].position);
 	}
 }
 

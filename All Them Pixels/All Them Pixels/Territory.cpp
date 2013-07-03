@@ -15,6 +15,7 @@ Territory::Territory(Vector2f position, float radius, World * world)
 	int layers = (numberOfLayersHorizontal < numberOfLayersVertical) ? numberOfLayersHorizontal : numberOfLayersVertical;
 	HexagonGrid grid(Hexagon::FlatTopped);
 	
+	this->hexagonRadius= hexagonRadius;
 	this->position = position;
 	this->radius = radius;
 	this->world = world;
@@ -168,7 +169,7 @@ Vector2f Territory::getSpawnLocation()
 {
 	bool found = false;	
 	HexagonGrid grid(Hexagon::FlatTopped);
-	AxialCoordinates origin = grid.getAxialCoordinates(player->getPosition() - position, 10);
+	AxialCoordinates origin = grid.getAxialCoordinates(player->getPosition() - position, hexagonRadius);
 	Vector2f spawnPosition = position;
 
 	while(!found)
@@ -184,7 +185,7 @@ Vector2f Territory::getSpawnLocation()
 			if (gridMatrix[x][y] != NULL)
 			{
 				found = true;
-				spawnPosition += grid.getPosition(AxialCoordinates(q, r), 10);
+				spawnPosition += grid.getPosition(AxialCoordinates(q, r), hexagonRadius);
 			}
 		}
 	}
@@ -258,7 +259,7 @@ void Territory::draw(RenderWindow * window)
 	{
 		int layers = 47;
 		HexagonGrid grid(Hexagon::FlatTopped);
-		AxialCoordinates origin = grid.getAxialCoordinates(player->getPosition() - position, 10);
+		AxialCoordinates origin = grid.getAxialCoordinates(player->getPosition() - position, hexagonRadius);
 
 		gridMatrix[offset.x + origin.q][offset.y + origin.r]->draw(window);
 
