@@ -22,7 +22,19 @@ int main(int argc, char ** argv)
 	Clock elapsedTime;
 	int fps = 0;
 	Territory * t = world.getTerritory(AxialCoordinates(0, 0));
-	Player * player = new Player(t, 1000, Vector2f(0, 0));
+	Player * player;
+	PlayerConfiguration playerconfig;
+
+	playerconfig.hp = 10000;
+	playerconfig.speed = 10;
+	playerconfig.weaponConfig.cooldown = 100;
+	playerconfig.weaponConfig.damage = 100;
+	playerconfig.weaponConfig.piercing = 1;
+	playerconfig.weaponConfig.speed = 10;
+	playerconfig.weaponConfig.spread = 5;
+	playerconfig.weaponConfig.ttl = 55;
+
+	player = new Player(t, playerconfig, Vector2f(0, 0));
 
 	t->active = true;
 	t->player = player;

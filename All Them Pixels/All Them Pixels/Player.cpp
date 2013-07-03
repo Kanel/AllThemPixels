@@ -61,13 +61,14 @@ void Player::updateAim()
 	aimDirection = direction;
 }
 
-Player::Player(Territory * removePlease, unsigned int hp, Vector2f position) : Destructible(hp, position), weapon(0, 30, 1000, 1, 10, 100)
+Player::Player(Territory * removePlease, PlayerConfiguration config, Vector2f position) : Destructible(config.hp, position), weapon(config.weaponConfig)
 {
 	const int size = 20;
 	const int aimboxSize = 4;
 	Color color(0, 0, 0);
 
 	this->removePlease = removePlease;
+	this->config = config;
 	type = EntityTypes::PlayerEntity;
 	shapeCount = 4;
 	aimboxShapeCount = 4;
@@ -129,9 +130,9 @@ void Player::update(UpdateInfo info)
 	Vector2f direction = Vector2fMath::unitVector(UserInput::getJoystickVector(0, Joystick::Axis::U, Joystick::Axis::R));
 	
 	updateAim();
-	translate(UserInput::getJoystickVector(0, Joystick::Axis::X, Joystick::Axis::Y) / 20.0f);
+	translate(Vector2fMath::unitVector(UserInput::getJoystickVector(0, Joystick::Axis::X, Joystick::Axis::Y)) * config.speed);
 	
-	if (weapon.isReady(info.elapsedGameTime) && !_isnan(direction.x) && !_isnan(direction.y))
+	if (weapon.isReady(info.elapsedGameTime) && direction.x + direction.y != 0)
 	{
 		removePlease->addEntity(weapon.fire(aimBoxPosition, direction, info.elapsedGameTime));
 	}

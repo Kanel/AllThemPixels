@@ -244,7 +244,7 @@ void Territory::cleanup()
 		}
 	}
 
-	if (player->isExpended())
+	if (active && player->isExpended())
 	{
 		delete player;
 
@@ -384,7 +384,7 @@ void Territory::update(UpdateInfo info)
 	}
 
 	// Spawn enemies
-	if (true || rand() % 5 == 1)
+	if (active)
 	{
 		Enemy * enemy = new Enemy(100, getSpawnLocation());
 			

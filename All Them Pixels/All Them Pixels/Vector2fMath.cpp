@@ -39,7 +39,14 @@ Vector2f Vector2fMath::unitVector(Vector2f vector)
 {
 	float l= length(vector);
 
-	return Vector2f(vector.x / l, vector.y / l);
+	if (l != 0)
+	{
+		return Vector2f(vector.x / l, vector.y / l);
+	}
+	else
+	{
+		return Vector2f();
+	}
 }
 
 Vector2f Vector2fMath::max()

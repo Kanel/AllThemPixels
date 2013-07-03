@@ -3,19 +3,24 @@
 #include "Projectile.h"
 #include <SFML\Graphics.hpp>
 
+struct WeaponConfiguration
+{
+	int cooldown; // milliseconds
+	int spread; // degrees from center aim
+	int damage;
+	int piercing;
+	float speed;
+	int ttl;
+};
+
 class Weapon
 {
 public:
-	int cooldown; // milliseconds
-	int spread; // degrees from center line
-	int damage;
-	int piercing;
+	WeaponConfiguration config;
 	int lastFired; // game time
-	float speed;
-	int ttl;
 
 public:
-	Weapon(int cooldown, int spread, int damage, int piercing, float speed, int ttl);
+	Weapon(WeaponConfiguration config);
 
 	Projectile * fire(Vector2f position, Vector2f direction, int gameTime);
 	bool isReady(int gameTime);

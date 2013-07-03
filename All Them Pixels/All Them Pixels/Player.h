@@ -13,6 +13,13 @@ using std::vector;
 
 class Territory;
 
+struct PlayerConfiguration
+{
+	WeaponConfiguration weaponConfig;
+	float speed;
+	int hp;
+};
+
 class Player : public Destructible
 {
 public:
@@ -26,6 +33,7 @@ protected:
 	Vertex shape[4];
 	Vertex aimBoxShape[4];
 	Weapon weapon;
+	PlayerConfiguration config;
 
 protected:
 	void applyTransform(Transform transform, Vertex vertices[], int count);
@@ -34,7 +42,7 @@ protected:
 	void updateAim();
 
 public:
-	Player(Territory * removePlease, unsigned int hp, Vector2f position);
+	Player(Territory * removePlease, PlayerConfiguration config, Vector2f position);
 
 	void applyTransform(Transform transform) override;
 
