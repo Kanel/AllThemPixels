@@ -179,7 +179,7 @@ Vector2f Territory::getSpawnLocation()
 		int x = offset.x + q;
 		int y = offset.y + r;
 
-		if (0 <= x && x <= matrixLength && 0 <= y && y <= matrixLength)
+		if (0 <= x && x < matrixLength && 0 <= y && y < matrixLength)
 		{
 			if (gridMatrix[x][y] != NULL)
 			{
