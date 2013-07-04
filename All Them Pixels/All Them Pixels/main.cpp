@@ -28,7 +28,7 @@ int main(int argc, char ** argv)
 	PlayerCustomizationUI ui(Vector2f(0, 0));
 
 	playerconfig.hp = 10000;
-	playerconfig.speed = 10;
+	playerconfig.speed = 1.5;
 	playerconfig.weaponConfig.cooldown = 100;
 	playerconfig.weaponConfig.damage = 100;
 	playerconfig.weaponConfig.piercing = 1;

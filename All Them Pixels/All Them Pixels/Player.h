@@ -24,6 +24,7 @@ class Player : public Destructible
 {
 public:
 	Territory * removePlease;
+	Vector2f aimVector;
 
 protected:
 	int shapeCount;
@@ -49,6 +50,8 @@ public:
 	Rect<float> getBoundingBox() override;
 	ConvexHull getConvexHull() override;
 	void setConfiguration(PlayerConfiguration config);
+
+
 
 	void fade();
 

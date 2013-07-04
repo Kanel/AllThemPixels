@@ -20,10 +20,11 @@ public:
 	int lastFired; // game time
 
 public:
+	Weapon();
 	Weapon(WeaponConfiguration config);
 
 	void setConfiguration(WeaponConfiguration config);
 
-	Projectile * fire(Vector2f position, Vector2f direction, int gameTime);
+	Projectile * fire(Vector2f position, Vector2f direction, int gameTime, EntityTypes type);
 	bool isReady(int gameTime);
 };

@@ -8,6 +8,7 @@
 #include "Enemy.h"
 #include "UserInput.h"
 #include "AI.h"
+#include "Weapon.h"
 #include "Collision.h"
 #include "World.h"
 #include "HexagonGrid.h"
@@ -24,6 +25,8 @@ class Player;
 class World;
 class Projectile;
 class Enemy;
+class Weapon;
+struct AIProperties;
 
 class Territory
 {
@@ -43,6 +46,9 @@ private:
 	vector<AxialCoordinates> drawGrid;
 	vector<AxialCoordinates> spawnGrid;
 	float hexagonRadius;
+
+	Weapon enemyWeapons;
+	AIProperties aiProperties;
 
 public:
 	bool active;

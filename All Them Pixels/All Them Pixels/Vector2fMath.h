@@ -17,4 +17,7 @@ public:
 	static Vector2f unitVector(Vector2f vector);
 	static Vector2f max();
 	static Vector2f min();
+
+	static Vector2f turn90left(Vector2f vector);
+	static Vector2f turn90right(Vector2f vector);
 };

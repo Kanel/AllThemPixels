@@ -1,5 +1,7 @@
 #include "Weapon.h"
 
+Weapon::Weapon(){}
+
 Weapon::Weapon(WeaponConfiguration config)
 {
 	this->config = config;
@@ -11,7 +13,7 @@ void Weapon::setConfiguration(WeaponConfiguration config)
 	this->config = config;
 }
 
-Projectile * Weapon::fire(Vector2f position, Vector2f direction, int gameTime)
+Projectile * Weapon::fire(Vector2f position, Vector2f direction, int gameTime, EntityTypes type)
 {
 	Transform transform;
 	Vector2f speedVector = direction * config.speed;
@@ -35,7 +37,7 @@ Projectile * Weapon::fire(Vector2f position, Vector2f direction, int gameTime)
 
 	lastFired = gameTime;
 
-	return new Projectile(position, speedVector, config.damage, config.ttl, color);
+	return new Projectile(position, speedVector, config.damage, config.ttl, color, type);
 }
 
 bool Weapon::isReady(int gameTime)

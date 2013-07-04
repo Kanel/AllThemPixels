@@ -1,10 +1,10 @@
 #include "Player.h"
 
-void Player::applyTransform(Transform transform, Vertex vertices[], int count)
+void Player::applyTransform(Transform transform, VertexArray &vertecies)
 {
-	for (int i = 0; i < count; i++)
+	for (int i = 0; i < vertecies.getVertexCount(); i++)
 	{
-		vertices[i].position = transform.transformPoint(vertices[i].position);
+		vertecies[i].position = transform.transformPoint(vertecies[i].position);
 	}
 }
 
@@ -55,37 +55,36 @@ void Player::updateAim()
 	Transform transform;
 
 	transform.rotate(direction - aimDirection, position);
-	applyTransform(transform, aimBoxShape, 4);
+	applyTransform(transform, aimBox);
 	
 	aimBoxPosition = transform.transformPoint(aimBoxPosition);
 	aimDirection = direction;
 }
 
-Player::Player(Territory * removePlease, PlayerConfiguration config, Vector2f position) : Destructible(config.hp, position), weapon(config.weaponConfig)
+Player::Player(Territory * removePlease, unsigned int hp, Vector2f position) : Destructible(hp, position), weapon(0, 10, 1000, 1, 10, 100)
 {
-	const int size = 20;
-	const int aimboxSize = 4;
 	Color color(0, 0, 0);
 
 	this->removePlease = removePlease;
-	this->config = config;
 	type = EntityTypes::PlayerEntity;
-	shapeCount = 4;
-	aimboxShapeCount = 4;
 
-	shape[0] = Vertex(Vector2f(position.x - size, position.y - size), color);
-	shape[1] = Vertex(Vector2f(position.x + size, position.y - size), color);
-	shape[2] = Vertex(Vector2f(position.x + size, position.y + size), color);
-	shape[3] = Vertex(Vector2f(position.x - size, position.y + size), color);
+	shape.setPrimitiveType(PrimitiveType::Quads);
+	shape.append(Vertex(Vector2f(position.x - 20, position.y - 20), color));
+	shape.append(Vertex(Vector2f(position.x + 20, position.y - 20), color));
+	shape.append(Vertex(Vector2f(position.x + 20, position.y + 20), color));
+	shape.append(Vertex(Vector2f(position.x - 20, position.y + 20), color));
 
 	aimDirection = 180;
 	aimBoxPosition = position;
 	aimBoxPosition.y -= 35;
+		
+	aimBox.setPrimitiveType(PrimitiveType::Quads);
+	aimBox.append(Vertex(Vector2f(aimBoxPosition.x - 4, aimBoxPosition.y - 4), color));
+	aimBox.append(Vertex(Vector2f(aimBoxPosition.x + 4, aimBoxPosition.y - 4), color));
+	aimBox.append(Vertex(Vector2f(aimBoxPosition.x + 4, aimBoxPosition.y + 4), color));
+	aimBox.append(Vertex(Vector2f(aimBoxPosition.x - 4, aimBoxPosition.y + 4), color));
 	
-	aimBoxShape[0] = Vertex(Vector2f(aimBoxPosition.x - aimboxSize, aimBoxPosition.y - aimboxSize), color);
-	aimBoxShape[1] = Vertex(Vector2f(aimBoxPosition.x + aimboxSize, aimBoxPosition.y - aimboxSize), color);
-	aimBoxShape[2] = Vertex(Vector2f(aimBoxPosition.x + aimboxSize, aimBoxPosition.y + aimboxSize), color);
-	aimBoxShape[3] = Vertex(Vector2f(aimBoxPosition.x - aimboxSize, aimBoxPosition.y + aimboxSize), color);
+	this->hp = 1000;
 }
 
 void Player::applyTransform(Transform transform)
@@ -94,52 +93,51 @@ void Player::applyTransform(Transform transform)
 
 	aimBoxPosition = transform.transformPoint(aimBoxPosition);
 
-	applyTransform(transform, shape, shapeCount);
-	applyTransform(transform, aimBoxShape, aimboxShapeCount);
+	applyTransform(transform, shape);
+	applyTransform(transform, aimBox);
 }
 
 Rect<float> Player::getBoundingBox()
 {
-	return Collision::getHitBox(shape, shapeCount);
+	// Todo: stop cheating
+	return Rect<float>(position.x - 20, position.y - 20, 40, 40);
 }
 
 ConvexHull Player::getConvexHull()
 {
-	return Collision::getConvexHull(shape, shapeCount);
-}
+	vector<Vector2f> vertecies;
 
-void Player::setConfiguration(PlayerConfiguration config)
-{
-	this->config = config;
+	for (int i = 0; i < shape.getVertexCount(); i++)
+	{
+		vertecies.push_back(shape[i].position);
+	}
 
-	weapon.setConfiguration(config.weaponConfig);
+	return MonotoneChain::getConvexHull(vertecies);
 }
 
 void Player::fade()
 {
-	float a = 255.0f * ((float)hp / (float)originalHp);
-
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < shape.getVertexCount(); i++)
 	{
-		shape[i].color.a = a;
+		shape[i].color.a = 255 * ((float)hp / (float)originalHp);
 	}
 }
 
 void Player::draw(RenderWindow * window)
 {
-	window->draw(shape, shapeCount, PrimitiveType::Quads);
-	window->draw(aimBoxShape, aimboxShapeCount, PrimitiveType::Quads);
+	window->draw(shape);
+	window->draw(aimBox);
 }
 
 void Player::update(UpdateInfo info)
 {
 	Vector2f spawn = aimBoxPosition;
 	Vector2f direction = Vector2fMath::unitVector(UserInput::getJoystickVector(0, Joystick::Axis::U, Joystick::Axis::R));
-	
+	this->aimVector = direction;
 	updateAim();
-	translate(Vector2fMath::unitVector(UserInput::getJoystickVector(0, Joystick::Axis::X, Joystick::Axis::Y)) * config.speed);
+	translate(UserInput::getJoystickVector(0, Joystick::Axis::X, Joystick::Axis::Y) / 20.0f);
 	
-	if (weapon.isReady(info.elapsedGameTime) && abs(direction.x) + abs(direction.y) != 0)
+	if (weapon.isReady(info.elapsedGameTime) && !_isnan(direction.x) && !_isnan(direction.y))
 	{
 		removePlease->addEntity(weapon.fire(aimBoxPosition, direction, info.elapsedGameTime));
 	}

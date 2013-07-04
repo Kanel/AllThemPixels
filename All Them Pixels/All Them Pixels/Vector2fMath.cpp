@@ -58,3 +58,13 @@ Vector2f Vector2fMath::min()
 {
 	return Vector2f(std::numeric_limits<float>::min(), std::numeric_limits<float>::min());
 }
+
+Vector2f Vector2fMath::turn90left(Vector2f vector)
+{
+	return Vector2f(vector.y, -vector.x);
+}
+
+Vector2f Vector2fMath::turn90right(Vector2f vector)
+{
+	return Vector2f(-vector.y, vector.x);
+}

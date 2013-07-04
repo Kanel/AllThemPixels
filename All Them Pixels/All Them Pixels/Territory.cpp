@@ -63,6 +63,18 @@ Territory::Territory(Vector2f position, float radius, World * world)
 			}
 		}
 	}
+
+
+	WeaponConfiguration wc;
+	wc.cooldown = 100;
+	wc.damage = 20;
+	wc.piercing = 1;
+	wc.speed = 8;
+	wc.spread = 4;
+	wc.ttl = 20;
+	enemyWeapons = Weapon(wc);
+
+	//aiProperties = AI::generate(rand() % 4);
 }
 
 Territory::~Territory()
@@ -353,11 +365,11 @@ void Territory::update(UpdateInfo info)
 			}
 		}
 	}
-
+	AIProperties aiProperties = AI::generate(1+rand() % 4);
 	for (std::list<Enemy *>::iterator it = enemies.begin(); it != enemies.end(); it++)
 	{
-		AI::update(this, *it, player, info);
-	}	
+		AI::update(this, *it, player, &enemyWeapons, &aiProperties, info);
+	}
 
 	if (active)
 	{
@@ -378,16 +390,18 @@ void Territory::update(UpdateInfo info)
 					world->changeTerritory(seekPosition);
 
 					break;
-				}				
+				}
 			}
-		}		
+		}
 	}
 
 	// Spawn enemies
 	if (active)
 	{
 		Enemy * enemy = new Enemy(100, getSpawnLocation());
-			
+		//maybe?
+		//enemy->educate(aiProperties[rand() % 4]);
+		//enemy->arm(weapons[rand() % 4]);
 		addEntity(enemy);
 	}
 }
