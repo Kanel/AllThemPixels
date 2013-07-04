@@ -61,13 +61,13 @@ void Player::updateAim()
 	aimDirection = direction;
 }
 
-Player::Player(Territory * removePlease, PlayerConfiguration config, Vector2f position) : Destructible(config.hp, position), weapon(config.weaponConfig)
+Player::Player(queue<Entity *> *spawnQueue, PlayerConfiguration config, Vector2f position) : Destructible(config.hp, position), weapon(config.weaponConfig)
 {
 	const int size = 20;
 	const int aimboxSize = 4;
 	Color color(0, 0, 0);
 
-	this->removePlease = removePlease;
+	this->spawnQueue = spawnQueue;
 	this->config = config;
 	type = EntityTypes::PlayerEntity;
 	shapeCount = 4;
@@ -139,8 +139,8 @@ void Player::update(UpdateInfo info)
 	updateAim();
 	translate(getJoystickVector(Joystick::Axis::X, Joystick::Axis::Y) * config.speed);
 	
-	if (weapon.isReady(info.elapsedGameTime))
+	if (weapon.isReady(info.elapsedGameTime) && !(direction == Vector2f(0.0,0.0)))
 	{
-		removePlease->addEntity(weapon.fire(aimBoxPosition, direction, info.elapsedGameTime, EntityTypes::ProjectileEntity));
+		spawnQueue->push(weapon.fire(aimBoxPosition, direction, info.elapsedGameTime, EntityTypes::ProjectileEntity));
 	}
 }

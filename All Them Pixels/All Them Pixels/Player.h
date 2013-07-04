@@ -2,16 +2,14 @@
 
 #define _USE_MATH_DEFINES
 
-#include "Territory.h"
 #include "Destructible.h"
 #include "Projectile.h"
 #include "UserInput.h"
 #include "Weapon.h"
-#include <math.h>
+#include "Collision.h"
+#include <queue>
 
-using std::vector;
-
-class Territory;
+using std::queue;
 
 struct PlayerConfiguration
 {
@@ -23,7 +21,7 @@ struct PlayerConfiguration
 class Player : public Destructible
 {
 public:
-	Territory * removePlease;
+	queue<Entity *> *spawnQueue;
 	Vector2f aimVector;
 
 protected:
@@ -43,7 +41,7 @@ protected:
 	void updateAim();
 
 public:
-	Player(Territory * removePlease, PlayerConfiguration config, Vector2f position);
+	Player(queue<Entity *> *spawnQueue, PlayerConfiguration config, Vector2f position);
 
 	void applyTransform(Transform transform) override;
 

@@ -72,9 +72,15 @@ Territory::Territory(Vector2f position, float radius, World * world)
 	wc.speed = 8;
 	wc.spread = 4;
 	wc.ttl = 20;
-	enemyWeapons = Weapon(wc);
+	enemyWeapons[0] = Weapon(wc);
+	enemyWeapons[1] = Weapon(wc);
+	enemyWeapons[2] = Weapon(wc);
+	enemyWeapons[3] = Weapon(wc);
 
-	//aiProperties = AI::generate(rand() % 4);
+	aiProperties[0] = AI::generate(rand() % 5);
+	aiProperties[1] = AI::generate(rand() % 5);
+	aiProperties[2] = AI::generate(rand() % 5);
+	aiProperties[3] = AI::generate(rand() % 5);
 }
 
 Territory::~Territory()
@@ -90,6 +96,11 @@ Territory::~Territory()
 
 		delete entity;
 	}*/
+}
+
+queue<Entity *> *Territory::getSpawnQueue()
+{
+	return &spawnQueue;
 }
 
 Vector2f Territory::getPosition()
@@ -365,10 +376,9 @@ void Territory::update(UpdateInfo info)
 			}
 		}
 	}
-	AIProperties aiProperties = AI::generate(1+rand() % 4);
 	for (std::list<Enemy *>::iterator it = enemies.begin(); it != enemies.end(); it++)
 	{
-		AI::update(this, *it, player, &enemyWeapons, &aiProperties, info);
+		AI::update(&spawnQueue, *it, player, info);
 	}
 
 	if (active)
@@ -399,9 +409,9 @@ void Territory::update(UpdateInfo info)
 	if (active)
 	{
 		Enemy * enemy = new Enemy(100, getSpawnLocation());
-		//maybe?
-		//enemy->educate(aiProperties[rand() % 4]);
-		//enemy->arm(weapons[rand() % 4]);
+
+		enemy->educate(aiProperties[0]);
+		enemy->arm(enemyWeapons[rand() % 4]);
 		addEntity(enemy);
 	}
 }

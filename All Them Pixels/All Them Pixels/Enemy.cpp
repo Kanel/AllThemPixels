@@ -9,6 +9,16 @@ Enemy::Enemy(unsigned int hp, Vector2f position) : Destructible(hp, position)
 	type = EntityTypes::EnemyEntity;
 }
 
+void Enemy::educate(AIProperties aiProperties)
+{
+	this->aiProperties = aiProperties;
+}
+
+void Enemy::arm(Weapon weapon)
+{
+	this->weapon = weapon;
+}
+
 int Enemy::getCooldown()
 {
 	return cooldown;

@@ -63,7 +63,7 @@ void World::changeTerritory(Vector2f position)
 	current->player = NULL;
 	next->player = player;
 
-	player->removePlease = next;
+	player->spawnQueue = next->getSpawnQueue();
 
 	current->active = false;
 	next->active = true;

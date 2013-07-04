@@ -2,10 +2,19 @@
 
 #include "Shapes.h"
 #include "Destructible.h"
+#include "Weapon.h"
 #include <SFML\Graphics\Vertex.hpp>
 
 using std::vector;
 using namespace sf;
+
+struct AIProperties
+{
+	float speed;
+	int aimavoidance;
+	float playerspace;
+	bool righthanded;
+};
 
 class Enemy : public Destructible
 {
@@ -15,7 +24,13 @@ protected:
 	Vertex shape[4];
 
 public:
+	AIProperties aiProperties;
+	Weapon weapon;
+
+public:
 	Enemy(unsigned int hp, Vector2f position);
+	void educate(AIProperties aiProperties);
+	void arm(Weapon weapon);
 
 	int getCooldown();
 	void setCooldown(int cooldown);

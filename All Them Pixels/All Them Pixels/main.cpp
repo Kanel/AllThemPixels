@@ -36,7 +36,7 @@ int main(int argc, char ** argv)
 	playerconfig.weaponConfig.spread = 5;
 	playerconfig.weaponConfig.ttl = 55;
 
-	player = new Player(t, playerconfig, Vector2f(0, 0));
+	player = new Player(t->getSpawnQueue(), playerconfig, Vector2f(0, 0));
 
 	t->active = true;
 	t->player = player;

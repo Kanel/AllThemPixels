@@ -26,7 +26,6 @@ class World;
 class Projectile;
 class Enemy;
 class Weapon;
-struct AIProperties;
 
 class Territory
 {
@@ -47,8 +46,8 @@ private:
 	vector<AxialCoordinates> spawnGrid;
 	float hexagonRadius;
 
-	Weapon enemyWeapons;
-//	AIProperties aiProperties;
+	Weapon enemyWeapons[4];
+	AIProperties aiProperties[4];
 
 public:
 	bool active;
@@ -58,6 +57,7 @@ public:
 	Territory();
 	Territory(Vector2f position, float radius, World * world);
 	~Territory();
+	queue<Entity *> *getSpawnQueue();
 
 	Vector2f getPosition();
 
