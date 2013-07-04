@@ -27,7 +27,7 @@ int main(int argc, char ** argv)
 	PlayerConfiguration playerconfig;
 	PlayerCustomizationUI ui(Vector2f(0, 0));
 
-	playerconfig.hp = 10000;
+	playerconfig.hp = 10000000;
 	playerconfig.speed = 1.5;
 	playerconfig.weaponConfig.cooldown = 100;
 	playerconfig.weaponConfig.damage = 100;
@@ -87,7 +87,7 @@ int main(int argc, char ** argv)
 			inGamePosition.y -= window.getView().getSize().y / 2;
 			inGamePosition.y += Mouse::getPosition(window).y;
 
-			if (ui.update(inGamePosition) == PlayerCustomizationUI::Changed)
+			if (ui.update(info) == PlayerCustomizationUI::Changed)
 			{
 				player->setConfiguration(ui.getConfiguration());
 			}

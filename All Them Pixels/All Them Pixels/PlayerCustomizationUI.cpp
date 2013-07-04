@@ -1,60 +1,62 @@
 #include  "PlayerCustomizationUI.h"
 
-PlayerCustomizationUI::PlayerCustomizationUI(Vector2f position)
+PlayerCustomizationUI::PlayerCustomizationUI(Vector2f position) : wheel(3, 100)
 {
 	size = Vector2f(400, 200);
+	cooldown = 100;
+	lastChange = 0;
 
 	background[0] = Vertex(Vector2f(position.x - (size.x / 2), position.y - (size.y / 2)));
 	background[1] = Vertex(Vector2f(position.x + (size.x / 2), position.y - (size.y / 2)));
 	background[2] = Vertex(Vector2f(position.x + (size.x / 2), position.y + (size.y / 2)));
 	background[3] = Vertex(Vector2f(position.x - (size.x / 2), position.y + (size.y / 2)));
 
-	config.hp = 10000;
-	config.speed = 10;
-	config.weaponConfig.cooldown = 100;
-	config.weaponConfig.damage = 100;
-	config.weaponConfig.piercing = 1;
-	config.weaponConfig.speed = 10;
-	config.weaponConfig.spread = 5;
-	config.weaponConfig.ttl = 55;
 }
 
 PlayerConfiguration PlayerCustomizationUI::getConfiguration()
 {
-	return config;
+	return wheel.getConfiguration();
 }
 	
-PlayerCustomizationUI::Result PlayerCustomizationUI::update(Vector2f mousePosition)
+PlayerCustomizationUI::Result PlayerCustomizationUI::update(UpdateInfo info)
 {
-	Rect<float> boundingBox = getTransform().transformRect(Collision::getHitBox(background, 4));
+	Result result = Result::NoChange;
 
-	if (Collision::containsPoint(boundingBox, mousePosition))
+	if (lastChange + cooldown <= info.elapsedGameTime)
 	{
-		if (Mouse::isButtonPressed(Mouse::Left))
+		result = Result::Changed;
+
+		if (Keyboard::isKeyPressed(Keyboard::E))
 		{
-			config.weaponConfig.cooldown = 0;
-			config.weaponConfig.spread = 110;
+			wheel.setIndex((wheel.getIndex() - 1) % wheel.getNumberOfSkills());
+
+			result = Result::Changed;
 		}
-		else if (Mouse::isButtonPressed(Mouse::Middle))
+		else if (Keyboard::isKeyPressed(Keyboard::R))
 		{
-			
+			wheel.setIndex((wheel.getIndex() + 1) % wheel.getNumberOfSkills());
+
+			result = Result::Changed;
 		}
-		else if (Mouse::isButtonPressed(Mouse::Right))
+		else if (Keyboard::isKeyPressed(Keyboard::T))
 		{
-			config.weaponConfig.cooldown = 100;
-			config.weaponConfig.spread = 5;
+			wheel.setSkillValue(wheel.getSkillValue() + 4);
+
+			result = Result::Changed;
 		}
-		return Result::Changed;
+		
+		if (result == Result::Changed)
+		{
+			lastChange = info.elapsedGameTime;
+		}
 	}
-	else
-	{
-		return Result::NoChange;
-	}
+	return result;
 }
 
 void PlayerCustomizationUI::align(View view)
 {
 	setPosition(view.getCenter() + Vector2f(0, (view.getSize().y / 2) - (size.y / 2)));
+	wheel.setPosition(getPosition());
 }
 
 void PlayerCustomizationUI::draw(RenderTarget& target, RenderStates states) const
@@ -62,4 +64,5 @@ void PlayerCustomizationUI::draw(RenderTarget& target, RenderStates states) cons
 	states.transform *= getTransform();
 
 	target.draw(background, 4, PrimitiveType::Quads, states);
+	target.draw(wheel);
 }
