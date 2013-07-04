@@ -48,7 +48,7 @@ private:
 	float hexagonRadius;
 
 	Weapon enemyWeapons;
-	AIProperties aiProperties;
+//	AIProperties aiProperties;
 
 public:
 	bool active;
