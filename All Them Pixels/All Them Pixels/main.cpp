@@ -3,6 +3,7 @@
 #include "UpdateInfo.h"
 #include "World.h"
 #include "PlayerCustomizationUI.h"
+#include "VertexCluster.h"
 #include <SFML/Graphics.hpp>
 #include <iostream>
 
@@ -18,7 +19,8 @@ int main(int argc, char ** argv)
 	ContextSettings settings(0, 0, 8, 2, 0);
 	VideoMode videoMode(1024, 1024);
     RenderWindow window(videoMode, windowtitle, 7, settings);
-	World world(Vector2f(), 2048, 0, 1);
+	VertexCluster cluster;
+	World world(Vector2f(), 2048, 0, 1, &cluster);
 	Clock c;
 	Clock elapsedTime;
 	int fps = 0;
@@ -36,7 +38,8 @@ int main(int argc, char ** argv)
 	playerconfig.weaponConfig.spread = 5;
 	playerconfig.weaponConfig.ttl = 55;
 
-	player = new Player(t->getSpawnQueue(), playerconfig, Vector2f(0, 0));
+	player = new Player(t->getSpawnQueue(), playerconfig, Vector2f(0, 0), cluster[VertexCluster::HexagonSource]);
+	VertexCollection * col;
 
 	t->active = true;
 	t->player = player;
@@ -44,33 +47,19 @@ int main(int argc, char ** argv)
 
 	while (world.isActive())
     {
-        Event event;
-
-        while (window.pollEvent(event))
-        {
-            if (event.type == Event::Closed)
-			{
-                window.close();
-			}
-			if (event.type == Event::KeyPressed && Keyboard::isKeyPressed(Keyboard::F11))
-			{
-				windowStyle = (windowStyle == Style::Fullscreen ? Style::Resize | Style::Close : Style::Fullscreen);
-
-				window.create(videoMode, windowtitle, windowStyle);
-			}
-			if (event.type == Event::Resized)
-			{
-				videoMode.height = event.size.height;
-				videoMode.width = event.size.width;
-				
-				window.create(videoMode, windowtitle, windowStyle);
-			}
-        }
-
 		if (c.getElapsedTime().asMilliseconds() >= updateInterval)
 		{
+			Event event;
 			UpdateInfo info;
 			Vector2f inGamePosition;
+
+			while (window.pollEvent(event))
+			{
+				if (event.type == Event::Closed)
+				{
+					window.close();
+				}
+			}
 
 			elapsedGameTime += updateInterval;
 
@@ -93,6 +82,7 @@ int main(int argc, char ** argv)
 			}
 
 			window.clear();
+			window.draw(cluster);
 			world.draw(&window);
 			window.draw(ui);
 			window.display();			

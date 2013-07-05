@@ -61,7 +61,7 @@ void Player::updateAim()
 	aimDirection = direction;
 }
 
-Player::Player(queue<Entity *> *spawnQueue, PlayerConfiguration config, Vector2f position) : Destructible(config.hp, position), weapon(config.weaponConfig)
+Player::Player(queue<Entity *> *spawnQueue, PlayerConfiguration config, Vector2f position, VertexCollection * vertexSource) : Destructible(config.hp, position), weapon(config.weaponConfig, vertexSource)
 {
 	const int size = 20;
 	const int aimboxSize = 4;

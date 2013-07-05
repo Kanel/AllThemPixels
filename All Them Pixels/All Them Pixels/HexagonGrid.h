@@ -69,5 +69,5 @@ public:
 
 	vector<AxialCoordinates> getCornerRegionCoordinates(int corner);
 	vector<AxialCoordinates> getRingCoordinates(int layer);
-	Hexagon *** generateGrid(Vector2f position, float hexagonRadius, int layers);
+	Hexagon *** generateGrid(Vector2f position, float hexagonRadius, int layers, VertexCollection * vertexSource);
 };

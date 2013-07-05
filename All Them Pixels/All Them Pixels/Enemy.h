@@ -3,6 +3,7 @@
 #include "Shapes.h"
 #include "Destructible.h"
 #include "Weapon.h"
+#include "VertexCollection.h"
 #include <SFML\Graphics\Vertex.hpp>
 
 using std::vector;
@@ -21,14 +22,18 @@ class Enemy : public Destructible
 protected:
 	int cooldown;
 	int lastShootFired;
-	Vertex shape[4];
+	int vertexCount;
+	int vertexOffset;
+	VertexCollection * vertexSource;
 
 public:
 	AIProperties aiProperties;
 	Weapon weapon;
 
 public:
-	Enemy(unsigned int hp, Vector2f position);
+	Enemy(unsigned int hp, Vector2f position, VertexCollection * vertexSource);
+	~Enemy();
+	
 	void educate(AIProperties aiProperties);
 	void arm(Weapon weapon);
 

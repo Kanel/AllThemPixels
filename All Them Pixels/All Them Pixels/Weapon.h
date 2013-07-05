@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Projectile.h"
+#include "VertexCollection.h"
 #include <SFML\Graphics.hpp>
 
 struct WeaponConfiguration
@@ -17,11 +18,12 @@ class Weapon
 {
 public:
 	WeaponConfiguration config;
+	VertexCollection * vertexSource;
 	int lastFired; // game time
 
 public:
 	Weapon();
-	Weapon(WeaponConfiguration config);
+	Weapon(WeaponConfiguration config, VertexCollection * vertexSource);
 
 	void setConfiguration(WeaponConfiguration config);
 

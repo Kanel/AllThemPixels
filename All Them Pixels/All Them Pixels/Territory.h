@@ -20,12 +20,14 @@ using std::list;
 using std::queue;
 using namespace sf;
 
+// Isthis a sign of something?
 class AI;
 class Player;
 class World;
 class Projectile;
 class Enemy;
 class Weapon;
+class VertexCluster;
 
 class Territory
 {
@@ -45,6 +47,7 @@ private:
 	vector<AxialCoordinates> drawGrid;
 	vector<AxialCoordinates> spawnGrid;
 	float hexagonRadius;
+	VertexCluster * cluster;
 
 	Weapon enemyWeapons[4];
 	AIProperties aiProperties[4];
@@ -55,7 +58,7 @@ public:
 
 public:
 	Territory();
-	Territory(Vector2f position, float radius, World * world);
+	Territory(Vector2f position, float radius, World * world, VertexCluster * cluster);
 	~Territory();
 	queue<Entity *> *getSpawnQueue();
 

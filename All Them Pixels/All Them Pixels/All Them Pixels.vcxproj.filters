@@ -90,7 +90,7 @@
     <ClCompile Include="PlayerCustomizationUI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SkillWheel.cpp">
+    <ClCompile Include="VertexCollection.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -161,7 +161,7 @@
     <ClInclude Include="PlayerCustomizationUI.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SkillWheel.h">
+    <ClInclude Include="VertexCollection.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,12 +1,24 @@
 #include "Enemy.h"
 
-Enemy::Enemy(unsigned int hp, Vector2f position) : Destructible(hp, position)
+Enemy::Enemy(unsigned int hp, Vector2f position, VertexCollection * vertexSource) : Destructible(hp, position)
 {
-	Shapes::rectangle(shape, 0, position, 20, 20, Color(0, 0, 160, 255));
+	Vertex vertices[6];
+
+	this->vertexSource = vertexSource;
 
 	cooldown = 500 + rand() % 256;
 	lastShootFired = 0;
 	type = EntityTypes::EnemyEntity;
+	vertexCount = 4;	
+
+	Shapes::rectangle(vertices, 0, position, 20, 20, Color(0, 0, 160, 255));
+
+	vertexOffset = vertexSource->add(vertices);
+}
+
+Enemy::~Enemy()
+{
+	vertexSource->remove(vertexOffset);
 }
 
 void Enemy::educate(AIProperties aiProperties)
@@ -43,9 +55,9 @@ void Enemy::applyTransform(Transform transform)
 {
 	Destructible::applyTransform(transform);
 
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < vertexCount; i++)
 	{
-		shape[i].position = transform.transformPoint(shape[i].position);
+		(*vertexSource)[vertexOffset + i].position = transform.transformPoint((*vertexSource)[vertexOffset + i].position);
 	}
 }
 
@@ -58,9 +70,9 @@ ConvexHull Enemy::getConvexHull()
 {
 	vector<Vector2f> vertices;
 
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < vertexCount; i++)
 	{
-		vertices.push_back(shape[i].position);
+		vertices.push_back((*vertexSource)[vertexOffset + i].position);
 	}
 
 	return MonotoneChain::getConvexHull(vertices);
@@ -68,7 +80,7 @@ ConvexHull Enemy::getConvexHull()
 
 void Enemy::draw(RenderWindow * window)
 {
-	window->draw(shape, 4, PrimitiveType::Quads);
+	//window->draw(shape, 4, PrimitiveType::Quads);
 }
 
 void Enemy::update(UpdateInfo info)

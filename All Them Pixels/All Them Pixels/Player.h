@@ -41,7 +41,7 @@ protected:
 	void updateAim();
 
 public:
-	Player(queue<Entity *> *spawnQueue, PlayerConfiguration config, Vector2f position);
+	Player(queue<Entity *> *spawnQueue, PlayerConfiguration config, Vector2f position, VertexCollection * vertexSource);
 
 	void applyTransform(Transform transform) override;
 

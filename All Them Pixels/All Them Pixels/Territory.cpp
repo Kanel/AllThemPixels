@@ -1,8 +1,6 @@
 #include "Territory.h"
 
-Territory::Territory() { }
-
-Territory::Territory(Vector2f position, float radius, World * world)
+Territory::Territory(Vector2f position, float radius, World * world, VertexCluster * cluster)
 {
 	// Flat topped hexagons
 	// Todo: clean it a bit
@@ -14,11 +12,12 @@ Territory::Territory(Vector2f position, float radius, World * world)
 	int numberOfLayersVertical = ((((sqrt(3) / 2) *  radius * 2) / hexagonHeight) - 1) / 2;
 	int layers = (numberOfLayersHorizontal < numberOfLayersVertical) ? numberOfLayersHorizontal : numberOfLayersVertical;
 	HexagonGrid grid(Hexagon::FlatTopped);
-	
+
 	this->hexagonRadius= hexagonRadius;
 	this->position = position;
 	this->radius = radius;
 	this->world = world;
+	this->cluster = cluster;
 
 	active = false;	
 	player = NULL;
@@ -30,7 +29,7 @@ Territory::Territory(Vector2f position, float radius, World * world)
 	boundingBox.left = position.x - (boundingBox.width / 2);
 	boundingBox.top = position.y - (boundingBox.height / 2);
 
-	gridMatrix = grid.generateGrid(position, hexagonRadius, layers);
+	gridMatrix = grid.generateGrid(position, hexagonRadius, layers, (*cluster)[VertexCluster::HexagonSource]);
 	borderCoordinates = grid.getRingCoordinates(layers);
 	layers = 47;
 	spawnGrid = grid.getRingCoordinates(layers + 2);
@@ -72,10 +71,10 @@ Territory::Territory(Vector2f position, float radius, World * world)
 	wc.speed = 8;
 	wc.spread = 4;
 	wc.ttl = 20;
-	enemyWeapons[0] = Weapon(wc);
-	enemyWeapons[1] = Weapon(wc);
-	enemyWeapons[2] = Weapon(wc);
-	enemyWeapons[3] = Weapon(wc);
+	enemyWeapons[0] = Weapon(wc, (*cluster)[VertexCluster::HexagonSource]);
+	enemyWeapons[1] = Weapon(wc, (*cluster)[VertexCluster::HexagonSource]);
+	enemyWeapons[2] = Weapon(wc, (*cluster)[VertexCluster::HexagonSource]);
+	enemyWeapons[3] = Weapon(wc, (*cluster)[VertexCluster::HexagonSource]);
 
 	aiProperties[0] = AI::generate(rand() % 5);
 	aiProperties[1] = AI::generate(rand() % 5);
@@ -224,7 +223,7 @@ void Territory::cleanup()
 {
 	for (std::list<Projectile *>::iterator it = enemyProjectiles.begin(); it != enemyProjectiles.end();)
 	{
-		Entity * entity = *it;
+		Projectile * entity = *it;
 
 		if (entity->isExpended())
 		{
@@ -239,7 +238,7 @@ void Territory::cleanup()
 
 	for (std::list<Projectile *>::iterator it = playerProjectile.begin(); it != playerProjectile.end();)
 	{
-		Entity * entity = *it;
+		Projectile * entity = *it;
 
 		if (entity->isExpended())
 		{
@@ -254,7 +253,7 @@ void Territory::cleanup()
 
 	for (std::list<Enemy *>::iterator it = enemies.begin(); it != enemies.end();)
 	{
-		Entity * entity = *it;
+		Enemy * entity = *it;
 
 		if (entity->isExpended())
 		{
@@ -278,7 +277,7 @@ void Territory::cleanup()
 
 void Territory::draw(RenderWindow * window)
 {
-	if (active)
+	/*if (false && active)
 	{
 		int layers = 47;
 		HexagonGrid grid(Hexagon::FlatTopped);
@@ -309,14 +308,14 @@ void Territory::draw(RenderWindow * window)
 			{
 				if (gridMatrix[i][j] != NULL)
 				{
-					if (Collision::isWithinWindow(gridMatrix[i][j]->getBoundingBox(), window->getView()))
+					//if (Collision::isWithinWindow(gridMatrix[i][j]->getBoundingBox(), window->getView()))
 						gridMatrix[i][j]->draw(window);
 				}
 			}
 		}
-	}
+	}*/
 
-	for (std::list<Projectile *>::iterator it = enemyProjectiles.begin(); it != enemyProjectiles.end(); it++)
+	/*for (std::list<Projectile *>::iterator it = enemyProjectiles.begin(); it != enemyProjectiles.end(); it++)
 	{
 		if (Collision::isWithinWindow((*it)->getBoundingBox(), window->getView()))
 		{
@@ -338,7 +337,7 @@ void Territory::draw(RenderWindow * window)
 		{
 			(*it)->draw(window);
 		}
-	}
+	}*/
 
 	if (active)
 	{
@@ -408,7 +407,7 @@ void Territory::update(UpdateInfo info)
 	// Spawn enemies
 	if (active)
 	{
-		Enemy * enemy = new Enemy(100, getSpawnLocation());
+		Enemy * enemy = new Enemy(100, getSpawnLocation(), (*cluster)[VertexCluster::RectangleSource]);
 
 		enemy->educate(aiProperties[0]);
 		enemy->arm(enemyWeapons[rand() % 4]);

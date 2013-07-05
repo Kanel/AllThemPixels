@@ -104,6 +104,8 @@
     <ClCompile Include="Territory.cpp" />
     <ClCompile Include="UserInput.cpp" />
     <ClCompile Include="Vector2fMath.cpp" />
+    <ClCompile Include="VertexCluster.cpp" />
+    <ClCompile Include="VertexCollection.cpp" />
     <ClCompile Include="Weapon.cpp" />
     <ClCompile Include="World.cpp" />
   </ItemGroup>
@@ -129,6 +131,8 @@
     <ClInclude Include="UpdateInfo.h" />
     <ClInclude Include="UserInput.h" />
     <ClInclude Include="Vector2fMath.h" />
+    <ClInclude Include="VertexCluster.h" />
+    <ClInclude Include="VertexCollection.h" />
     <ClInclude Include="Weapon.h" />
     <ClInclude Include="World.h" />
   </ItemGroup>

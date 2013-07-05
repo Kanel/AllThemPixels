@@ -2,6 +2,7 @@
 
 #include "Territory.h"
 #include "HexagonGrid.h"
+#include "VertexCluster.h"
 #include <SFML\Graphics.hpp>
 #include <vector>
 
@@ -24,7 +25,7 @@ private:
 	Territory *** territories;
 
 public:
-	World(Vector2f position, float territoryRadius, float territorySpacing, int layers);
+	World(Vector2f position, float territoryRadius, float territorySpacing, int layers, VertexCluster * cluster);
 
 	Territory * getTerritory(AxialCoordinates coordinates);
 	void changeTerritory(Vector2f position);

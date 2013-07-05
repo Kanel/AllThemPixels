@@ -1,10 +1,7 @@
 #include  "Projectile.h"
 
-Projectile::Projectile(Vector2f position, Vector2f speed, float damage, int ttl, Color color, EntityTypes type) : Entity(position)
+Projectile::Projectile(Vector2f position, Vector2f speed, float damage, int ttl, VertexCollection * vertexSource, Color color, EntityTypes type) : Entity(position), shape(position, 5, color, Hexagon::FlatTopped, vertexSource)
 {
-	Shapes::hexagon(shape, 0, position, 5, color, true);
-	//Shapes::rectangle(shape, 0, position, 10, 10);
-	
 	this->ttl = ttl;
 	this->speed = speed;
 	this->type = type;
@@ -37,10 +34,7 @@ void Projectile::applyTransform(Transform transform)
 {
 	Entity::applyTransform(transform);
 
-	for (int i = 0; i < 6; i++)
-	{
-		shape[i].position = transform.transformPoint(shape[i].position);
-	}
+	shape.applyTransform(transform);
 }
 
 Rect<float> Projectile::getBoundingBox()
@@ -50,19 +44,12 @@ Rect<float> Projectile::getBoundingBox()
 
 ConvexHull Projectile::getConvexHull()
 {
-	vector<Vector2f> vertices;
-
-	for (int i = 0; i < 6; i++)
-	{
-		vertices.push_back(shape[i].position);
-	}
-
-	return MonotoneChain::getConvexHull(vertices);
+	return shape.getConvexHull();
 }
 
 void Projectile::draw(RenderWindow * window)
 {
-	window->draw(shape, 6, PrimitiveType::TrianglesFan);
+	//window->draw(shape, 6, PrimitiveType::TrianglesFan);
 }
 
 void Projectile::update(UpdateInfo info)

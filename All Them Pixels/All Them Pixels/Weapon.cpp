@@ -1,10 +1,11 @@
 #include "Weapon.h"
 
-Weapon::Weapon(){}
+Weapon::Weapon() { }
 
-Weapon::Weapon(WeaponConfiguration config)
+Weapon::Weapon(WeaponConfiguration config, VertexCollection * vertexSource)
 {
 	this->config = config;
+	this->vertexSource= vertexSource;
 	this->lastFired = 0;
 }
 
@@ -37,7 +38,7 @@ Projectile * Weapon::fire(Vector2f position, Vector2f direction, int gameTime, E
 
 	lastFired = gameTime;
 
-	return new Projectile(position, speedVector, config.damage, config.ttl, color, type);
+	return new Projectile(position, speedVector, config.damage, config.ttl, vertexSource, color, type);
 }
 
 bool Weapon::isReady(int gameTime)

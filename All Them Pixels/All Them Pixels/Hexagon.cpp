@@ -1,9 +1,14 @@
 #include "Hexagon.h"
 
-Hexagon::Hexagon() { }
+//Hexagon::Hexagon() { }
 
-Hexagon::Hexagon(Vector2f position, float radius, Color color, Style style)
+Hexagon::Hexagon(Vector2f position, float radius, Color color, Style style, VertexCollection * vertexSource) : convexHull(6)
 {
+	this->vertexSource = vertexSource;
+
+	vertexCount = 8;
+	vertexOffset = vertexSource->add();
+
 	if (style == Style::FlatTopped)
 	{
 		// Flat topped
@@ -13,17 +18,26 @@ Hexagon::Hexagon(Vector2f position, float radius, Color color, Style style)
 		float height = sqrt(3)/2 * width;
 		float halfHeight = height / 2;
 
-		corners[0] = Vertex(Vector2f(position.x - quarterWidth, position.y - halfHeight), color);
-		corners[1] = Vertex(Vector2f(position.x + quarterWidth, position.y - halfHeight), color);
-		corners[2] = Vertex(Vector2f(position.x + halfWidth, position.y), color);
-		corners[3] = Vertex(Vector2f(position.x + quarterWidth, position.y + halfHeight), color);
-		corners[4] = Vertex(Vector2f(position.x - quarterWidth, position.y + halfHeight), color);
-		corners[5] = Vertex(Vector2f(position.x - halfWidth, position.y), color);
-
+		(*vertexSource)[vertexOffset + 0] = Vertex(Vector2f(position.x - halfWidth, position.y), color);
+		(*vertexSource)[vertexOffset + 1] = Vertex(Vector2f(position.x - halfWidth, position.y), color);
+		(*vertexSource)[vertexOffset + 2] = Vertex(Vector2f(position.x - quarterWidth, position.y + halfHeight), color);
+		(*vertexSource)[vertexOffset + 3] = Vertex(Vector2f(position.x - quarterWidth, position.y - halfHeight), color);
+		(*vertexSource)[vertexOffset + 4] = Vertex(Vector2f(position.x + quarterWidth, position.y + halfHeight), color);
+		(*vertexSource)[vertexOffset + 5] = Vertex(Vector2f(position.x + quarterWidth, position.y - halfHeight), color);
+		(*vertexSource)[vertexOffset + 6] = Vertex(Vector2f(position.x + halfWidth, position.y), color);
+		(*vertexSource)[vertexOffset + 7] = Vertex(Vector2f(position.x + halfWidth, position.y), color);
+		
 		boundingBox.left = position.x - halfWidth;
 		boundingBox.top = position.y - halfHeight;
 		boundingBox.width = width;
-		boundingBox.height = height;		
+		boundingBox.height = height;
+
+		convexHull[0] = (*vertexSource)[vertexOffset + 1].position;
+		convexHull[1] = (*vertexSource)[vertexOffset + 3].position;
+		convexHull[2] = (*vertexSource)[vertexOffset + 5].position;
+		convexHull[3] = (*vertexSource)[vertexOffset + 6].position;
+		convexHull[4] = (*vertexSource)[vertexOffset + 4].position;
+		convexHull[5] = (*vertexSource)[vertexOffset + 2].position;
 	}
 	else
 	{
@@ -34,26 +48,32 @@ Hexagon::Hexagon(Vector2f position, float radius, Color color, Style style)
 		float width = sqrtf(3) / 2 * height;
 		float halfWidth = width / 2;
 
-		corners[0] = Vertex(Vector2f(position.x, position.y - halfHeight), color);
-		corners[1] = Vertex(Vector2f(position.x + halfWidth, position.y - quarterHeight), color);
-		corners[2] = Vertex(Vector2f(position.x + halfWidth, position.y + quarterHeight), color);
-		corners[3] = Vertex(Vector2f(position.x, position.y + halfHeight), color);
-		corners[4] = Vertex(Vector2f(position.x - halfWidth, position.y + quarterHeight), color);
-		corners[5] = Vertex(Vector2f(position.x - halfWidth, position.y - quarterHeight), color);
+		(*vertexSource)[vertexOffset + 0] = Vertex(Vector2f(position.x, position.y - halfHeight), color);
+		(*vertexSource)[vertexOffset + 1] = Vertex(Vector2f(position.x, position.y - halfHeight), color);
+		(*vertexSource)[vertexOffset + 2] = Vertex(Vector2f(position.x - halfWidth, position.y - quarterHeight), color);
+		(*vertexSource)[vertexOffset + 3] = Vertex(Vector2f(position.x + halfWidth, position.y - quarterHeight), color);
+		(*vertexSource)[vertexOffset + 4] = Vertex(Vector2f(position.x - halfWidth, position.y + quarterHeight), color);
+		(*vertexSource)[vertexOffset + 5] = Vertex(Vector2f(position.x + halfWidth, position.y + quarterHeight), color);
+		(*vertexSource)[vertexOffset + 6] = Vertex(Vector2f(position.x, position.y + halfHeight), color);
+		(*vertexSource)[vertexOffset + 7] = Vertex(Vector2f(position.x, position.y + halfHeight), color);
 	
 		boundingBox.left = position.x - halfWidth;
 		boundingBox.top = position.y - halfHeight;
 		boundingBox.width = width;
 		boundingBox.height = height;
-	}
-	convexHull.resize(6);
 
-	convexHull[0] = corners[0].position;
-	convexHull[1] = corners[1].position;
-	convexHull[2] = corners[2].position;
-	convexHull[3] = corners[3].position;
-	convexHull[4] = corners[4].position;
-	convexHull[5] = corners[5].position;
+		convexHull[0] = (*vertexSource)[vertexOffset + 2].position;
+		convexHull[1] = (*vertexSource)[vertexOffset + 1].position;
+		convexHull[2] = (*vertexSource)[vertexOffset + 3].position;
+		convexHull[3] = (*vertexSource)[vertexOffset + 5].position;
+		convexHull[4] = (*vertexSource)[vertexOffset + 6].position;
+		convexHull[5] = (*vertexSource)[vertexOffset + 4].position;
+	}
+}
+
+Hexagon::~Hexagon()
+{
+	vertexSource->remove(vertexOffset);
 }
 
 Hexagon::Style Hexagon::getStyle()
@@ -73,15 +93,21 @@ ConvexHull Hexagon::getConvexHull()
 
 void Hexagon::setColor(Color color)
 {
-	corners[0].color = color;
-	corners[1].color = color;
-	corners[2].color = color;
-	corners[3].color = color;
-	corners[4].color = color;
-	corners[5].color = color;
+	for (int i = 0; i < vertexCount; i++)
+	{
+		(*vertexSource)[vertexOffset + i].color = color;
+	}
+}
+
+void Hexagon::applyTransform(Transform transform)
+{
+	for (int i = 0; i < vertexCount; i++)
+	{
+		(*vertexSource)[vertexOffset + i].position = transform.transformPoint((*vertexSource)[vertexOffset + i].position);
+	}
 }
 
 void Hexagon::draw(RenderWindow * window)
 {
-	window->draw(corners, 6, PrimitiveType::TrianglesFan);
+	//window->draw(corners, 8, PrimitiveType::TrianglesStrip);
 }

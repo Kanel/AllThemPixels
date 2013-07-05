@@ -2,6 +2,7 @@
 
 #include "Collision.h"
 #include "SAT.h"
+#include "VertexCollection.h"
 #include <SFML\Graphics.hpp>
 
 using namespace sf;
@@ -15,20 +16,26 @@ public:
 		PointyTopped
 	};
 
+public:// should not be public
+	int vertexCount;
+	int vertexOffset;
+
 private:
 	Style style;
-	Vertex corners[7];
+	//Vertex corners[7];
 	Rect<float> boundingBox;
 	ConvexHull convexHull;
-
-public:
-	Hexagon();
-	Hexagon(Vector2f position, float radius, Color color, Style style);
+	VertexCollection * vertexSource;
+	
+public:	
+	Hexagon(Vector2f position, float radius, Color color, Style style, VertexCollection * vertexSource);
+	~Hexagon();
 
 	Style getStyle();
 	Rect<float> getBoundingBox();
 	ConvexHull getConvexHull();
 	void setColor(Color color);
+	void applyTransform(Transform transform);
 
 	void draw(RenderWindow * window);
 };
