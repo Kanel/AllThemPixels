@@ -1,43 +1,9 @@
 #include "VertexCollection.h"
 
-VertexCollection::VertexCollection()
-{
-	this->verticesPerShape = 0;
-	this->type = PrimitiveType::TrianglesStrip;
-	this->size = 0;
-	this->nextIndex = 0;
-	this->numberOfVertices = 0;
-	this->vertices = NULL;
-}
-
-VertexCollection::VertexCollection(int verticesPerShape, int size, PrimitiveType type)
-{
-	this->verticesPerShape = verticesPerShape;
-	this->type = type;
-	this->size = size;
-	this->nextIndex = 0;
-	this->numberOfVertices = size * verticesPerShape;
-	this->vertices = new Vertex[numberOfVertices];
-}
-
-VertexCollection::~VertexCollection()
-{
-	if (vertices != NULL)
-	{
-		delete vertices;
-	}
-}
-
-int VertexCollection::add()
-{
-
-	return add(vertices);
-}
-
-int VertexCollection::add(Vertex vertices[])
+int VertexCollection::allocateSlot()
 {
 	int index;
-	
+
 	if (freeSlots.size() > 0)
 	{
 		index = freeSlots.front();
@@ -49,8 +15,38 @@ int VertexCollection::add(Vertex vertices[])
 		index = nextIndex;
 		nextIndex += verticesPerShape;
 
-		assert(index >= 0 && index + verticesPerShape <= numberOfVertices);
-	}	
+		if (index == numberOfVertices)
+		{
+			resize(size + increment);
+		}
+	}
+	return index;
+}
+
+VertexCollection::VertexCollection(int verticesPerShape, int size, int increment, PrimitiveType type)
+{
+	this->verticesPerShape = verticesPerShape;
+	this->type = type;
+	this->size = size;
+	this->nextIndex = 0;
+	this->numberOfVertices = size * verticesPerShape;
+	this->increment = increment;
+	this->vertices = new Vertex[numberOfVertices];
+}
+
+VertexCollection::~VertexCollection()
+{
+	delete vertices;
+}
+
+int VertexCollection::add()
+{
+	return allocateSlot();
+}
+
+int VertexCollection::add(Vertex vertices[])
+{
+	int index = allocateSlot();
 
 	for(int i = 0; i < verticesPerShape; i++)
 	{
@@ -61,7 +57,7 @@ int VertexCollection::add(Vertex vertices[])
 
 void VertexCollection::remove(int index)
 {
-	assert(index >= 0 && index + verticesPerShape <= numberOfVertices);
+	assert(index >= 0 && index < numberOfVertices);
 
 	for (int i = 0; i < verticesPerShape; i++)
 	{
@@ -73,17 +69,18 @@ void VertexCollection::remove(int index)
 void VertexCollection::resize(int newSize)
 {
 	int i;
-	Vertex * newArray = new Vertex[newSize * verticesPerShape];
+	int newNumberOfVertices = newSize * verticesPerShape;
+	Vertex * newArray = new Vertex[newNumberOfVertices];
 
-	numberOfVertices = newSize * verticesPerShape;
-
-	for (i = 0; i < size && i < numberOfVertices; i++)
+	for (i = 0; i < numberOfVertices && i < newNumberOfVertices; i++)
 	{
 		newArray[i] = vertices[i];
 	}
 	delete vertices;
 
-	nextIndex = i;
+	size = newSize;
+	nextIndex = i + verticesPerShape;
+	numberOfVertices = newNumberOfVertices;
 	vertices = newArray;
 }
 
