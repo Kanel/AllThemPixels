@@ -1,6 +1,6 @@
 #include "World.h"
 
-World::World(Vector2f position, float territoryRadius, float territorySpacing, int layers, VertexCluster * cluster)
+World::World(Vector2f position, float territoryRadius, float territorySpacing, int layers)
 {
 	HexagonGrid grid(Hexagon::PointyTopped);
 
@@ -28,7 +28,7 @@ World::World(Vector2f position, float territoryRadius, float territorySpacing, i
 	territoryCount = 0;
 
 	// Center Territory
-	territories[offset.x][offset.y] = new Territory(position, territoryRadius, this, cluster);
+	territories[offset.x][offset.y] = new Territory(position, territoryRadius, this);
 
 	// Layer Territories
 	for (int k = 1; k <= layers; k++)
@@ -39,7 +39,7 @@ World::World(Vector2f position, float territoryRadius, float territorySpacing, i
 		{
 			for (int j = 0; j < k; j++)
 			{
-				territories[offset.x + hexagon.q][offset.y + hexagon.r] = new Territory(position + grid.getPosition(hexagon, tileSize), territoryRadius, this, cluster);
+				territories[offset.x + hexagon.q][offset.y + hexagon.r] = new Territory(position + grid.getPosition(hexagon, tileSize), territoryRadius, this);
 
 				hexagon = grid.step(hexagon, (HexagonGrid::HexagonDirection)((HexagonGrid::DownRight + i) % 6));
 			}
@@ -89,10 +89,10 @@ void World::draw(RenderWindow * window)
 		{
 			if (territories[i][j] != NULL)
 			{
-				/*if (Collision::isWithinWindow(territories[i][j]->getBoundingBox(), window->getView()))
-				{*/
+				if (Collision::isWithinWindow(territories[i][j]->getBoundingBox(), window->getView()))
+				{
 					territories[i][j]->draw(window);
-				//}
+				}
 			}
 		}
 	}

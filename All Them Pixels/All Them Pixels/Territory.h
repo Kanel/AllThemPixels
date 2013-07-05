@@ -12,6 +12,7 @@
 #include "Collision.h"
 #include "World.h"
 #include "HexagonGrid.h"
+#include "VertexCluster.h"
 #include <SFML\Graphics.hpp>
 #include <list>
 #include <queue>
@@ -47,7 +48,8 @@ private:
 	vector<AxialCoordinates> drawGrid;
 	vector<AxialCoordinates> spawnGrid;
 	float hexagonRadius;
-	VertexCluster * cluster;
+	VertexCluster cluster;
+	VertexCluster cluster2;
 
 	Weapon enemyWeapons[4];
 	AIProperties aiProperties[4];
@@ -58,7 +60,7 @@ public:
 
 public:
 	Territory();
-	Territory(Vector2f position, float radius, World * world, VertexCluster * cluster);
+	Territory(Vector2f position, float radius, World * world);
 	~Territory();
 	queue<Entity *> *getSpawnQueue();
 

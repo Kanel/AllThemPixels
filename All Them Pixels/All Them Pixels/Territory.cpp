@@ -1,6 +1,6 @@
 #include "Territory.h"
 
-Territory::Territory(Vector2f position, float radius, World * world, VertexCluster * cluster)
+Territory::Territory(Vector2f position, float radius, World * world)
 {
 	// Flat topped hexagons
 	// Todo: clean it a bit
@@ -17,7 +17,6 @@ Territory::Territory(Vector2f position, float radius, World * world, VertexClust
 	this->position = position;
 	this->radius = radius;
 	this->world = world;
-	this->cluster = cluster;
 
 	active = false;	
 	player = NULL;
@@ -29,7 +28,7 @@ Territory::Territory(Vector2f position, float radius, World * world, VertexClust
 	boundingBox.left = position.x - (boundingBox.width / 2);
 	boundingBox.top = position.y - (boundingBox.height / 2);
 
-	gridMatrix = grid.generateGrid(position, hexagonRadius, layers, (*cluster)[VertexCluster::HexagonSource]);
+	gridMatrix = grid.generateGrid(position, hexagonRadius, layers, cluster[VertexCluster::HexagonSource]);
 	borderCoordinates = grid.getRingCoordinates(layers);
 	layers = 47;
 	spawnGrid = grid.getRingCoordinates(layers + 2);
@@ -40,9 +39,7 @@ Territory::Territory(Vector2f position, float radius, World * world, VertexClust
 	}
 
 	// Pre compute values!?!
-	int index = 0;
-	
-	
+	int index = 0;	
 	
 	drawGrid.resize(grid.getNumberOfTiles(layers));
 
@@ -63,7 +60,6 @@ Territory::Territory(Vector2f position, float radius, World * world, VertexClust
 		}
 	}
 
-
 	WeaponConfiguration wc;
 	wc.cooldown = 100;
 	wc.damage = 20;
@@ -71,10 +67,10 @@ Territory::Territory(Vector2f position, float radius, World * world, VertexClust
 	wc.speed = 8;
 	wc.spread = 4;
 	wc.ttl = 20;
-	enemyWeapons[0] = Weapon(wc, (*cluster)[VertexCluster::HexagonSource]);
-	enemyWeapons[1] = Weapon(wc, (*cluster)[VertexCluster::HexagonSource]);
-	enemyWeapons[2] = Weapon(wc, (*cluster)[VertexCluster::HexagonSource]);
-	enemyWeapons[3] = Weapon(wc, (*cluster)[VertexCluster::HexagonSource]);
+	enemyWeapons[0] = Weapon(wc, cluster2[VertexCluster::HexagonSource]);
+	enemyWeapons[1] = Weapon(wc, cluster2[VertexCluster::HexagonSource]);
+	enemyWeapons[2] = Weapon(wc, cluster2[VertexCluster::HexagonSource]);
+	enemyWeapons[3] = Weapon(wc, cluster2[VertexCluster::HexagonSource]);
 
 	aiProperties[0] = AI::generate(rand() % 5);
 	aiProperties[1] = AI::generate(rand() % 5);
@@ -338,6 +334,8 @@ void Territory::draw(RenderWindow * window)
 			(*it)->draw(window);
 		}
 	}*/
+	window->draw(cluster);
+	window->draw(cluster2);
 
 	if (active)
 	{
@@ -407,7 +405,7 @@ void Territory::update(UpdateInfo info)
 	// Spawn enemies
 	if (active)
 	{
-		Enemy * enemy = new Enemy(100, getSpawnLocation(), (*cluster)[VertexCluster::RectangleSource]);
+		Enemy * enemy = new Enemy(100, getSpawnLocation(), cluster2[VertexCluster::RectangleSource]);
 
 		enemy->educate(aiProperties[0]);
 		enemy->arm(enemyWeapons[rand() % 4]);

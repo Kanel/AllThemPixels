@@ -1,6 +1,6 @@
 #include"VertexCluster.h"
 
-VertexCluster::VertexCluster() : collections1(8, 400000, PrimitiveType::TrianglesStrip), collections2(4, 200000, PrimitiveType::Quads)
+VertexCluster::VertexCluster() : collections1(8, 80000, PrimitiveType::TrianglesStrip), collections2(4, 2000, PrimitiveType::Quads)
 {
 	//collections[HexagonSource] = VertexCollection(8, 200000, PrimitiveType::TrianglesStrip);
 	//collections[RectangleSource] = VertexCollection(4, 200000, PrimitiveType::Quads);
