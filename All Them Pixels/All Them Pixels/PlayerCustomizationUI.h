@@ -3,6 +3,7 @@
 #include "Player.h"
 #include "UpdateInfo.h"
 #include "SkillWheel.h"
+#include "UserInput.h"
 #include <SFML\Graphics.hpp>
 
 // Transformable och Drawable verkar snälla men man måste transforma sig massa mer
@@ -14,6 +15,7 @@ private:
 	SkillWheel wheel;
 	int cooldown;
 	int lastChange;
+	bool wasPressed[4];
 
 public:
 	enum Result

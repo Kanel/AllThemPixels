@@ -1,6 +1,6 @@
 #include "UserInput.h"
 
-float UserInput::getGamepadEkvivalentValue(Keyboard::Key positive, Keyboard::Key negative)
+int UserInput::getGamepadEkvivalentValue(Keyboard::Key positive, Keyboard::Key negative)
 {
 	if(Keyboard::isKeyPressed(positive))
 	{
@@ -16,11 +16,11 @@ float UserInput::getGamepadEkvivalentValue(Keyboard::Key positive, Keyboard::Key
 	}
 }
 
-float UserInput::getJoystickPosition(unsigned int joystick, Joystick::Axis axis)
+float UserInput::getJoystickPosition(Joystick::Axis axis)
 {
-	if (Joystick::isConnected(joystick))
+	if (Joystick::isConnected(0))
 	{
-		return Joystick::getAxisPosition(joystick, axis);
+		return Joystick::getAxisPosition(0, axis);
 	}
 	else
 	{
@@ -64,20 +64,31 @@ float UserInput::getJoystickPosition(unsigned int joystick, Joystick::Axis axis)
 	}
 }
 
-Vector2f UserInput::getJoystickVector(unsigned int joystick, Joystick::Axis x, Joystick::Axis y)
+Vector2f UserInput::getJoystickVector(Joystick::Axis x, Joystick::Axis y)
 {
-	return Vector2f(getJoystickPosition(joystick, x), 
-					getJoystickPosition(joystick, y));
+	return Vector2f(getJoystickPosition(x), 
+					getJoystickPosition(y));
 }
 
-bool UserInput::isButtonPressed(unsigned int joystick, unsigned int button)
+bool UserInput::isButtonPressed(unsigned int button)
 {
-	if (Joystick::isConnected(joystick))
+	if (Joystick::isConnected(0))
 	{
-		return Joystick::isButtonPressed(joystick, button);
+		return Joystick::isButtonPressed(0, button);
 	}
 	else
 	{
+		switch (button)
+		{
+		case UIC_SCROLL_LEFT:
+			return Keyboard::isKeyPressed(Keyboard::E);
+		case UIC_SCROLL_RIGHT:
+			return Keyboard::isKeyPressed(Keyboard::R);
+		case UIC_INCREASE_SKILL:
+			return Keyboard::isKeyPressed(Keyboard::T);
+		case UIC_DECREASE_SKILL:
+			return Keyboard::isKeyPressed(Keyboard::Y);
+		}
 		return false;
 	}
 }

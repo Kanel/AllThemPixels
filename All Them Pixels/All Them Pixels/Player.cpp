@@ -10,8 +10,8 @@ void Player::applyTransform(Transform transform, Vertex vertices[], int count)
 
 float Player::getDirection(Joystick::Axis axisX, Joystick::Axis axisY)
 {
-	float x = UserInput::getJoystickPosition(0, axisX); 
-	float y = -UserInput::getJoystickPosition(0, axisY); 
+	float x = UserInput::getJoystickPosition(axisX); 
+	float y = -UserInput::getJoystickPosition(axisY); 
 	float distance = sqrtf(powf(x, 2) + powf(y, 2));	
 	float direction;
 
@@ -41,7 +41,7 @@ float Player::getDirection(Joystick::Axis axisX, Joystick::Axis axisY)
 
 Vector2f Player::getJoystickVector(Joystick::Axis x, Joystick::Axis y)
 {
-	Vector2f vector= UserInput::getJoystickVector(0, x, y);
+	Vector2f vector= UserInput::getJoystickVector(x, y);
 
 	vector.x = (powf(vector.x, 2) > 400) ? vector.x / 15 : 0;
 	vector.y = (powf(vector.y, 2) > 400) ? vector.y / 15 : 0;

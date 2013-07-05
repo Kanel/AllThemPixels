@@ -3,8 +3,10 @@
 PlayerCustomizationUI::PlayerCustomizationUI(Vector2f position) : wheel(3, 100)
 {
 	size = Vector2f(400, 200);
-	cooldown = 100;
+	cooldown = 20;
 	lastChange = 0;
+
+	for (int i = 0; i < 4; i++)	wasPressed[i] = false;
 
 	background[0] = Vertex(Vector2f(position.x - (size.x / 2), position.y - (size.y / 2)));
 	background[1] = Vertex(Vector2f(position.x + (size.x / 2), position.y - (size.y / 2)));
@@ -22,31 +24,45 @@ PlayerCustomizationUI::Result PlayerCustomizationUI::update(UpdateInfo info)
 {
 	Result result = Result::NoChange;
 
+	if (UserInput::isButtonPressed(UIC_SCROLL_LEFT))
+	{
+		wasPressed[0] = true;
+	}
+	else if(wasPressed[0] == true)
+	{
+		wheel.setIndex((wheel.getIndex() - 1) % wheel.getNumberOfSkills());
+		result = Result::Changed;
+		wasPressed[0] = false;
+	}
+	if (UserInput::isButtonPressed(UIC_SCROLL_RIGHT))
+	{
+		wasPressed[1] = true;
+	}
+	else if(wasPressed[1] == true)
+	{
+		wheel.setIndex((wheel.getIndex() + 1) % wheel.getNumberOfSkills());
+		result = Result::Changed;
+		wasPressed[1] = false;
+	}
 	if (lastChange + cooldown <= info.elapsedGameTime)
 	{
-		result = Result::Changed;
-
-		if (Keyboard::isKeyPressed(Keyboard::E))
+		float triggervalue = UserInput::getJoystickPosition(Joystick::Axis::Z);
+		if ((triggervalue * triggervalue) > 100)
 		{
-			wheel.setIndex((wheel.getIndex() - 1) % wheel.getNumberOfSkills());
-
+			wheel.setSkillValue(wheel.getSkillValue() + triggervalue/15);
 			result = Result::Changed;
+			lastChange = info.elapsedGameTime;
 		}
-		else if (Keyboard::isKeyPressed(Keyboard::R))
-		{
-			wheel.setIndex((wheel.getIndex() + 1) % wheel.getNumberOfSkills());
-
-			result = Result::Changed;
-		}
-		else if (Keyboard::isKeyPressed(Keyboard::T))
+		if (UserInput::isButtonPressed(UIC_INCREASE_SKILL))
 		{
 			wheel.setSkillValue(wheel.getSkillValue() + 4);
-
 			result = Result::Changed;
+			lastChange = info.elapsedGameTime;
 		}
-		
-		if (result == Result::Changed)
+		if (UserInput::isButtonPressed(UIC_DECREASE_SKILL))
 		{
+			wheel.setSkillValue(wheel.getSkillValue() - 4);
+			result = Result::Changed;
 			lastChange = info.elapsedGameTime;
 		}
 	}
