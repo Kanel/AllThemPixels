@@ -20,14 +20,15 @@ int main(int argc, char ** argv)
 	VideoMode videoMode(1024, 1024);
     RenderWindow window(videoMode, windowtitle, 7, settings);
 	World world(Vector2f(), 2048, 0, 1);
-	Clock c;
-	Clock elapsedTime;
+	/*Clock c;
+	Clock elapsedTime;*/
 	int fps = 0;
 	Territory * t = world.getTerritory(AxialCoordinates(0, 0));
 	Player * player;
 	PlayerConfiguration playerconfig;
 	PlayerCustomizationUI ui(Vector2f(0, 0));
 	VertexCluster cluster;
+	Time sleepDuration = milliseconds(updateInterval);
 
 	playerconfig.hp = 10000000;
 	playerconfig.speed = 1.5;
@@ -47,8 +48,8 @@ int main(int argc, char ** argv)
 
 	while (world.isActive())
     {
-		if (c.getElapsedTime().asMilliseconds() >= updateInterval)
-		{
+		/*if (c.getElapsedTime().asMilliseconds() >= updateInterval)
+		{*/
 			Event event;
 			UpdateInfo info;
 			Vector2f inGamePosition;
@@ -87,10 +88,10 @@ int main(int argc, char ** argv)
 			window.draw(ui);
 			window.display();			
 
-			fps++;
+			/*fps++;
 
-			c.restart();
-		}
+			c.restart();*/
+		/*}
 
 		if (elapsedTime.getElapsedTime().asMilliseconds() >= 1000)
 		{
@@ -99,7 +100,8 @@ int main(int argc, char ** argv)
 			fps = 0;
 
 			elapsedTime.restart();
-		}
+		}*/
+		sleep(sleepDuration);
     }
 
     return 0;
