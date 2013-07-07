@@ -56,6 +56,6 @@ public:
 	Rect<float> getBoundingBox() override;
 
 	void applyTransform(Transform transform) override;
-	void draw(RenderWindow * window) override;
+	void draw(RenderWindow * window);
 	void update(UpdateInfo info) override;
 };

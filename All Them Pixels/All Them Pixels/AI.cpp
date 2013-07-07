@@ -1,6 +1,6 @@
 #include "AI.h"
 
-Vector2f aproximation(Vector2f vector)
+Vector2f AI::aproximation(Vector2f vector)
 {
 	return Vector2f(floorf(vector.x*10000)/10000, floorf(vector.y*10000)/10000);
 }
@@ -8,6 +8,7 @@ Vector2f aproximation(Vector2f vector)
 AIProperties AI::generate(int difficulty)
 {
 	AIProperties aiProperties;
+
 	aiProperties.aimavoidance = (difficulty > 3) ? 50 + rand() % 50 : 0;
 	aiProperties.playerspace = (float)(rand() % 200) / 100.0;
 	aiProperties.righthanded = (rand() % 2 == 0);
@@ -18,6 +19,7 @@ AIProperties AI::generate(int difficulty)
 
 void AI::update(queue<Entity *> *spawnQueue, Enemy * target, Player * player, UpdateInfo info)
 {
+	int shots;
 	Weapon weapon = target->weapon;
 	AIProperties properties = target->aiProperties;
 	float projectileSpeed = weapon.config.speed;
@@ -25,30 +27,38 @@ void AI::update(queue<Entity *> *spawnQueue, Enemy * target, Player * player, Up
 	int range = 100;// weapon->ttl * speed; //make correct
 	Vector2f direction = Vector2fMath::unitVector(player->getPosition() - target->getPosition());
 
+	// Determine in which direction to circle the player.
 	if (Vector2fMath::distance(player->getPosition(), target->getPosition()) < range * properties.playerspace)
 	{
 		direction = properties.righthanded ? Vector2fMath::turn90right(direction) : Vector2fMath::turn90left(direction) ;
 	}
+
+	// Dodge behaviour.
 	if (properties.aimavoidance > 0)
 	{
-		Vector2f a, p, n;
-		a = player->getPosition();
-		p = target->getPosition();
-		n = player->aimVector;
+		Vector2f a = player->getPosition();
+		Vector2f p = target->getPosition();
+		Vector2f n = player->aimVector;
 		Vector2f v1 = Vector2fMath::dot((a-p), n)*n;
 		Vector2f v2 = aproximation(Vector2fMath::invert(Vector2fMath::unitVector(v1)));
 		Vector2f v3 = aproximation(n);
-		float d = Vector2fMath::length((a-p)-v1);
-		if (d < properties.aimavoidance && v3 == v2)
+		float distance = Vector2fMath::length((a-p)-v1);
+
+		if (distance < properties.aimavoidance && v3 == v2)
 		{
 			direction = Vector2fMath::invert(Vector2fMath::unitVector((a-p)-v1));
 		}
 	}
+
+	// Move the controlled enemy.
 	target->translate(direction * speed);
 
-	if (target->getLastShootFired() + target->getCooldown() <= info.elapsedGameTime)
+	// Fire the weapon as many times as allowed.
+	if (weapon.isReady(info.elapsedGameTime, info.updateInterval, shots))
 	{
-		target->setLastShootFired(info.elapsedGameTime);
-		spawnQueue->push(weapon.fire(target->getPosition(), Vector2fMath::unitVector(player->getPosition() - target->getPosition()), info.elapsedGameTime, EntityTypes::EnemyProjectileEntity));
+		for (int i = 0; i < shots; i++)
+		{
+			spawnQueue->push(weapon.fire(target->getPosition(), Vector2fMath::unitVector(player->getPosition() - target->getPosition()), info.elapsedGameTime, EntityTypes::EnemyProjectileEntity));
+		}
 	}
 }

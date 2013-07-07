@@ -53,6 +53,6 @@ public:
 
 	void fade();
 
-	void draw(RenderWindow * window) override;
+	void draw(RenderWindow * window);
 	void update(UpdateInfo info) override;
 };

@@ -28,5 +28,5 @@ public:
 	void setConfiguration(WeaponConfiguration config);
 
 	Projectile * fire(Vector2f position, Vector2f direction, int gameTime, EntityTypes type);
-	bool isReady(int gameTime);
+	bool isReady(int gameTime, int updateInterval, int &shots);
 };

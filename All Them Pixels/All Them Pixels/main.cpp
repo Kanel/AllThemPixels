@@ -20,15 +20,16 @@ int main(int argc, char ** argv)
 	VideoMode videoMode(1024, 1024);
     RenderWindow window(videoMode, windowtitle, 7, settings);
 	World world(Vector2f(), 2048, 0, 1);
-	/*Clock c;
-	Clock elapsedTime;*/
-	int fps = 0;
 	Territory * t = world.getTerritory(AxialCoordinates(0, 0));
 	Player * player;
 	PlayerConfiguration playerconfig;
 	PlayerCustomizationUI ui(Vector2f(0, 0));
 	VertexCluster cluster;
 	Time sleepDuration = milliseconds(updateInterval);
+	UpdateInfo info;
+
+	info.updateInterval = updateInterval;
+	info.elapsedGameTime = 0;
 
 	playerconfig.hp = 10000000;
 	playerconfig.speed = 1.5;
@@ -40,67 +41,40 @@ int main(int argc, char ** argv)
 	playerconfig.weaponConfig.ttl = 55;
 
 	player = new Player(t->getSpawnQueue(), playerconfig, Vector2f(0, 0), cluster[VertexCluster::HexagonSource]);
-	VertexCollection * col;
 
 	t->active = true;
 	t->player = player;
 	t->addEntity(player);
 
-	while (world.isActive())
+	while (world.isActive() && window.isOpen())
     {
-		/*if (c.getElapsedTime().asMilliseconds() >= updateInterval)
-		{*/
-			Event event;
-			UpdateInfo info;
-			Vector2f inGamePosition;
+		Event event;		
 
-			while (window.pollEvent(event))
-			{
-				if (event.type == Event::Closed)
-				{
-					window.close();
-				}
-			}
-
-			elapsedGameTime += updateInterval;
-
-			info.updateInterval = updateInterval;
-			info.elapsedGameTime = elapsedGameTime;
-
-			world.update(info);
-			window.setView(world.getView(window.getView()));
-			ui.align(window.getView());
-
-			inGamePosition = window.getView().getCenter();
-			inGamePosition.x -= window.getView().getSize().x / 2;
-			inGamePosition.x += Mouse::getPosition(window).x;
-			inGamePosition.y -= window.getView().getSize().y / 2;
-			inGamePosition.y += Mouse::getPosition(window).y;
-
-			if (ui.update(info) == PlayerCustomizationUI::Changed)
-			{
-				player->setConfiguration(ui.getConfiguration());
-			}
-
-			window.clear();
-			window.draw(cluster);
-			world.draw(&window);
-			window.draw(ui);
-			window.display();			
-
-			/*fps++;
-
-			c.restart();*/
-		/*}
-
-		if (elapsedTime.getElapsedTime().asMilliseconds() >= 1000)
+		while (window.pollEvent(event))
 		{
-			std::cout << "FPS: " << fps << "\n";
+			if (event.type == Event::Closed)
+			{
+				window.close();
+			}
+		}
+		info.elapsedGameTime += updateInterval;
 
-			fps = 0;
+		world.update(info);
+		window.setView(world.getView(window.getView()));
+		ui.align(window.getView());
 
-			elapsedTime.restart();
-		}*/
+		if (ui.update(info) == PlayerCustomizationUI::Changed)
+		{
+			player->setConfiguration(ui.getConfiguration());
+		}
+
+		window.clear();		
+		world.draw(&window);
+		window.draw(cluster); // This contains the player and all its projectiles.
+		window.draw(ui);
+		window.display();
+			
+		// Sleep until the next frame needs to be rendered.
 		sleep(sleepDuration);
     }
 

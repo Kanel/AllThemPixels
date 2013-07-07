@@ -20,8 +20,6 @@ struct AIProperties
 class Enemy : public Destructible
 {
 protected:
-	int cooldown;
-	int lastShootFired;
 	int vertexCount;
 	int vertexOffset;
 	VertexCollection * vertexSource;
@@ -37,17 +35,10 @@ public:
 	void educate(AIProperties aiProperties);
 	void arm(Weapon weapon);
 
-	int getCooldown();
-	void setCooldown(int cooldown);
-
-	int getLastShootFired();
-	void setLastShootFired(int lastShootFired);
-
 	void applyTransform(Transform transform) override;
 
 	Rect<float> getBoundingBox() override;
 	ConvexHull getConvexHull() override;
 
-	void draw(RenderWindow * window) override;
 	void update(UpdateInfo info) override;
 };

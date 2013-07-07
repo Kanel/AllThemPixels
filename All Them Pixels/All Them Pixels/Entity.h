@@ -35,6 +35,5 @@ public:
 	virtual Rect<float> getBoundingBox() = NULL;
 	virtual ConvexHull getConvexHull() = NULL;
 
-	virtual void draw(RenderWindow * window) = NULL;
 	virtual void update(UpdateInfo info) = NULL;
 };

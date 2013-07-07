@@ -6,8 +6,6 @@ Enemy::Enemy(unsigned int hp, Vector2f position, VertexCollection * vertexSource
 
 	this->vertexSource = vertexSource;
 
-	cooldown = 500 + rand() % 256;
-	lastShootFired = 0;
 	type = EntityTypes::EnemyEntity;
 	vertexCount = 4;	
 
@@ -29,26 +27,6 @@ void Enemy::educate(AIProperties aiProperties)
 void Enemy::arm(Weapon weapon)
 {
 	this->weapon = weapon;
-}
-
-int Enemy::getCooldown()
-{
-	return cooldown;
-}
-
-void Enemy::setCooldown(int cooldown)
-{
-	this->cooldown = cooldown;
-}
-
-int Enemy::getLastShootFired()
-{
-	return lastShootFired;
-}
-
-void Enemy::setLastShootFired(int lastShootFired)
-{
-	this->lastShootFired = lastShootFired;
 }
 
 void Enemy::applyTransform(Transform transform)
@@ -76,11 +54,6 @@ ConvexHull Enemy::getConvexHull()
 	}
 
 	return MonotoneChain::getConvexHull(vertices);
-}
-
-void Enemy::draw(RenderWindow * window)
-{
-	//window->draw(shape, 4, PrimitiveType::Quads);
 }
 
 void Enemy::update(UpdateInfo info)

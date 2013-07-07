@@ -30,6 +30,5 @@ public:
 	Rect<float> getBoundingBox() override;
 	ConvexHull getConvexHull() override;
 
-	void draw(RenderWindow * window) override;
 	void update(UpdateInfo info) override;
 };

@@ -47,11 +47,6 @@ ConvexHull Projectile::getConvexHull()
 	return shape.getConvexHull();
 }
 
-void Projectile::draw(RenderWindow * window)
-{
-	//window->draw(shape, 6, PrimitiveType::TrianglesFan);
-}
-
 void Projectile::update(UpdateInfo info)
 {
 	ttl--;

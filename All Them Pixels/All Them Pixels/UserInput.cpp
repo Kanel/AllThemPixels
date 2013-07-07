@@ -82,10 +82,13 @@ bool UserInput::isButtonPressed(unsigned int button)
 		{
 		case UIC_SCROLL_LEFT:
 			return Keyboard::isKeyPressed(Keyboard::E);
+
 		case UIC_SCROLL_RIGHT:
 			return Keyboard::isKeyPressed(Keyboard::R);
+
 		case UIC_INCREASE_SKILL:
 			return Keyboard::isKeyPressed(Keyboard::T);
+
 		case UIC_DECREASE_SKILL:
 			return Keyboard::isKeyPressed(Keyboard::Y);
 		}

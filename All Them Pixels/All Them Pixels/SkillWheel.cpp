@@ -91,7 +91,7 @@ PlayerConfiguration SkillWheel::getConfiguration()
 
 	config.hp = 10000;
 	config.speed = 1;
-	config.weaponConfig.cooldown = 100 - (skillValues[0] - 100);
+	config.weaponConfig.cooldown = (skillValues[0] < 100) ? skillValues[0] - 100 : 1;
 	config.weaponConfig.damage = skillValues[1];
 	config.weaponConfig.piercing = 1;
 	config.weaponConfig.speed = 5;

@@ -28,7 +28,7 @@ Territory::Territory(Vector2f position, float radius, World * world)
 	boundingBox.left = position.x - (boundingBox.width / 2);
 	boundingBox.top = position.y - (boundingBox.height / 2);
 
-	gridMatrix = grid.generateGrid(position, hexagonRadius, layers, cluster[VertexCluster::HexagonSource]);
+	gridMatrix = grid.generateGrid(position, hexagonRadius, layers, tileCluster[VertexCluster::HexagonSource]);
 	borderCoordinates = grid.getRingCoordinates(layers);
 	layers = 47;
 	spawnGrid = grid.getRingCoordinates(layers + 2);
@@ -67,10 +67,10 @@ Territory::Territory(Vector2f position, float radius, World * world)
 	wc.speed = 8;
 	wc.spread = 4;
 	wc.ttl = 20;
-	enemyWeapons[0] = Weapon(wc, cluster2[VertexCluster::HexagonSource]);
-	enemyWeapons[1] = Weapon(wc, cluster2[VertexCluster::HexagonSource]);
-	enemyWeapons[2] = Weapon(wc, cluster2[VertexCluster::HexagonSource]);
-	enemyWeapons[3] = Weapon(wc, cluster2[VertexCluster::HexagonSource]);
+	enemyWeapons[0] = Weapon(wc, entityCluster[VertexCluster::HexagonSource]);
+	enemyWeapons[1] = Weapon(wc, entityCluster[VertexCluster::HexagonSource]);
+	enemyWeapons[2] = Weapon(wc, entityCluster[VertexCluster::HexagonSource]);
+	enemyWeapons[3] = Weapon(wc, entityCluster[VertexCluster::HexagonSource]);
 
 	aiProperties[0] = AI::generate(rand() % 5);
 	aiProperties[1] = AI::generate(rand() % 5);
@@ -80,7 +80,7 @@ Territory::Territory(Vector2f position, float radius, World * world)
 
 Territory::~Territory()
 {
-	// Todo: fix
+	// Todo: fix, does not work now
 	integrateSpawnQueue();
 
 	/*for (std::list<Entity *>::iterator it = entities.begin(); it != entities.end();)
@@ -108,7 +108,7 @@ void Territory::addEntity(Entity * entity)
 	spawnQueue.push(entity);
 }
 
-// Note: Does not delete entities.
+// Note: Does not delete entities. Should it?
 void Territory::removeEntity(Entity * entity)
 {
 	if(Enum::isFlagSet(entity->getType(), EntityTypes::EnemyProjectileEntity))
@@ -272,70 +272,9 @@ void Territory::cleanup()
 }
 
 void Territory::draw(RenderWindow * window)
-{
-	/*if (false && active)
-	{
-		int layers = 47;
-		HexagonGrid grid(Hexagon::FlatTopped);
-		AxialCoordinates origin = grid.getAxialCoordinates(player->getPosition() - position, hexagonRadius);
-
-		gridMatrix[offset.x + origin.q][offset.y + origin.r]->draw(window);
-
-		// Layer Territories
-		for (int i = 0; i < drawGrid.size(); i++)
-		{
-			int q = origin.q + drawGrid[i].q;
-			int r = origin.r + drawGrid[i].r;
-					
-			if (0 <= q && q < matrixLength && 0 <= r && r < matrixLength)
-			{
-				if (gridMatrix[q][r] != NULL)
-				{
-					gridMatrix[q][r]->draw(window);
-				}		
-			}
-		}
-	}
-	else
-	{
-		for (int i = 0; i < matrixLength; i++)
-		{
-			for (int j = 0; j < matrixLength; j++)
-			{
-				if (gridMatrix[i][j] != NULL)
-				{
-					//if (Collision::isWithinWindow(gridMatrix[i][j]->getBoundingBox(), window->getView()))
-						gridMatrix[i][j]->draw(window);
-				}
-			}
-		}
-	}*/
-
-	/*for (std::list<Projectile *>::iterator it = enemyProjectiles.begin(); it != enemyProjectiles.end(); it++)
-	{
-		if (Collision::isWithinWindow((*it)->getBoundingBox(), window->getView()))
-		{
-			(*it)->draw(window);
-		}
-	}
-
-	for (std::list<Projectile *>::iterator it = playerProjectile.begin(); it != playerProjectile.end(); it++)
-	{
-		if (Collision::isWithinWindow((*it)->getBoundingBox(), window->getView()))
-		{
-			(*it)->draw(window);
-		}
-	}
-
-	for (std::list<Enemy *>::iterator it = enemies.begin(); it != enemies.end(); it++)
-	{
-		if (Collision::isWithinWindow((*it)->getBoundingBox(), window->getView()))
-		{
-			(*it)->draw(window);
-		}
-	}*/
-	window->draw(cluster);
-	window->draw(cluster2);
+{	
+	window->draw(tileCluster);
+	window->draw(entityCluster);
 
 	if (active)
 	{
@@ -405,7 +344,7 @@ void Territory::update(UpdateInfo info)
 	// Spawn enemies
 	if (active)
 	{
-		Enemy * enemy = new Enemy(100, getSpawnLocation(), cluster2[VertexCluster::RectangleSource]);
+		Enemy * enemy = new Enemy(100, getSpawnLocation(), entityCluster[VertexCluster::RectangleSource]);
 
 		enemy->educate(aiProperties[0]);
 		enemy->arm(enemyWeapons[rand() % 4]);

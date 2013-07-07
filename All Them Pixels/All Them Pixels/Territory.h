@@ -48,8 +48,8 @@ private:
 	vector<AxialCoordinates> drawGrid;
 	vector<AxialCoordinates> spawnGrid;
 	float hexagonRadius;
-	VertexCluster cluster;
-	VertexCluster cluster2;
+	VertexCluster tileCluster;
+	VertexCluster entityCluster;
 
 	Weapon enemyWeapons[4];
 	AIProperties aiProperties[4];

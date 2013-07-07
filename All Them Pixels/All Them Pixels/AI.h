@@ -14,6 +14,9 @@ class Player;
 
 static class AI
 {
+private:
+	static Vector2f aproximation(Vector2f vector);
+
 public:
 	static AIProperties generate(int difficulty);
 	static void update(queue<Entity *> *spawnQueue, Enemy * target, Player * player, UpdateInfo info);

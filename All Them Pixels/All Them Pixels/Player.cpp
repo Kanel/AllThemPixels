@@ -133,14 +133,19 @@ void Player::draw(RenderWindow * window)
 
 void Player::update(UpdateInfo info)
 {
+	int shots;
 	Vector2f spawn = aimBoxPosition;
 	Vector2f direction = Vector2fMath::unitVector(getJoystickVector(Joystick::Axis::U, Joystick::Axis::R));
+	
 	this->aimVector = direction;
 	updateAim();
 	translate(getJoystickVector(Joystick::Axis::X, Joystick::Axis::Y) * config.speed);
 	
-	if (weapon.isReady(info.elapsedGameTime) && !(direction == Vector2f(0.0,0.0)))
+	if (weapon.isReady(info.elapsedGameTime, info.updateInterval, shots) && !(direction == Vector2f(0.0,0.0)))
 	{
-		spawnQueue->push(weapon.fire(aimBoxPosition, direction, info.elapsedGameTime, EntityTypes::ProjectileEntity));
+		for (int i = 0; i < shots; i++)
+		{
+			spawnQueue->push(weapon.fire(aimBoxPosition, direction, info.elapsedGameTime, EntityTypes::ProjectileEntity));
+		}
 	}
 }
