@@ -24,9 +24,12 @@ int main(int argc, char ** argv)
 	Player * player;
 	PlayerConfiguration playerconfig;
 	PlayerCustomizationUI ui(Vector2f(0, 0));
-	VertexCluster cluster;
+	VertexCluster playerCluster;
 	Time sleepDuration = milliseconds(updateInterval);
 	UpdateInfo info;
+
+	playerCluster.create(VertexCluster::HexagonSource);
+	playerCluster.create(VertexCluster::RectangleSource);
 
 	info.updateInterval = updateInterval;
 	info.elapsedGameTime = 0;
@@ -40,7 +43,7 @@ int main(int argc, char ** argv)
 	playerconfig.weaponConfig.spread = 5;
 	playerconfig.weaponConfig.ttl = 55;
 
-	player = new Player(t->getSpawnQueue(), playerconfig, Vector2f(0, 0), cluster[VertexCluster::HexagonSource]);
+	player = new Player(t->getSpawnQueue(), playerconfig, Vector2f(0, 0), playerCluster.getCollection(0));
 
 	t->active = true;
 	t->player = player;
@@ -70,7 +73,7 @@ int main(int argc, char ** argv)
 
 		window.clear();		
 		world.draw(&window);
-		window.draw(cluster); // This contains the player and all its projectiles.
+		window.draw(playerCluster); // This contains the player and all its projectiles.
 		window.draw(ui);
 		window.display();
 			

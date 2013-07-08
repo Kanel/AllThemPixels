@@ -137,7 +137,7 @@ Hexagon *** HexagonGrid::generateGrid(Vector2f position, float hexagonRadius, in
 	Vector2i offset(layers, layers);
 	Hexagon *** matrix;
 	Vector2f hexagonPosition = position + getPosition(AxialCoordinates(0, 0), hexagonRadius);
-
+	
 	// Allocate matrix.
 	matrix = new Hexagon**[matrixLength];
 

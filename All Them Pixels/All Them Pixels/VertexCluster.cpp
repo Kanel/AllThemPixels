@@ -1,26 +1,51 @@
 #include"VertexCluster.h"
 
-VertexCluster::VertexCluster() : collections1(8, 1000, 1000, PrimitiveType::TrianglesStrip), collections2(4, 2000, 1000, PrimitiveType::Quads)
+VertexCluster::~VertexCluster()
 {
-
+	for (int i = 0; i < collections.size(); i++)
+	{
+		delete collections[i];
+	}
 }
 
-VertexCollection* VertexCluster::operator[](const int index)
+int VertexCluster::create(CollectionTypes type)
 {
-	assert(index >= 0 && index < 2);
+	switch (type)
+	{
+	case VertexCluster::HexagonSource:
+		return create(8, 1000, 1000, PrimitiveType::TrianglesStrip);
 
-	if (index == HexagonSource)
-	{
-		return &collections1;
+	case VertexCluster::RectangleSource:
+		return create(4, 1000, 1000, PrimitiveType::Quads);
+
+	default:
+		assert(false); // Is this better or worse than throwing an exception?
+
+		return -1;
 	}
-	else
-	{
-		return &collections2;
-	}
+}
+
+int VertexCluster::create(int verticesPerShape, int size, int increment, PrimitiveType type)
+{
+	int index = collections.size();
+	VertexCollection * collection =  new VertexCollection(verticesPerShape, size, increment, type);
+
+	collections.push_back(collection);
+
+	return index;
+}
+
+VertexCollection * VertexCluster::getCollection(int index)
+{
+	assert(index >= 0 && index < collections.size());
+
+	return collections[index];
 }
 
 void VertexCluster::draw(RenderTarget& target, RenderStates states) const
 {
-	target.draw(collections1, states);
-	target.draw(collections2, states);
+	for (int  i = 0; i < collections.size(); i++)
+	{
+		target.draw(*collections[i], states);
+	}
 }

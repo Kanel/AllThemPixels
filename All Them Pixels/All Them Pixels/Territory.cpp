@@ -11,7 +11,14 @@ Territory::Territory(Vector2f position, float radius, World * world)
 	int numberOfLayersHorizontal = (((radius * 2) - hexagonWidth) / (hexagonWidth * 1.5f)) + 1;
 	int numberOfLayersVertical = ((((sqrt(3) / 2) *  radius * 2) / hexagonHeight) - 1) / 2;
 	int layers = (numberOfLayersHorizontal < numberOfLayersVertical) ? numberOfLayersHorizontal : numberOfLayersVertical;
+	int numberOfTiles;
 	HexagonGrid grid(Hexagon::FlatTopped);
+
+	numberOfTiles = grid.getNumberOfTiles(layers);
+
+	tileCluster.create(8, numberOfTiles, 1, PrimitiveType::TrianglesStrip);
+	entityCluster.create(VertexCluster::HexagonSource);
+	entityCluster.create(VertexCluster::RectangleSource);
 
 	this->hexagonRadius= hexagonRadius;
 	this->position = position;
@@ -28,7 +35,7 @@ Territory::Territory(Vector2f position, float radius, World * world)
 	boundingBox.left = position.x - (boundingBox.width / 2);
 	boundingBox.top = position.y - (boundingBox.height / 2);
 
-	gridMatrix = grid.generateGrid(position, hexagonRadius, layers, tileCluster[VertexCluster::HexagonSource]);
+	gridMatrix = grid.generateGrid(position, hexagonRadius, layers, tileCluster.getCollection(0));
 	borderCoordinates = grid.getRingCoordinates(layers);
 	layers = 47;
 	spawnGrid = grid.getRingCoordinates(layers + 2);
@@ -67,10 +74,10 @@ Territory::Territory(Vector2f position, float radius, World * world)
 	wc.speed = 8;
 	wc.spread = 4;
 	wc.ttl = 20;
-	enemyWeapons[0] = Weapon(wc, entityCluster[VertexCluster::HexagonSource]);
-	enemyWeapons[1] = Weapon(wc, entityCluster[VertexCluster::HexagonSource]);
-	enemyWeapons[2] = Weapon(wc, entityCluster[VertexCluster::HexagonSource]);
-	enemyWeapons[3] = Weapon(wc, entityCluster[VertexCluster::HexagonSource]);
+	enemyWeapons[0] = Weapon(wc, entityCluster.getCollection(0));
+	enemyWeapons[1] = Weapon(wc, entityCluster.getCollection(0));
+	enemyWeapons[2] = Weapon(wc, entityCluster.getCollection(0));
+	enemyWeapons[3] = Weapon(wc, entityCluster.getCollection(0));
 
 	aiProperties[0] = AI::generate(rand() % 5);
 	aiProperties[1] = AI::generate(rand() % 5);
@@ -344,7 +351,7 @@ void Territory::update(UpdateInfo info)
 	// Spawn enemies
 	if (active)
 	{
-		Enemy * enemy = new Enemy(100, getSpawnLocation(), entityCluster[VertexCluster::RectangleSource]);
+		Enemy * enemy = new Enemy(100, getSpawnLocation(), entityCluster.getCollection(1));
 
 		enemy->educate(aiProperties[0]);
 		enemy->arm(enemyWeapons[rand() % 4]);
