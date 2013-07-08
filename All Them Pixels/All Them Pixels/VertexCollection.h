@@ -27,11 +27,12 @@ private:
 	int allocateSlot();
 
 public:
-	// int verticesPerShape: The number of vertices in each shape to be stored.
-	// int size: The number of slots for shapes this collection can store.
-	// int increment: The number of slots the container will grow by once it's full.
-	// PrimitiveType type: The primitive type to use when drawing.
+	// verticesPerShape: The number of vertices in each shape to be stored.
+	// size: The number of slots for shapes the collection can store.
+	// increment: The number of slots the container will grow by once it's full.
+	// type: The primitive type to use when drawing.
 	VertexCollection(int verticesPerShape, int size, int increment, PrimitiveType type);
+	
 	~VertexCollection();
 
 	// Allocates a slot of array space for a shape. 
