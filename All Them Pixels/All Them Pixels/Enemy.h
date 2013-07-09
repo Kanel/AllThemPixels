@@ -4,7 +4,7 @@
 #include "Destructible.h"
 #include "Weapon.h"
 #include "VertexCollection.h"
-#include <SFML\Graphics\Vertex.hpp>
+#include <SFML/Graphics/Vertex.hpp>
 
 using std::vector;
 using namespace sf;

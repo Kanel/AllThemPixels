@@ -5,7 +5,7 @@
 #define UIC_INCREASE_SKILL 6 //start
 #define UIC_DECREASE_SKILL 7 //back
 
-#include <SFML\Graphics.hpp>
+#include <SFML/Graphics.hpp>
 
 using namespace sf;
 

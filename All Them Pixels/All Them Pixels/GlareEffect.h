@@ -1,8 +1,8 @@
 #pragma once
 
 #include "Entity.h"
-#include <SFML\Graphics.hpp>
-#include <SFML\Window\Joystick.hpp>
+#include <SFML/Graphics.hpp>
+#include <SFML/Window/Joystick.hpp>
 
 using namespace sf;
 

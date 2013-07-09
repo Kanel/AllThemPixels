@@ -4,7 +4,7 @@
 #include "UpdateInfo.h"
 #include "SkillWheel.h"
 #include "UserInput.h"
-#include <SFML\Graphics.hpp>
+#include <SFML/Graphics.hpp>
 
 // Transformable och Drawable verkar snälla men man måste transforma sig massa mer
 class PlayerCustomizationUI : public Transformable, public Drawable

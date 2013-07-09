@@ -5,7 +5,7 @@
 #include "EntityTypes.h"
 #include "Shapes.h"
 #include "UpdateInfo.h"
-#include <SFML\Graphics.hpp>
+#include <SFML/Graphics.hpp>
 
 using std::list;
 using namespace sf;

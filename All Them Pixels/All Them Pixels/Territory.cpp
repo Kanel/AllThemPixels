@@ -44,16 +44,9 @@ Territory::Territory(Vector2f position, float radius, World * world)
 	{
 		gridMatrix[offset.x + borderCoordinates[i].q][offset.y + borderCoordinates[i].r]->setColor(Color(255, 0, 0));
 	}
-
-	// Pre compute values!?!
-	int index = 0;	
 	
-	drawGrid.resize(grid.getNumberOfTiles(layers));
-
-	drawGrid[index++] = AxialCoordinates(offset.x, offset.y);
-
 	// Layer Territories
-	for (int k = 1; k <= layers; k++)
+	/*for (int k = 1; k <= layers; k++)
 	{
 		AxialCoordinates hexagon(offset.x + -k, offset.y + k);
 
@@ -65,7 +58,7 @@ Territory::Territory(Vector2f position, float radius, World * world)
 				hexagon = grid.step(hexagon, (HexagonGrid::HexagonDirection)((HexagonGrid::DownRight + i) % 6));
 			}
 		}
-	}
+	}*/
 
 	WeaponConfiguration wc;
 	wc.cooldown = 100;

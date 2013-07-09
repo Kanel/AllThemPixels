@@ -13,7 +13,7 @@
 #include "World.h"
 #include "HexagonGrid.h"
 #include "VertexCluster.h"
-#include <SFML\Graphics.hpp>
+#include <SFML/Graphics.hpp>
 #include <list>
 #include <queue>
 
@@ -45,7 +45,7 @@ private:
 	vector<AxialCoordinates> borderCoordinates;
 	World * world;
 	Rect<float> boundingBox;
-	vector<AxialCoordinates> drawGrid;
+	vector<Hexagon *> safeZonesTiles[6];
 	vector<AxialCoordinates> spawnGrid;
 	float hexagonRadius;
 	VertexCluster tileCluster;

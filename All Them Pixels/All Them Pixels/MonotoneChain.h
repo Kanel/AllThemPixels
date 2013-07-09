@@ -3,7 +3,7 @@
 #include "Vector2fMath.h"
 #include <vector>
 #include <algorithm>
-#include <SFML\Graphics.hpp>
+#include <SFML/Graphics.hpp>
 
 using namespace sf;
 

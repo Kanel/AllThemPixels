@@ -2,7 +2,7 @@
 
 #include "Projectile.h"
 #include "VertexCollection.h"
-#include <SFML\Graphics.hpp>
+#include <SFML/Graphics.hpp>
 
 struct WeaponConfiguration
 {

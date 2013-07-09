@@ -3,7 +3,7 @@
 #include "Territory.h"
 #include "HexagonGrid.h"
 #include "VertexCluster.h"
-#include <SFML\Graphics.hpp>
+#include <SFML/Graphics.hpp>
 #include <vector>
 
 using std::vector;

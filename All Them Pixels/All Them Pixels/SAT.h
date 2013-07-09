@@ -5,7 +5,7 @@
 #include "Vector2fMath.h"
 #include <list>
 #include <math.h>
-#include <SFML\Graphics.hpp>
+#include <SFML/Graphics.hpp>
 
 using namespace sf;
 
