@@ -43,7 +43,12 @@ Projectile * Weapon::fire(Vector2f position, Vector2f direction, int gameTime, E
 
 bool Weapon::isReady(int gameTime, int updateInterval, int &shots)
 {
-	bool ready  = lastFired + config.cooldown <= gameTime;
+	bool ready = lastFired + config.cooldown <= gameTime;
+
+	if (lastFired > 0)
+	{
+		bool gröt = true;
+	}
 
 	if (config.cooldown < updateInterval)
 	{
@@ -53,6 +58,7 @@ bool Weapon::isReady(int gameTime, int updateInterval, int &shots)
 	{
 		shots = 1;
 	}
+
 
 	return ready;
 }

@@ -20,9 +20,8 @@ AIProperties AI::generate(int difficulty)
 void AI::update(queue<Entity *> *spawnQueue, Enemy * target, Player * player, UpdateInfo info)
 {
 	int shots;
-	Weapon weapon = target->weapon;
 	AIProperties properties = target->aiProperties;
-	float projectileSpeed = weapon.config.speed;
+	float projectileSpeed = target->weapon.config.speed;
 	float speed = properties.speed;
 	int range = 100;// weapon->ttl * speed; //make correct
 	Vector2f direction = Vector2fMath::unitVector(player->getPosition() - target->getPosition());
@@ -54,11 +53,11 @@ void AI::update(queue<Entity *> *spawnQueue, Enemy * target, Player * player, Up
 	target->translate(direction * speed);
 
 	// Fire the weapon as many times as allowed.
-	if (weapon.isReady(info.elapsedGameTime, info.updateInterval, shots))
+	if (target->weapon.isReady(info.elapsedGameTime, info.updateInterval, shots))
 	{
 		for (int i = 0; i < shots; i++)
 		{
-			spawnQueue->push(weapon.fire(target->getPosition(), Vector2fMath::unitVector(player->getPosition() - target->getPosition()), info.elapsedGameTime, EntityTypes::EnemyProjectileEntity));
+			spawnQueue->push(target->weapon.fire(target->getPosition(), Vector2fMath::unitVector(player->getPosition() - target->getPosition()), info.elapsedGameTime, EntityTypes::EnemyProjectileEntity));
 		}
 	}
 }

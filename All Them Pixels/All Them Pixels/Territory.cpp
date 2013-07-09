@@ -61,12 +61,12 @@ Territory::Territory(Vector2f position, float radius, World * world)
 	}*/
 
 	WeaponConfiguration wc;
-	wc.cooldown = 100;
+	wc.cooldown = 500;
 	wc.damage = 20;
 	wc.piercing = 1;
 	wc.speed = 8;
 	wc.spread = 4;
-	wc.ttl = 20;
+	wc.ttl = 500;
 	enemyWeapons[0] = Weapon(wc, entityCluster.getCollection(0));
 	enemyWeapons[1] = Weapon(wc, entityCluster.getCollection(0));
 	enemyWeapons[2] = Weapon(wc, entityCluster.getCollection(0));
