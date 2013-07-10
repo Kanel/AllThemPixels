@@ -43,8 +43,8 @@ Vector2f Player::getJoystickVector(Joystick::Axis x, Joystick::Axis y)
 {
 	Vector2f vector= UserInput::getJoystickVector(x, y);
 
-	vector.x = (powf(vector.x, 2) > 400) ? vector.x / 15 : 0;
-	vector.y = (powf(vector.y, 2) > 400) ? vector.y / 15 : 0;
+	vector.x = (powf(vector.x, 2) > 500) ? vector.x / 15 : 0;
+	vector.y = (powf(vector.y, 2) > 500) ? vector.y / 15 : 0;
 
 	return vector;
 }

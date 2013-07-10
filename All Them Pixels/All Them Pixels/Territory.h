@@ -53,6 +53,7 @@ private:
 
 	Weapon enemyWeapons[4];
 	AIProperties aiProperties[4];
+	AxialCoordinates trail[10];
 
 private:
 	void prepareSafeZoneTiles(int tileGridLayers);

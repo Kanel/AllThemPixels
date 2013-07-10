@@ -132,7 +132,7 @@ vector<AxialCoordinates> HexagonGrid::getRingCoordinates(int layer)
 
 Hexagon *** HexagonGrid::generateGrid(Vector2f position, float hexagonRadius, int layers, VertexCollection * vertexSource)
 {
-	int spacing = 1;
+	int spacing = 0;
 	int matrixLength = (layers * 2) + 1;
 	Vector2i offset(layers, layers);
 	Hexagon *** matrix;
@@ -163,7 +163,8 @@ Hexagon *** HexagonGrid::generateGrid(Vector2f position, float hexagonRadius, in
 			for (int j = 0; j < k; j++)
 			{
 				hexagonPosition = position + getPosition(hexagon, hexagonRadius);
-				matrix[offset.x + hexagon.q][offset.y + hexagon.r] = new Hexagon(hexagonPosition, hexagonRadius - spacing, Color(255, 255, 255), style, vertexSource);
+				int grayness = rand() % 30;
+				matrix[offset.x + hexagon.q][offset.y + hexagon.r] = new Hexagon(hexagonPosition, hexagonRadius - spacing, Color(255-grayness, 255-grayness, 255-grayness), style, vertexSource);
 				
 				hexagon = step(hexagon, (HexagonGrid::HexagonDirection)((HexagonGrid::DownRight + i) % 6));
 			}

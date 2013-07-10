@@ -26,7 +26,8 @@ private:
 	Rect<float> boundingBox;
 	ConvexHull convexHull;
 	VertexCollection * vertexSource;
-	
+	Color originalColor;
+
 public:	
 	Hexagon(Vector2f position, float radius, Color color, Style style, VertexCollection * vertexSource);
 	~Hexagon();
@@ -34,7 +35,10 @@ public:
 	Style getStyle();
 	Rect<float> getBoundingBox();
 	ConvexHull getConvexHull();
+	Color getColor();
 	void setColor(Color color);
+	void mark(Color color);
+	void fadeToOriginalColor(int amount);
 	void applyTransform(Transform transform);
 
 	void draw(RenderWindow * window);

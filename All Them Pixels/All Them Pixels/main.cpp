@@ -39,7 +39,7 @@ int main(int argc, char ** argv)
 	playerconfig.weaponConfig.cooldown = 100;
 	playerconfig.weaponConfig.damage = 100;
 	playerconfig.weaponConfig.piercing = 1;
-	playerconfig.weaponConfig.speed = 10;
+	playerconfig.weaponConfig.speed = 20;
 	playerconfig.weaponConfig.spread = 5;
 	playerconfig.weaponConfig.ttl = 55;
 

@@ -12,7 +12,7 @@ AIProperties AI::generate(int difficulty)
 	aiProperties.aimavoidance = (difficulty > 3) ? 50 + rand() % 50 : 0;
 	aiProperties.playerspace = (float)(rand() % 200) / 100.0;
 	aiProperties.righthanded = (rand() % 2 == 0);
-	aiProperties.speed = 1+(float)(rand() % (difficulty * 200)) / 100.0;
+	aiProperties.speed = (float)(rand() % ((1+difficulty) * 200)) / 100.0;
 
 	return aiProperties;
 }

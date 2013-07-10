@@ -353,6 +353,23 @@ void Territory::update(UpdateInfo info)
 	if (active)
 	{
 		player->update(info);
+		
+		HexagonGrid grid(Hexagon::FlatTopped);
+		AxialCoordinates pac = grid.getAxialCoordinates(player->getPosition() - position, hexagonRadius);
+		Hexagon * hexagon = gridMatrix[offset.x + pac.q][offset.y + pac.r];
+		if (true || (pac.q != trail[0].q && pac.r != trail[0].r))
+		{
+			hexagon->mark(Color(210,10,10));
+
+			for (int i = 9; i > 0; i--)
+			{
+				hexagon = gridMatrix[offset.x + trail[i].q][offset.y + trail[i].r];
+				hexagon->fadeToOriginalColor(10-i);
+
+				trail[i] = trail[i-1];
+			}
+			trail[0] = pac;
+		}
 
 		for (int i = 0; i < borderCoordinates.size(); i++)
 		{

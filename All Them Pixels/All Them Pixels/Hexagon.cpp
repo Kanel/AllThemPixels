@@ -4,6 +4,7 @@
 
 Hexagon::Hexagon(Vector2f position, float radius, Color color, Style style, VertexCollection * vertexSource) : convexHull(6)
 {
+	this->originalColor = color;
 	this->vertexSource = vertexSource;
 
 	vertexCount = 8;
@@ -91,11 +92,37 @@ ConvexHull Hexagon::getConvexHull()
 	return convexHull;
 }
 
+Color Hexagon::getColor()
+{
+	return (*vertexSource)[vertexOffset].color;
+}
+
 void Hexagon::setColor(Color color)
 {
 	for (int i = 0; i < vertexCount; i++)
 	{
 		(*vertexSource)[vertexOffset + i].color = color;
+	}
+}
+
+void Hexagon::mark(Color color)
+{
+	return setColor(color);
+}
+
+void Hexagon::fadeToOriginalColor(int amount)
+{
+	if (amount == 0)
+	{
+		return setColor(this->originalColor);
+	}
+	else
+	{
+		Color currentColor = getColor();
+		Color newColor = Color(originalColor.r - ((amount - 1) * (float)(originalColor.r - currentColor.r) / amount), //detta kan omöjligen förenklas!!
+							   originalColor.g - ((amount - 1) * (float)(originalColor.g - currentColor.g) / amount), 
+							   originalColor.b - ((amount - 1) * (float)(originalColor.b - currentColor.b) / amount));
+		setColor(newColor);
 	}
 }
 
