@@ -71,6 +71,7 @@ Player::Player(queue<Entity *> *spawnQueue, PlayerConfiguration config, Vector2f
 	this->config = config;
 	type = EntityTypes::PlayerEntity;
 	shapeCount = 4;
+	isInSafeZone = false;
 	aimboxShapeCount = 4;
 
 	shape[0] = Vertex(Vector2f(position.x - size, position.y - size), color);
@@ -86,6 +87,16 @@ Player::Player(queue<Entity *> *spawnQueue, PlayerConfiguration config, Vector2f
 	aimBoxShape[1] = Vertex(Vector2f(aimBoxPosition.x + aimboxSize, aimBoxPosition.y - aimboxSize), color);
 	aimBoxShape[2] = Vertex(Vector2f(aimBoxPosition.x + aimboxSize, aimBoxPosition.y + aimboxSize), color);
 	aimBoxShape[3] = Vertex(Vector2f(aimBoxPosition.x - aimboxSize, aimBoxPosition.y + aimboxSize), color);
+}
+
+bool Player::getIsInSafeZone()
+{
+	return isInSafeZone;
+}
+
+void Player::setIsInSafeZone(bool isInSafeZone)
+{
+	this->isInSafeZone = isInSafeZone;
 }
 
 void Player::applyTransform(Transform transform)

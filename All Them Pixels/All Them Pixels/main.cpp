@@ -64,17 +64,25 @@ int main(int argc, char ** argv)
 
 		world.update(info);
 		window.setView(world.getView(window.getView()));
-		ui.align(window.getView());
 
-		if (ui.update(info) == PlayerCustomizationUI::Changed)
+		if (player->getIsInSafeZone())
 		{
-			player->setConfiguration(ui.getConfiguration());
+			ui.align(window.getView());
+
+			if (ui.update(info) == PlayerCustomizationUI::Changed)
+			{
+				player->setConfiguration(ui.getConfiguration());
+			}
 		}
 
 		window.clear();		
 		world.draw(&window);
 		window.draw(playerCluster); // This contains the player and all its projectiles.
-		window.draw(ui);
+		
+		if (player->getIsInSafeZone())
+		{
+			window.draw(ui);
+		}
 		window.display();
 			
 		// Sleep until the next frame needs to be rendered.

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Config.h"
 #include "Player.h"
 #include <SFML/Graphics.hpp>
 

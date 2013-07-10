@@ -1,5 +1,53 @@
 #include "Territory.h"
 
+void Territory::prepareSafeZoneTiles(int tileGridLayers)
+{
+	int origins[6][2]= {
+		{ 0,				-tileGridLayers },
+		{ tileGridLayers,	-tileGridLayers },
+		{ tileGridLayers,	 0 },
+		{ 0,				tileGridLayers },
+		{-tileGridLayers,	tileGridLayers },
+		{-tileGridLayers,	0 },
+	};
+	int layers = 10;	
+	HexagonGrid grid(Hexagon::FlatTopped);
+
+	for(int direction = 0; direction < 6; direction++)
+	{
+		int x = offset.x + origins[direction][0];
+		int y = offset.y + origins[direction][1];
+		AxialCoordinates hexagon(origins[direction][0], origins[direction][1]);
+
+		gridMatrix[x][y]->setColor(Color(0, 255, 0));
+		safeZonesTiles[direction].push_back(gridMatrix[x][y]);
+
+		for (int k = 1; k <= layers; k++)
+		{
+			hexagon = AxialCoordinates(origins[direction][0] + -k, origins[direction][1] + k);
+
+			for (int i = 0; i < 6; i++)
+			{
+				for (int j = 0; j < k; j++)
+				{
+					x = offset.x + hexagon.q;
+					y = offset.y + hexagon.r;
+
+					if (0 <= x && x < matrixLength && 0 <= y && y < matrixLength)
+					{
+						if (gridMatrix[x][y] != NULL)
+						{
+							gridMatrix[x][y]->setColor(Color(0, 255, 0));
+							safeZonesTiles[direction].push_back(gridMatrix[x][y]);
+						}
+					}
+					hexagon = grid.step(hexagon, (HexagonGrid::HexagonDirection)((HexagonGrid::DownRight + i) % 6));
+				}
+			}
+		}
+	}
+}
+
 Territory::Territory(Vector2f position, float radius, World * world)
 {
 	// Flat topped hexagons
@@ -11,14 +59,9 @@ Territory::Territory(Vector2f position, float radius, World * world)
 	int numberOfLayersHorizontal = (((radius * 2) - hexagonWidth) / (hexagonWidth * 1.5f)) + 1;
 	int numberOfLayersVertical = ((((sqrt(3) / 2) *  radius * 2) / hexagonHeight) - 1) / 2;
 	int layers = (numberOfLayersHorizontal < numberOfLayersVertical) ? numberOfLayersHorizontal : numberOfLayersVertical;
-	int numberOfTiles;
+	int spawnRingSize = 47; //+2?
 	HexagonGrid grid(Hexagon::FlatTopped);
-
-	numberOfTiles = grid.getNumberOfTiles(layers);
-
-	tileCluster.create(8, numberOfTiles, 1, PrimitiveType::TrianglesStrip);
-	entityCluster.create(VertexCluster::HexagonSource);
-	entityCluster.create(VertexCluster::RectangleSource);
+	WeaponConfiguration wc;
 
 	this->hexagonRadius= hexagonRadius;
 	this->position = position;
@@ -35,38 +78,28 @@ Territory::Territory(Vector2f position, float radius, World * world)
 	boundingBox.left = position.x - (boundingBox.width / 2);
 	boundingBox.top = position.y - (boundingBox.height / 2);
 
+	tileCluster.create(8, grid.getNumberOfTiles(layers), 1, PrimitiveType::TrianglesStrip);
+	entityCluster.create(VertexCluster::HexagonSource);
+	entityCluster.create(VertexCluster::RectangleSource);
+
 	gridMatrix = grid.generateGrid(position, hexagonRadius, layers, tileCluster.getCollection(0));
 	borderCoordinates = grid.getRingCoordinates(layers);
-	layers = 47;
-	spawnGrid = grid.getRingCoordinates(layers + 2);
+	spawnGrid = grid.getRingCoordinates(spawnRingSize);
 
 	for (int i = 0; i < borderCoordinates.size(); i++)
 	{
 		gridMatrix[offset.x + borderCoordinates[i].q][offset.y + borderCoordinates[i].r]->setColor(Color(255, 0, 0));
 	}
-	
-	// Layer Territories
-	/*for (int k = 1; k <= layers; k++)
-	{
-		AxialCoordinates hexagon(offset.x + -k, offset.y + k);
 
-		for (int i = 0; i < 6; i++)
-		{
-			for (int j = 0; j < k; j++)
-			{
-				drawGrid[index++] = hexagon;
-				hexagon = grid.step(hexagon, (HexagonGrid::HexagonDirection)((HexagonGrid::DownRight + i) % 6));
-			}
-		}
-	}*/
+	prepareSafeZoneTiles(layers);
 
-	WeaponConfiguration wc;
 	wc.cooldown = 500;
 	wc.damage = 20;
 	wc.piercing = 1;
 	wc.speed = 8;
 	wc.spread = 4;
 	wc.ttl = 500;
+
 	enemyWeapons[0] = Weapon(wc, entityCluster.getCollection(0));
 	enemyWeapons[1] = Weapon(wc, entityCluster.getCollection(0));
 	enemyWeapons[2] = Weapon(wc, entityCluster.getCollection(0));
@@ -336,6 +369,28 @@ void Territory::update(UpdateInfo info)
 					world->changeTerritory(seekPosition);
 
 					break;
+				}
+			}
+		}
+
+		player->setIsInSafeZone(false);
+
+		for (int i = 0; i < 6 && !player->getIsInSafeZone(); i++)
+		{
+			for (int j = 0; j < safeZonesTiles[i].size(); j++)
+			{
+				Hexagon * hexagon = safeZonesTiles[i][j];
+
+				if (Collision::hitBoxesOverlap(hexagon->getBoundingBox(), player->getBoundingBox()))
+				{
+					std::list<Vector2f> penetration;
+
+					if (SAT::collides(player->getConvexHull(), hexagon->getConvexHull(), penetration))
+					{
+						player->setIsInSafeZone(true);
+
+						break;
+					}
 				}
 			}
 		}

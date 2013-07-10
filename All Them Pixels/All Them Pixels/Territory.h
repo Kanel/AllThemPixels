@@ -21,7 +21,7 @@ using std::list;
 using std::queue;
 using namespace sf;
 
-// Isthis a sign of something?
+// Is this a sign of something?
 class AI;
 class Player;
 class World;
@@ -53,6 +53,9 @@ private:
 
 	Weapon enemyWeapons[4];
 	AIProperties aiProperties[4];
+
+private:
+	void prepareSafeZoneTiles(int tileGridLayers);
 
 public:
 	bool active;

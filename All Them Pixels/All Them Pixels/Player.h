@@ -28,6 +28,7 @@ protected:
 	int shapeCount;
 	int aimboxShapeCount;
 	float aimDirection;
+	bool isInSafeZone;
 	Vector2f aimBoxPosition;
 	Vertex shape[4];
 	Vertex aimBoxShape[4];
@@ -42,6 +43,9 @@ protected:
 
 public:
 	Player(queue<Entity *> *spawnQueue, PlayerConfiguration config, Vector2f position, VertexCollection * vertexSource);
+
+	bool getIsInSafeZone();
+	void setIsInSafeZone(bool isInSafeZone);
 
 	void applyTransform(Transform transform) override;
 

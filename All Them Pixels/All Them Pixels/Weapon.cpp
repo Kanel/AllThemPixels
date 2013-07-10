@@ -45,11 +45,6 @@ bool Weapon::isReady(int gameTime, int updateInterval, int &shots)
 {
 	bool ready = lastFired + config.cooldown <= gameTime;
 
-	if (lastFired > 0)
-	{
-		bool gröt = true;
-	}
-
 	if (config.cooldown < updateInterval)
 	{
 		shots = ((float)updateInterval / (float)config.cooldown) + 0.5f;
@@ -58,7 +53,6 @@ bool Weapon::isReady(int gameTime, int updateInterval, int &shots)
 	{
 		shots = 1;
 	}
-
 
 	return ready;
 }

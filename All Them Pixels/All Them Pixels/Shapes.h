@@ -4,7 +4,7 @@
 
 using namespace sf;
 
-static class Shapes
+class Shapes
 {
 public:
 	enum HexagonStyles

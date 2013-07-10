@@ -13,8 +13,13 @@ private:
 	Vertex background[4];
 	Vector2f size;
 	SkillWheel wheel;
-	int cooldown;
-	int lastChange;
+	Font font;
+	Text skillTitle;
+	Text skillDescription;
+	String skillTitles[3];
+	String skillDescriptions[3];
+	int lastSkillChange;
+	int lastSkillModifed;
 	bool wasPressed[4];
 
 public:

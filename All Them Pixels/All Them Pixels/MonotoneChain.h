@@ -9,7 +9,7 @@ using namespace sf;
 
 typedef std::vector<Vector2f> ConvexHull;
 
-static class MonotoneChain
+class MonotoneChain
 {
 private:
 	static bool compare(Vector2f a, Vector2f b);

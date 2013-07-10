@@ -176,10 +176,8 @@
     <ClInclude Include="VertexCluster.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <Font Include="..\..\..\..\..\Firefox\cubic.ttf">
-      <Filter>Resource Files</Filter>
-    </Font>
+    <ClInclude Include="Config.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
