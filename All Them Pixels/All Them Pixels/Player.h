@@ -28,12 +28,14 @@ protected:
 	int shapeCount;
 	int aimboxShapeCount;
 	float aimDirection;
+	int safeZoneIndex;
 	bool isInSafeZone;
 	Vector2f aimBoxPosition;
 	Vertex shape[4];
 	Vertex aimBoxShape[4];
 	Weapon weapon;
 	PlayerConfiguration config;
+	Vector2f speed;
 
 protected:
 	void applyTransform(Transform transform, Vertex vertices[], int count);
@@ -46,6 +48,11 @@ public:
 
 	bool getIsInSafeZone();
 	void setIsInSafeZone(bool isInSafeZone);
+
+	int getSafeZoneIndex();
+	void setSafeZoneIndex(int safeZoneIndex);
+
+	Vector2f getSpeed();
 
 	void applyTransform(Transform transform) override;
 

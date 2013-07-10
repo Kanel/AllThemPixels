@@ -317,109 +317,143 @@ void Territory::draw(RenderWindow * window)
 
 void Territory::update(UpdateInfo info)
 {
-	if (active)
+	if (!player->getIsInSafeZone())
 	{
-		for (std::list<Projectile *>::iterator it = enemyProjectiles.begin(); it != enemyProjectiles.end(); it++)
+		// Update all player projectiles
+		for each (Projectile * projectile in playerProjectile)
 		{
-			(*it)->update(info);
+			projectile->update(info);
 
-			if (Collision::isClose(player, (*it)))
+			for each (Enemy * enemy in enemies)
 			{
-				player->modHP(-((Projectile*)(*it))->getDamage()); //DIE();
-				player->fade();
-				(*it)->expend();
-			}
-		}
-	}
-
-	for (std::list<Projectile *>::iterator it = playerProjectile.begin(); it != playerProjectile.end(); it++)
-	{
-		(*it)->update(info);
-
-		for (std::list<Enemy *>::iterator itEnemies = enemies.begin(); itEnemies != enemies.end(); itEnemies++)
-		{
-			if (Collision::isClose(*itEnemies, *it))
-			{
-				(*itEnemies)->modHP(-(*it)->getDamage());
-				(*it)->expend();
-			}
-		}
-	}
-	for (std::list<Enemy *>::iterator it = enemies.begin(); it != enemies.end(); it++)
-	{
-		AI::update(&spawnQueue, *it, player, info);
-	}
-
-	if (active)
-	{
-		player->update(info);
-		
-		HexagonGrid grid(Hexagon::FlatTopped);
-		AxialCoordinates pac = grid.getAxialCoordinates(player->getPosition() - position, hexagonRadius);
-		Hexagon * hexagon = gridMatrix[offset.x + pac.q][offset.y + pac.r];
-		if (true || (pac.q != trail[0].q && pac.r != trail[0].r))
-		{
-			hexagon->mark(Color(210,10,10));
-
-			for (int i = 9; i > 0; i--)
-			{
-				hexagon = gridMatrix[offset.x + trail[i].q][offset.y + trail[i].r];
-				hexagon->fadeToOriginalColor(10-i);
-
-				trail[i] = trail[i-1];
-			}
-			trail[0] = pac;
-		}
-
-		for (int i = 0; i < borderCoordinates.size(); i++)
-		{
-			Hexagon * hexagon = gridMatrix[offset.x + borderCoordinates[i].q][offset.y + borderCoordinates[i].r];
-
-			if (Collision::hitBoxesOverlap(hexagon->getBoundingBox(), player->getBoundingBox()))
-			{
-				Vector2f direction = Vector2fMath::unitVector(player->getPosition() - position);
-				Vector2f seekPosition = position + (direction * radius * 1.5f);
-				std::list<Vector2f> penetration;
-
-				if (SAT::collides(player->getConvexHull(), hexagon->getConvexHull(), penetration))
+				if (Collision::isClose(enemy, projectile))
 				{
-					world->changeTerritory(seekPosition);
-
-					break;
+					enemy->modHP(-projectile->getDamage());
+					projectile->expend();
 				}
 			}
 		}
 
-		player->setIsInSafeZone(false);
-
-		for (int i = 0; i < 6 && !player->getIsInSafeZone(); i++)
+		// Update all enemies.
+		for each (Enemy * enemy in enemies)
 		{
-			for (int j = 0; j < safeZonesTiles[i].size(); j++)
-			{
-				Hexagon * hexagon = safeZonesTiles[i][j];
+			AI::update(&spawnQueue, enemy, player, info);
+		}
+	}
 
-				if (Collision::hitBoxesOverlap(hexagon->getBoundingBox(), player->getBoundingBox()))
+	// Check if the player is hit by projectiles.
+	for each (Projectile * projectile in enemyProjectiles)
+	{
+		projectile->update(info);
+
+		if (Collision::isClose(player, projectile))
+		{
+			player->modHP(-projectile->getDamage()); //DIE();
+			player->fade();
+			projectile->expend();
+		}
+
+		if (player->getIsInSafeZone())
+		{
+			int safeZoneIndex = player->getSafeZoneIndex();
+								
+			for (int j = 0; j < safeZonesTiles[safeZoneIndex].size(); j++)
+			{
+				Hexagon * hexagon = safeZonesTiles[safeZoneIndex][j];
+
+				if (Collision::hitBoxesOverlap(hexagon->getBoundingBox(), projectile->getBoundingBox()))
 				{
 					std::list<Vector2f> penetration;
+					ConvexHull hull = projectile->getConvexHull();
 
-					if (SAT::collides(player->getConvexHull(), hexagon->getConvexHull(), penetration))
+					if (SAT::collides(projectile->getConvexHull(), hexagon->getConvexHull(), penetration))
 					{
-						player->setIsInSafeZone(true);
+						projectile->expend();
 
 						break;
 					}
+				}
+			}				
+		}
+	}
+
+	// Player update and safe zone checks.
+	player->update(info);
+	player->setIsInSafeZone(false);
+
+	for (int i = 0; i < 6 && !player->getIsInSafeZone(); i++)
+	{
+		for (int j = 0; j < safeZonesTiles[i].size(); j++)
+		{
+			Hexagon * hexagon = safeZonesTiles[i][j];
+
+			if (Collision::hitBoxesOverlap(hexagon->getBoundingBox(), player->getBoundingBox()))
+			{
+				std::list<Vector2f> penetration;
+
+				if (SAT::collides(player->getConvexHull(), hexagon->getConvexHull(), penetration))
+				{
+					player->setIsInSafeZone(true);
+					player->setSafeZoneIndex(i);
+
+					break;
 				}
 			}
 		}
 	}
 
 	// Spawn enemies
-	if (active)
-	{
-		Enemy * enemy = new Enemy(100, getSpawnLocation(), entityCluster.getCollection(1));
+	Enemy * enemy = new Enemy(100, getSpawnLocation(), entityCluster.getCollection(1));
 
-		enemy->educate(aiProperties[0]);
-		enemy->arm(enemyWeapons[rand() % 4]);
-		addEntity(enemy);
+	enemy->educate(aiProperties[0]);
+	enemy->arm(enemyWeapons[rand() % 4]);
+	addEntity(enemy);	
+	
+	// Background tile stuff.
+	HexagonGrid grid(Hexagon::FlatTopped);
+	AxialCoordinates pac = grid.getAxialCoordinates(player->getPosition() - position, hexagonRadius);
+	Hexagon * hexagon = gridMatrix[offset.x + pac.q][offset.y + pac.r];
+	if (true || (pac.q != trail[0].q && pac.r != trail[0].r))
+	{
+		hexagon->mark(Color(210,10,10));
+
+		for (int i = 9; i > 0; i--)
+		{
+			hexagon = gridMatrix[offset.x + trail[i].q][offset.y + trail[i].r];
+			hexagon->fadeToOriginalColor(10-i);
+
+			trail[i] = trail[i-1];
+		}
+		trail[0] = pac;
 	}
+
+	// Beware this section can change if this territory is active.
+	for (int i = 0; i < borderCoordinates.size(); i++)
+	{
+		Hexagon * hexagon = gridMatrix[offset.x + borderCoordinates[i].q][offset.y + borderCoordinates[i].r];
+
+		if (Collision::hitBoxesOverlap(hexagon->getBoundingBox(), player->getBoundingBox()))
+		{
+			std::list<Vector2f> penetration;
+
+			if (SAT::collides(player->getConvexHull(), hexagon->getConvexHull(), player->getSpeed(), penetration))
+			{
+				if (player->getIsInSafeZone())
+				{
+					Vector2f direction = Vector2fMath::unitVector(player->getPosition() - position);
+					Vector2f seekPosition = position + (direction * radius * 1.5f);
+
+					world->changeTerritory(seekPosition);
+
+					break;
+				}
+				else
+				{
+					player->translate(SAT::getShortestPenetration(penetration));
+
+					break;
+				}
+			}
+		}
+	}	
 }

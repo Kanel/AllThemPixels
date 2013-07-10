@@ -69,6 +69,7 @@ PlayerCustomizationUI::Result PlayerCustomizationUI::update(UpdateInfo info)
 		if(wasPressed[0] == true)
 		{
 			newIndex = (wheel.getIndex() - 1) % wheel.getNumberOfSkills();
+			newIndex = (newIndex < 0) ? wheel.getNumberOfSkills() + newIndex : newIndex;
 			result = Result::Changed;
 			wasPressed[0] = false;
 		}

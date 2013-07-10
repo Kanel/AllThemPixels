@@ -132,6 +132,26 @@ void Hexagon::applyTransform(Transform transform)
 	{
 		(*vertexSource)[vertexOffset + i].position = transform.transformPoint((*vertexSource)[vertexOffset + i].position);
 	}
+
+	if (style == Style::FlatTopped)
+	{
+		convexHull[0] = (*vertexSource)[vertexOffset + 1].position;
+		convexHull[1] = (*vertexSource)[vertexOffset + 3].position;
+		convexHull[2] = (*vertexSource)[vertexOffset + 5].position;
+		convexHull[3] = (*vertexSource)[vertexOffset + 6].position;
+		convexHull[4] = (*vertexSource)[vertexOffset + 4].position;
+		convexHull[5] = (*vertexSource)[vertexOffset + 2].position;
+	}
+	else
+	{
+		convexHull[0] = (*vertexSource)[vertexOffset + 2].position;
+		convexHull[1] = (*vertexSource)[vertexOffset + 1].position;
+		convexHull[2] = (*vertexSource)[vertexOffset + 3].position;
+		convexHull[3] = (*vertexSource)[vertexOffset + 5].position;
+		convexHull[4] = (*vertexSource)[vertexOffset + 6].position;
+		convexHull[5] = (*vertexSource)[vertexOffset + 4].position;
+	}
+	boundingBox = Collision::getHitBox(&(*vertexSource)[vertexOffset], 8);
 }
 
 void Hexagon::draw(RenderWindow * window)

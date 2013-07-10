@@ -19,7 +19,6 @@ void Projectile::expend()
 	expended = true;
 }
 
-
 bool Projectile::isExpended()
 {
 	return expended;

@@ -99,6 +99,21 @@ void Player::setIsInSafeZone(bool isInSafeZone)
 	this->isInSafeZone = isInSafeZone;
 }
 
+int Player::getSafeZoneIndex()
+{
+	return safeZoneIndex;
+}
+
+void Player::setSafeZoneIndex(int safeZoneIndex)
+{
+	this->safeZoneIndex = safeZoneIndex;
+}
+
+Vector2f Player::getSpeed()
+{
+	return speed;
+}
+
 void Player::applyTransform(Transform transform)
 {
 	Destructible::applyTransform(transform);
@@ -148,9 +163,11 @@ void Player::update(UpdateInfo info)
 	Vector2f spawn = aimBoxPosition;
 	Vector2f direction = Vector2fMath::unitVector(getJoystickVector(Joystick::Axis::U, Joystick::Axis::R));
 	
-	this->aimVector = direction;
+	speed = getJoystickVector(Joystick::Axis::X, Joystick::Axis::Y) * config.speed;
+	aimVector = direction;
+
 	updateAim();
-	translate(getJoystickVector(Joystick::Axis::X, Joystick::Axis::Y) * config.speed);
+	translate(speed);
 	
 	if (weapon.isReady(info.elapsedGameTime, info.updateInterval, shots) && !(direction == Vector2f(0.0,0.0)))
 	{
