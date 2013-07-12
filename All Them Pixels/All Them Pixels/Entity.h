@@ -23,17 +23,17 @@ public:
 	virtual void setPosition(Vector2f position);
 
 	EntityTypes getType();
-	virtual void expend() = NULL;// not at all a strange name...
-	virtual bool isExpended() = NULL;
-	virtual bool isEtheral() = NULL;
+	virtual void expend() = 0; // not at all a strange name...
+	virtual bool isExpended() = 0;
+	virtual bool isEtheral() = 0;
 
 	virtual void applyTransform(Transform transform);
 	virtual void translate(Vector2f offset);
 	virtual void rotate(float angle, Vector2f center);
 	virtual void scale(Vector2f factors, Vector2f center);
 	
-	virtual Rect<float> getBoundingBox() = NULL;
-	virtual ConvexHull getConvexHull() = NULL;
+	virtual Rect<float> getBoundingBox() = 0;
+	virtual ConvexHull getConvexHull() = 0;
 
-	virtual void update(UpdateInfo info) = NULL;
+	virtual void update(UpdateInfo info) = 0;
 };

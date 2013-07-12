@@ -48,6 +48,34 @@ void Territory::prepareSafeZoneTiles(int tileGridLayers)
 	}
 }
 
+void Territory::spatialPartitionSafeRoomTiles()
+{
+	Rect<float> box = getBoundingBox();
+	unordered_map<Uint32, list<Hexagon *>> map[6];
+
+	for (int i = 0; i < 6; i++)
+	{
+		for (auto hexagon : safeZonesTiles[i])
+		{
+			Rect<float> boundingBox = hexagon->getBoundingBox();
+			short startX = floor(boundingBox.left / TERRITORY_CELL_SIZE);
+			short endX = ceil((boundingBox.left + boundingBox.width) / TERRITORY_CELL_SIZE);
+			short startY = floor(boundingBox.top / TERRITORY_CELL_SIZE);
+			short endY = ceil((boundingBox.top + boundingBox.height) / TERRITORY_CELL_SIZE);
+
+			for (short a = startX; a <= endX; a++)
+			{
+				for (short b = startY; b <= endY; b++)
+				{
+					Uint32 composite = (a << 16) | b;
+
+					partitionedSafeZonesTiles[i][composite].push_back(hexagon);
+				}
+			}
+		}
+	}
+}
+
 Territory::Territory(Vector2f position, float radius, World * world)
 {
 	// Flat topped hexagons
@@ -92,6 +120,7 @@ Territory::Territory(Vector2f position, float radius, World * world)
 	}
 
 	prepareSafeZoneTiles(layers);
+	spatialPartitionSafeRoomTiles();
 
 	wc.cooldown = 500;
 	wc.damage = 20;
@@ -105,10 +134,10 @@ Territory::Territory(Vector2f position, float radius, World * world)
 	enemyWeapons[2] = Weapon(wc, entityCluster.getCollection(0));
 	enemyWeapons[3] = Weapon(wc, entityCluster.getCollection(0));
 
-	aiProperties[0] = AI::generate(rand() % 5);
-	aiProperties[1] = AI::generate(rand() % 5);
-	aiProperties[2] = AI::generate(rand() % 5);
-	aiProperties[3] = AI::generate(rand() % 5);
+	aiProperties[0] = AI::generate((rand() % 5) + 1);
+	aiProperties[1] = AI::generate((rand() % 5) + 1);
+	aiProperties[2] = AI::generate((rand() % 5) + 1);
+	aiProperties[3] = AI::generate((rand() % 5) + 1);
 }
 
 Territory::~Territory()
@@ -320,11 +349,11 @@ void Territory::update(UpdateInfo info)
 	if (!player->getIsInSafeZone())
 	{
 		// Update all player projectiles
-		for each (Projectile * projectile in playerProjectile)
+		for (auto projectile : playerProjectile)
 		{
 			projectile->update(info);
 
-			for each (Enemy * enemy in enemies)
+			for (auto enemy : enemies)
 			{
 				if (Collision::isClose(enemy, projectile))
 				{
@@ -335,14 +364,14 @@ void Territory::update(UpdateInfo info)
 		}
 
 		// Update all enemies.
-		for each (Enemy * enemy in enemies)
+		for (auto enemy : enemies)
 		{
 			AI::update(&spawnQueue, enemy, player, info);
 		}
 	}
 
 	// Check if the player is hit by projectiles.
-	for each (Projectile * projectile in enemyProjectiles)
+	for (auto projectile : enemyProjectiles)
 	{
 		projectile->update(info);
 
@@ -355,25 +384,39 @@ void Territory::update(UpdateInfo info)
 
 		if (player->getIsInSafeZone())
 		{
+			Rect<float> boundingBox = projectile->getBoundingBox();
 			int safeZoneIndex = player->getSafeZoneIndex();
-								
-			for (int j = 0; j < safeZonesTiles[safeZoneIndex].size(); j++)
+			short startX = floor(boundingBox.left / TERRITORY_CELL_SIZE);
+			short endX = ceil((boundingBox.left + boundingBox.width) / TERRITORY_CELL_SIZE);
+			short startY = floor(boundingBox.top / TERRITORY_CELL_SIZE);
+			short endY = ceil((boundingBox.top + boundingBox.height) / TERRITORY_CELL_SIZE);
+
+			for (short a = startX; a <= endX; a++)
 			{
-				Hexagon * hexagon = safeZonesTiles[safeZoneIndex][j];
-
-				if (Collision::hitBoxesOverlap(hexagon->getBoundingBox(), projectile->getBoundingBox()))
+				for (short b = startY; b <= endY; b++)
 				{
-					std::list<Vector2f> penetration;
-					ConvexHull hull = projectile->getConvexHull();
+					Uint32 composite = (a << 16) | b;
+					auto cell = partitionedSafeZonesTiles[safeZoneIndex].find(composite);
 
-					if (SAT::collides(projectile->getConvexHull(), hexagon->getConvexHull(), penetration))
+					if (cell != partitionedSafeZonesTiles[safeZoneIndex].end())
 					{
-						projectile->expend();
+						for (auto hexagon : cell->second)
+						{
+							if (Collision::hitBoxesOverlap(hexagon->getBoundingBox(), projectile->getBoundingBox()))
+							{
+								std::list<Vector2f> penetration;
 
-						break;
+								if (SAT::collides(projectile->getConvexHull(), hexagon->getConvexHull(), penetration))
+								{
+									projectile->expend();
+
+									break;
+								}
+							}
+						}
 					}
 				}
-			}				
+			}
 		}
 	}
 

@@ -6,6 +6,9 @@
 #define UI_BACKGROUND_COLOR Color(255, 255, 255)
 #define UI_TEXT_SPACING 10
 
+// Territory
+#define TERRITORY_CELL_SIZE 50.0f
+
 // Skill related constants.
 #define SKILL_CHANGE_COOLDOWN 200
 #define SKILL_MODIFY_COOLDOWN 20

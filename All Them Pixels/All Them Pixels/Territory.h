@@ -13,12 +13,15 @@
 #include "World.h"
 #include "HexagonGrid.h"
 #include "VertexCluster.h"
+#include "Config.h"
 #include <SFML/Graphics.hpp>
 #include <list>
 #include <queue>
+#include <unordered_map>
 
 using std::list;
 using std::queue;
+using std::unordered_map;
 using namespace sf;
 
 // Is this a sign of something?
@@ -46,6 +49,7 @@ private:
 	World * world;
 	Rect<float> boundingBox;
 	vector<Hexagon *> safeZonesTiles[6];
+	unordered_map<Uint32, list<Hexagon *>> partitionedSafeZonesTiles[6];
 	vector<AxialCoordinates> spawnGrid;
 	float hexagonRadius;
 	VertexCluster tileCluster;
@@ -57,6 +61,7 @@ private:
 
 private:
 	void prepareSafeZoneTiles(int tileGridLayers);
+	void spatialPartitionSafeRoomTiles();
 
 public:
 	bool active;

@@ -9,6 +9,8 @@ AIProperties AI::generate(int difficulty)
 {
 	AIProperties aiProperties;
 
+	assert(difficulty > 0);
+
 	aiProperties.aimavoidance = (difficulty > 3) ? 50 + rand() % 50 : 0;
 	aiProperties.playerspace = (float)(rand() % 200) / 100.0;
 	aiProperties.righthanded = (rand() % 2 == 0);
