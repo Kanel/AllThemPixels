@@ -86,7 +86,7 @@ Territory::Territory(Vector2f position, float radius, World * world)
 	float hexagonHeight = sqrt(3)/2 * hexagonWidth;
 	int numberOfLayersHorizontal = (((radius * 2) - hexagonWidth) / (hexagonWidth * 1.5f)) + 1;
 	int numberOfLayersVertical = ((((sqrt(3) / 2) *  radius * 2) / hexagonHeight) - 1) / 2;
-	int layers = (numberOfLayersHorizontal < numberOfLayersVertical) ? numberOfLayersHorizontal : numberOfLayersVertical;
+	int layers = (numberOfLayersHorizontal+numberOfLayersVertical) / 2;//(numberOfLayersHorizontal < numberOfLayersVertical) ? numberOfLayersHorizontal : numberOfLayersVertical;
 	int spawnRingSize = 47; //+2?
 	HexagonGrid grid(Hexagon::FlatTopped);
 	WeaponConfiguration wc;
