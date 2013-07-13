@@ -99,6 +99,12 @@
     <ClCompile Include="VertexCluster.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ColorFade.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FloorTile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="HexagonGrid.h">
@@ -177,6 +183,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Config.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ColorFade.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FloorTile.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

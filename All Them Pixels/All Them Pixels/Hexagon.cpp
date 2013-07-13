@@ -105,27 +105,6 @@ void Hexagon::setColor(Color color)
 	}
 }
 
-void Hexagon::mark(Color color)
-{
-	return setColor(color);
-}
-
-void Hexagon::fadeToOriginalColor(int amount)
-{
-	if (amount == 0)
-	{
-		return setColor(this->originalColor);
-	}
-	else
-	{
-		Color currentColor = getColor();
-		Color newColor = Color(originalColor.r - ((amount - 1) * (float)(originalColor.r - currentColor.r) / amount), //detta kan omöjligen förenklas!!
-							   originalColor.g - ((amount - 1) * (float)(originalColor.g - currentColor.g) / amount), 
-							   originalColor.b - ((amount - 1) * (float)(originalColor.b - currentColor.b) / amount));
-		setColor(newColor);
-	}
-}
-
 void Hexagon::applyTransform(Transform transform)
 {
 	for (int i = 0; i < vertexCount; i++)
@@ -152,9 +131,4 @@ void Hexagon::applyTransform(Transform transform)
 		convexHull[5] = (*vertexSource)[vertexOffset + 4].position;
 	}
 	boundingBox = Collision::getHitBox(&(*vertexSource)[vertexOffset], 8);
-}
-
-void Hexagon::draw(RenderWindow * window)
-{
-	//window->draw(corners, 8, PrimitiveType::TrianglesStrip);
 }

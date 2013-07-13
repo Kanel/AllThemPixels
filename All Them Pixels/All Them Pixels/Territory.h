@@ -14,6 +14,7 @@
 #include "HexagonGrid.h"
 #include "VertexCluster.h"
 #include "Config.h"
+#include "FloorTile.h"
 #include <SFML/Graphics.hpp>
 #include <list>
 #include <queue>
@@ -44,12 +45,12 @@ private:
 	list<Enemy *> enemies;
 	int matrixLength;
 	Vector2i offset;
-	Hexagon *** gridMatrix;
+	FloorTile *** gridMatrix;
 	vector<AxialCoordinates> borderCoordinates;
 	World * world;
 	Rect<float> boundingBox;
-	vector<Hexagon *> safeZonesTiles[6];
-	unordered_map<Uint32, list<Hexagon *>> partitionedSafeZonesTiles[6];
+	vector<FloorTile *> safeZonesTiles[6];
+	unordered_map<Uint32, list<FloorTile *>> partitionedSafeZonesTiles[6];
 	vector<AxialCoordinates> spawnGrid;
 	float hexagonRadius;
 	VertexCluster tileCluster;

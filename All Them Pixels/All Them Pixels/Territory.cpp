@@ -81,20 +81,26 @@ Territory::Territory(Vector2f position, float radius, World * world)
 	// Flat topped hexagons
 	// Todo: clean it a bit
 	// Todo: figure out number of layers
-	float hexagonRadius = 10;
-	float hexagonWidth = hexagonRadius * 2;
-	float hexagonHeight = sqrt(3)/2 * hexagonWidth;
-	int numberOfLayersHorizontal = (((radius * 2) - hexagonWidth) / (hexagonWidth * 1.5f)) + 1;
-	int numberOfLayersVertical = ((((sqrt(3) / 2) *  radius * 2) / hexagonHeight) - 1) / 2;
-	int layers = (numberOfLayersHorizontal+numberOfLayersVertical) / 2;//(numberOfLayersHorizontal < numberOfLayersVertical) ? numberOfLayersHorizontal : numberOfLayersVertical;
-	int spawnRingSize = 47; //+2?
+	float hexagonWidth;
+	float hexagonHeight;
+	int numberOfLayersHorizontal;
+	int numberOfLayersVertical;
+	int layers;
+	int spawnRingSize;
 	HexagonGrid grid(Hexagon::FlatTopped);
 	WeaponConfiguration wc;
 
-	this->hexagonRadius= hexagonRadius;
+	this->hexagonRadius = TERRITORY_TILE_SIZE;
 	this->position = position;
 	this->radius = radius;
 	this->world = world;
+
+	hexagonWidth = hexagonRadius * 2;
+	hexagonHeight = sqrt(3)/2 * hexagonWidth;
+	numberOfLayersHorizontal = (((radius * 2) - hexagonWidth) / (hexagonWidth * 1.5f)) + 1;
+	numberOfLayersVertical = ((((sqrt(3) / 2) *  radius * 2) / hexagonHeight) - 1) / 2;
+	layers = (numberOfLayersHorizontal+numberOfLayersVertical) / 2;//(numberOfLayersHorizontal < numberOfLayersVertical) ? numberOfLayersHorizontal : numberOfLayersVertical;
+	spawnRingSize = 47; //+2?
 
 	active = false;	
 	player = NULL;
@@ -110,7 +116,7 @@ Territory::Territory(Vector2f position, float radius, World * world)
 	entityCluster.create(VertexCluster::HexagonSource);
 	entityCluster.create(VertexCluster::RectangleSource);
 
-	gridMatrix = grid.generateGrid(position, hexagonRadius, layers, tileCluster.getCollection(0));
+	gridMatrix = FloorTile::generateGrid(position, hexagonRadius, layers, tileCluster.getCollection(0));
 	borderCoordinates = grid.getRingCoordinates(layers);
 	spawnGrid = grid.getRingCoordinates(spawnRingSize);
 
@@ -428,13 +434,13 @@ void Territory::update(UpdateInfo info)
 	{
 		for (int j = 0; j < safeZonesTiles[i].size(); j++)
 		{
-			Hexagon * hexagon = safeZonesTiles[i][j];
+			FloorTile * tile = safeZonesTiles[i][j];
 
-			if (Collision::hitBoxesOverlap(hexagon->getBoundingBox(), player->getBoundingBox()))
+			if (Collision::hitBoxesOverlap(tile->getBoundingBox(), player->getBoundingBox()))
 			{
 				std::list<Vector2f> penetration;
 
-				if (SAT::collides(player->getConvexHull(), hexagon->getConvexHull(), penetration))
+				if (SAT::collides(player->getConvexHull(), tile->getConvexHull(), penetration))
 				{
 					player->setIsInSafeZone(true);
 					player->setSafeZoneIndex(i);
@@ -450,36 +456,95 @@ void Territory::update(UpdateInfo info)
 
 	enemy->educate(aiProperties[0]);
 	enemy->arm(enemyWeapons[rand() % 4]);
-	addEntity(enemy);	
+	addEntity(enemy);
 	
 	// Background tile stuff.
 	HexagonGrid grid(Hexagon::FlatTopped);
+
+	for (int i = 0; i < matrixLength; i++)
+	{
+		for (int j = 0; j < matrixLength; j++)
+		{
+			if (gridMatrix[i][j] != NULL)
+			{
+				gridMatrix[i][j]->resetColor();
+			}
+		}
+	}
+	for (auto enemy : enemies)
+	{
+		AxialCoordinates coordinates = grid.getAxialCoordinates(enemy->getPosition() - getPosition(), hexagonRadius);
+		AxialCoordinates hexagon;
+		int layers = 5;
+		int x = offset.x + coordinates.q;
+		int y = offset.y + coordinates.r;
+		Color color = gridMatrix[x][y]->getColor();
+		int additive = 2 * (layers + 1);
+
+		color.r = (color.r - additive >= 0) ? color.r - additive : 0;
+		color.g = (color.g - additive >= 0) ? color.g - additive : 0;
+		color.b = (color.b - additive >= 0) ? color.b - additive : 0;
+
+		gridMatrix[x][y]->setColor(color);
+
+		for (int k = 1; k <= layers; k++)
+		{
+			hexagon = AxialCoordinates(-k, k);
+
+			for (int i = 0; i < 6; i++)
+			{
+				for (int j = 0; j < k; j++)
+				{
+					int x = offset.x + hexagon.q + coordinates.q;
+					int y = offset.y + hexagon.r + coordinates.r;
+
+					if (0 <= x && x < matrixLength && 0 <= y && y < matrixLength)
+					{
+						if (gridMatrix[x][y] != NULL)
+						{
+							color = gridMatrix[x][y]->getColor();
+							additive = 2 * ((layers + 1) - k);
+
+							color.r = (color.r - additive >= 0) ? color.r - additive : 0;
+							color.g = (color.g - additive >= 0) ? color.g - additive : 0;
+							color.b = (color.b - additive >= 0) ? color.b - additive : 0;
+
+							gridMatrix[x][y]->setColor(color);
+						}
+					}
+					hexagon = grid.step(hexagon, (HexagonGrid::HexagonDirection)((HexagonGrid::DownRight + i) % 6));
+				}
+			}
+		}
+	}
+	
+	/*HexagonGrid grid(Hexagon::FlatTopped);
 	AxialCoordinates pac = grid.getAxialCoordinates(player->getPosition() - position, hexagonRadius);
-	Hexagon * hexagon = gridMatrix[offset.x + pac.q][offset.y + pac.r];
+	FloorTile * tile = gridMatrix[offset.x + pac.q][offset.y + pac.r];
 	if (true || (pac.q != trail[0].q && pac.r != trail[0].r))
 	{
-		hexagon->mark(Color(210,10,10));
+		tile->setColor(Color(210,10,10));
 
 		for (int i = 9; i > 0; i--)
 		{
-			hexagon = gridMatrix[offset.x + trail[i].q][offset.y + trail[i].r];
-			hexagon->fadeToOriginalColor(10-i);
+			tile = gridMatrix[offset.x + trail[i].q][offset.y + trail[i].r];
+			tile->fadeToOriginalColor(10-i);
 
 			trail[i] = trail[i-1];
 		}
 		trail[0] = pac;
-	}
+	}*/
 
 	// Beware this section can change if this territory is active.
 	for (int i = 0; i < borderCoordinates.size(); i++)
 	{
-		Hexagon * hexagon = gridMatrix[offset.x + borderCoordinates[i].q][offset.y + borderCoordinates[i].r];
+		FloorTile * tile = gridMatrix[offset.x + borderCoordinates[i].q][offset.y + borderCoordinates[i].r];
 
-		if (Collision::hitBoxesOverlap(hexagon->getBoundingBox(), player->getBoundingBox()))
+		if (Collision::hitBoxesOverlap(tile->getBoundingBox(), player->getBoundingBox()))
 		{
 			std::list<Vector2f> penetration;
 
-			if (SAT::collides(player->getConvexHull(), hexagon->getConvexHull(), player->getSpeed(), penetration))
+			if (SAT::collides(player->getConvexHull(), tile->getConvexHull(), player->getSpeed(), penetration))
 			{
 				if (player->getIsInSafeZone())
 				{

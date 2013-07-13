@@ -86,10 +86,12 @@
   <ItemGroup>
     <ClCompile Include="AI.cpp" />
     <ClCompile Include="Collision.cpp" />
+    <ClCompile Include="ColorFade.cpp" />
     <ClCompile Include="Destructible.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="Enum.cpp" />
+    <ClCompile Include="FloorTile.cpp" />
     <ClCompile Include="GlareEffect.cpp" />
     <ClCompile Include="Hexagon.cpp" />
     <ClCompile Include="HexagonGrid.cpp" />
@@ -112,12 +114,14 @@
   <ItemGroup>
     <ClInclude Include="AI.h" />
     <ClInclude Include="Collision.h" />
+    <ClInclude Include="ColorFade.h" />
     <ClInclude Include="Config.h" />
     <ClInclude Include="Destructible.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="EntityTypes.h" />
     <ClInclude Include="Enum.h" />
+    <ClInclude Include="FloorTile.h" />
     <ClInclude Include="GlareEffect.h" />
     <ClInclude Include="Hexagon.h" />
     <ClInclude Include="HexagonGrid.h" />

@@ -8,6 +8,7 @@
 
 // Territory
 #define TERRITORY_CELL_SIZE 50.0f
+#define TERRITORY_TILE_SIZE 10
 
 // Skill related constants.
 #define SKILL_CHANGE_COOLDOWN 200

@@ -37,9 +37,6 @@ public:
 	ConvexHull getConvexHull();
 	Color getColor();
 	void setColor(Color color);
-	void mark(Color color);
-	void fadeToOriginalColor(int amount);
-	void applyTransform(Transform transform);
 
-	void draw(RenderWindow * window);
+	void applyTransform(Transform transform);
 };
