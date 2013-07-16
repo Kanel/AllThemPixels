@@ -19,7 +19,10 @@ void FloorTile::setColor(Color color)
 
 void FloorTile::resetColor()
 {
-	setColor(originalColor);
+	if (originalColor != currentColor)
+	{
+		setColor(originalColor);
+	}
 }
 
 void FloorTile::fadeToOriginalColor(int amount)

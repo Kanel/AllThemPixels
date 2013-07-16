@@ -29,6 +29,16 @@ void Enemy::arm(Weapon weapon)
 	this->weapon = weapon;
 }
 
+SkillPoints Enemy::getSkillPoints()
+{
+	SkillPoints points;
+
+	points.amount = 10;
+	points.type = SkillPointType::Common;
+
+	return points;
+}
+
 void Enemy::applyTransform(Transform transform)
 {
 	Destructible::applyTransform(transform);

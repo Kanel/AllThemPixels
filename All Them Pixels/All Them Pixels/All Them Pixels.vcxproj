@@ -131,6 +131,7 @@
     <ClInclude Include="Projectile.h" />
     <ClInclude Include="SAT.h" />
     <ClInclude Include="Shapes.h" />
+    <ClInclude Include="SkillPoints.h" />
     <ClInclude Include="SkillWheel.h" />
     <ClInclude Include="Territory.h" />
     <ClInclude Include="UpdateInfo.h" />

@@ -365,6 +365,11 @@ void Territory::update(UpdateInfo info)
 				{
 					enemy->modHP(-projectile->getDamage());
 					projectile->expend();
+
+					if (enemy->isExpended())
+					{
+						player->addSkillPoints(enemy->getSkillPoints());
+					}
 				}
 			}
 		}
@@ -385,7 +390,7 @@ void Territory::update(UpdateInfo info)
 		{
 			player->modHP(-projectile->getDamage()); //DIE();
 			player->fade();
-			projectile->expend();
+			projectile->expend();			
 		}
 
 		if (player->getIsInSafeZone())

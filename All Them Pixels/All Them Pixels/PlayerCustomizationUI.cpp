@@ -25,11 +25,11 @@ PlayerCustomizationUI::PlayerCustomizationUI(Vector2f position) : wheel(3, 100)
 	skillDescription.setColor(UI_FONT_COLOR);	
 
 	skillTitles[0] = "Cooldown";
-	skillTitles[1] = "Damage";
+	skillTitles[1] = "Speed";
 	skillTitles[2] = "Spread";
 
 	skillDescriptions[0] = "The cooldown decreases as it gets alloted more points.";
-	skillDescriptions[1] = "The damage increases as it gets alloted more points.";
+	skillDescriptions[1] = "The speed increases as it gets alloted more points.";
 	skillDescriptions[2] = "The spread increases as it gets alloted more points.";
 
 	skillTitle.setString(skillTitles[wheel.getIndex()]);
@@ -48,7 +48,7 @@ PlayerConfiguration PlayerCustomizationUI::getConfiguration()
 	return wheel.getConfiguration();
 }
 	
-PlayerCustomizationUI::Result PlayerCustomizationUI::update(UpdateInfo info)
+PlayerCustomizationUI::Result PlayerCustomizationUI::update(UpdateInfo info, Player * player)
 {
 	Result result = Result::NoChange;
 	int newIndex;
@@ -103,13 +103,34 @@ PlayerCustomizationUI::Result PlayerCustomizationUI::update(UpdateInfo info)
 		}
 		else if (UserInput::isButtonPressed(UIC_INCREASE_SKILL))
 		{
-			wheel.setSkillValue(wheel.getSkillValue() + 4);
-			result = Result::Changed;
+			PlayerSkillPoints * playerSkillPoints = player->getPlayerSkillPoints();
+
+			if (playerSkillPoints->common - playerSkillPoints->commonUsed >= 4)
+			{
+				playerSkillPoints->commonUsed += 4;
+				wheel.setSkillValue(wheel.getSkillValue() + 4);
+
+				result = Result::Changed;			
+			}
 		}
 		else if (UserInput::isButtonPressed(UIC_DECREASE_SKILL))
 		{
-			wheel.setSkillValue(wheel.getSkillValue() - 4);
-			result = Result::Changed;			
+			PlayerSkillPoints * playerSkillPoints = player->getPlayerSkillPoints();
+
+			if (playerSkillPoints->commonUsed >= 4)
+			{
+				playerSkillPoints->commonUsed -= 4;
+				wheel.setSkillValue(wheel.getSkillValue() - 4);
+
+				result = Result::Changed;			
+			}
+			else if (playerSkillPoints->commonUsed >= 1)
+			{
+				playerSkillPoints->commonUsed -= playerSkillPoints->commonUsed;
+				wheel.setSkillValue(wheel.getSkillValue() - playerSkillPoints->commonUsed);
+
+				result = Result::Changed;
+			}
 		}
 
 		if (result == Result::Changed)

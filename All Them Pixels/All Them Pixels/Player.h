@@ -7,6 +7,7 @@
 #include "UserInput.h"
 #include "Weapon.h"
 #include "Collision.h"
+#include "SkillPoints.h"
 #include <queue>
 
 using std::queue;
@@ -16,6 +17,12 @@ struct PlayerConfiguration
 	WeaponConfiguration weaponConfig;
 	float speed;
 	int hp;
+};
+
+struct PlayerSkillPoints
+{
+	int common;
+	int commonUsed;
 };
 
 class Player : public Destructible
@@ -36,6 +43,7 @@ protected:
 	Weapon weapon;
 	PlayerConfiguration config;
 	Vector2f speed;
+	PlayerSkillPoints playerSkillPoints;
 
 protected:
 	void applyTransform(Transform transform, Vertex vertices[], int count);
@@ -60,7 +68,8 @@ public:
 	ConvexHull getConvexHull() override;
 	void setConfiguration(PlayerConfiguration config);
 
-
+	void addSkillPoints(SkillPoints skillPoints);
+	PlayerSkillPoints * getPlayerSkillPoints();
 
 	void fade();
 

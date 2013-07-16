@@ -51,7 +51,7 @@ int main(int argc, char ** argv)
 
 	while (world.isActive() && window.isOpen())
     {
-		Event event;		
+		Event event;
 
 		while (window.pollEvent(event))
 		{
@@ -69,7 +69,7 @@ int main(int argc, char ** argv)
 		{
 			ui.align(window.getView());
 
-			if (ui.update(info) == PlayerCustomizationUI::Changed)
+			if (ui.update(info, player) == PlayerCustomizationUI::Changed)
 			{
 				player->setConfiguration(ui.getConfiguration());
 			}

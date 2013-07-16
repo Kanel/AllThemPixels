@@ -73,6 +73,8 @@ Player::Player(queue<Entity *> *spawnQueue, PlayerConfiguration config, Vector2f
 	shapeCount = 4;
 	isInSafeZone = false;
 	aimboxShapeCount = 4;
+	playerSkillPoints.common = 0;
+	playerSkillPoints.commonUsed = 0;
 
 	shape[0] = Vertex(Vector2f(position.x - size, position.y - size), color);
 	shape[1] = Vertex(Vector2f(position.x + size, position.y - size), color);
@@ -139,6 +141,19 @@ void Player::setConfiguration(PlayerConfiguration config)
 	this->config = config;
 
 	weapon.setConfiguration(config.weaponConfig);
+}
+
+void Player::addSkillPoints(SkillPoints skillPoints)
+{
+	if (skillPoints.type == SkillPointType::Common)
+	{
+		playerSkillPoints.common+= skillPoints.amount;
+	}
+}
+
+PlayerSkillPoints * Player::getPlayerSkillPoints()
+{
+	return &playerSkillPoints;
 }
 
 void Player::fade()

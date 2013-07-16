@@ -4,6 +4,7 @@
 #include "Destructible.h"
 #include "Weapon.h"
 #include "VertexCollection.h"
+#include "SkillPoints.h"
 #include <SFML/Graphics/Vertex.hpp>
 
 using std::vector;
@@ -34,6 +35,8 @@ public:
 	
 	void educate(AIProperties aiProperties);
 	void arm(Weapon weapon);
+
+	SkillPoints getSkillPoints();
 
 	void applyTransform(Transform transform) override;
 

@@ -191,5 +191,8 @@
     <ClInclude Include="FloorTile.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="SkillPoints.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

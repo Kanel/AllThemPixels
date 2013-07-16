@@ -33,7 +33,7 @@ public:
 	PlayerCustomizationUI(Vector2f position);
 
 	PlayerConfiguration getConfiguration();
-	Result update(UpdateInfo info);
+	Result update(UpdateInfo info, Player * player);
 
 	virtual void align(View view);	
 	virtual void draw(RenderTarget& target, RenderStates states) const;

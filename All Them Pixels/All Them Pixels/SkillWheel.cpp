@@ -41,7 +41,7 @@ SkillWheel::SkillWheel(int skills, float size)
 
 	for (int i = 0; i < skills; i++)
 	{
-		skillValues[i] = 100;
+		skillValues[i] = 1;
 	}
 	for (int i = 0; i < skills; i++)
 	{
@@ -89,14 +89,14 @@ PlayerConfiguration SkillWheel::getConfiguration()
 {
 	PlayerConfiguration config;
 
-	config.hp = 10000;
-	config.speed = 1;
-	config.weaponConfig.cooldown = (skillValues[0] < 100) ? skillValues[0] - 100 : 1;
-	config.weaponConfig.damage = 1000;
-	config.weaponConfig.piercing = 1;
-	config.weaponConfig.speed = skillValues[1]/5 ;
-	config.weaponConfig.spread = skillValues[2] - 99;
-	config.weaponConfig.ttl = 55;
+	config.hp = PLAYER_BASE_HP;
+	config.speed = PLAYER_BASE_SPEED;
+	config.weaponConfig.cooldown = (PLAYER_BASE_WEAPON_COOLDOWN - skillValues[0] > 0) ? PLAYER_BASE_WEAPON_COOLDOWN - skillValues[0] : 1;
+	config.weaponConfig.damage = PLAYER_BASE_WEAPON_COOLDOWN;
+	config.weaponConfig.piercing = PLAYER_BASE_WEAPON_PIERCING;
+	config.weaponConfig.speed = PLAYER_BASE_WEAPON_SPEED + skillValues[1];
+	config.weaponConfig.spread = PLAYER_BASE_WEAPON_SPREAD + skillValues[2];
+	config.weaponConfig.ttl = PLAYER_BASE_WEAPON_TTL;
 
 	return config;
 }
