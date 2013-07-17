@@ -6,7 +6,7 @@ Enemy::Enemy(unsigned int hp, Vector2f position, VertexCollection * vertexSource
 
 	this->vertexSource = vertexSource;
 
-	type = EntityTypes::EnemyEntity;
+	type = EnemyEntity;
 	vertexCount = 4;	
 
 	Shapes::rectangle(vertices, 0, position, 20, 20, Color(0, 0, 160, 255));

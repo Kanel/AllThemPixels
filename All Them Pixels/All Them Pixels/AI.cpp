@@ -59,7 +59,7 @@ void AI::update(queue<Entity *> *spawnQueue, Enemy * target, Player * player, Up
 	{
 		for (int i = 0; i < shots; i++)
 		{
-			spawnQueue->push(target->weapon.fire(target->getPosition(), Vector2fMath::unitVector(player->getPosition() - target->getPosition()), info.elapsedGameTime, EntityTypes::EnemyProjectileEntity));
+			spawnQueue->push(target->weapon.fire(target->getPosition(), Vector2fMath::unitVector(player->getPosition() - target->getPosition()), info.elapsedGameTime, EnemyProjectileEntity));
 		}
 	}
 }

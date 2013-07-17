@@ -10,7 +10,7 @@ Hexagon::Hexagon(Vector2f position, float radius, Color color, Style style, Vert
 	vertexCount = 8;
 	vertexOffset = vertexSource->add();
 
-	if (style == Style::FlatTopped)
+	if (style == FlatTopped)
 	{
 		// Flat topped
 		float width = radius * 2;
@@ -112,7 +112,7 @@ void Hexagon::applyTransform(Transform transform)
 		(*vertexSource)[vertexOffset + i].position = transform.transformPoint((*vertexSource)[vertexOffset + i].position);
 	}
 
-	if (style == Style::FlatTopped)
+	if (style == FlatTopped)
 	{
 		convexHull[0] = (*vertexSource)[vertexOffset + 1].position;
 		convexHull[1] = (*vertexSource)[vertexOffset + 3].position;

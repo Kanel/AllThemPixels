@@ -69,7 +69,7 @@ Player::Player(queue<Entity *> *spawnQueue, PlayerConfiguration config, Vector2f
 
 	this->spawnQueue = spawnQueue;
 	this->config = config;
-	type = EntityTypes::PlayerEntity;
+	type = PlayerEntity;
 	shapeCount = 4;
 	isInSafeZone = false;
 	aimboxShapeCount = 4;
@@ -188,7 +188,7 @@ void Player::update(UpdateInfo info)
 	{
 		for (int i = 0; i < shots; i++)
 		{
-			spawnQueue->push(weapon.fire(aimBoxPosition, direction, info.elapsedGameTime, EntityTypes::ProjectileEntity));
+			spawnQueue->push(weapon.fire(aimBoxPosition, direction, info.elapsedGameTime, ProjectileEntity));
 		}
 	}
 }

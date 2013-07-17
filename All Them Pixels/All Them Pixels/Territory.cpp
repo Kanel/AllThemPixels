@@ -179,7 +179,7 @@ void Territory::addEntity(Entity * entity)
 // Note: Does not delete entities. Should it?
 void Territory::removeEntity(Entity * entity)
 {
-	if(Enum::isFlagSet(entity->getType(), EntityTypes::EnemyProjectileEntity))
+	if(Enum::isFlagSet(entity->getType(), EnemyProjectileEntity))
 	{
 		for (std::list<Projectile *>::iterator it = enemyProjectiles.begin(); it != enemyProjectiles.end();)
 		{
@@ -195,7 +195,7 @@ void Territory::removeEntity(Entity * entity)
 			}
 		}
 	}
-	else if(Enum::isFlagSet(entity->getType(), EntityTypes::ProjectileEntity))
+	else if(Enum::isFlagSet(entity->getType(), ProjectileEntity))
 	{
 		for (std::list<Projectile *>::iterator it = playerProjectile.begin(); it != playerProjectile.end();)
 		{
@@ -211,7 +211,7 @@ void Territory::removeEntity(Entity * entity)
 			}
 		}
 	}
-	else if(Enum::isFlagSet(entity->getType(), EntityTypes::EnemyEntity))
+	else if(Enum::isFlagSet(entity->getType(), EnemyEntity))
 	{
 		for (std::list<Enemy *>::iterator it = enemies.begin(); it != enemies.end();)
 		{
@@ -235,15 +235,15 @@ void Territory::integrateSpawnQueue()
 	{
 		Entity * entity = spawnQueue.front();
 
-		if(Enum::isFlagSet(entity->getType(), EntityTypes::EnemyProjectileEntity))
+		if(Enum::isFlagSet(entity->getType(), EnemyProjectileEntity))
 		{
 			enemyProjectiles.push_back((Projectile *)entity);
 		}
-		else if(Enum::isFlagSet(entity->getType(), EntityTypes::ProjectileEntity))
+		else if(Enum::isFlagSet(entity->getType(), ProjectileEntity))
 		{
 			playerProjectile.push_back((Projectile *)entity);
 		}
-		else if(Enum::isFlagSet(entity->getType(), EntityTypes::EnemyEntity))
+		else if(Enum::isFlagSet(entity->getType(), EnemyEntity))
 		{
 			enemies.push_back((Enemy *)entity);
 		}
@@ -529,23 +529,6 @@ void Territory::update(UpdateInfo info)
 			}
 		}
 	}
-	
-	/*HexagonGrid grid(Hexagon::FlatTopped);
-	AxialCoordinates pac = grid.getAxialCoordinates(player->getPosition() - position, hexagonRadius);
-	FloorTile * tile = gridMatrix[offset.x + pac.q][offset.y + pac.r];
-	if (true || (pac.q != trail[0].q && pac.r != trail[0].r))
-	{
-		tile->setColor(Color(210,10,10));
-
-		for (int i = 9; i > 0; i--)
-		{
-			tile = gridMatrix[offset.x + trail[i].q][offset.y + trail[i].r];
-			tile->fadeToOriginalColor(10-i);
-
-			trail[i] = trail[i-1];
-		}
-		trail[0] = pac;
-	}*/
 
 	// Beware this section can change if this territory is active.
 	for (int i = 0; i < borderCoordinates.size(); i++)

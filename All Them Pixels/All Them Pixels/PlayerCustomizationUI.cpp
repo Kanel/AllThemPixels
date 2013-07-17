@@ -91,7 +91,7 @@ PlayerConfiguration PlayerCustomizationUI::getConfiguration()
 	
 PlayerCustomizationUI::Result PlayerCustomizationUI::update(UpdateInfo info, Player * player)
 {
-	Result result = Result::NoChange;	
+	Result result = NoChange;	
 
 	if (lastSkillChange + SKILL_CHANGE_COOLDOWN <= info.elapsedGameTime)
 	{
@@ -112,18 +112,18 @@ PlayerCustomizationUI::Result PlayerCustomizationUI::update(UpdateInfo info, Pla
 		{
 			newIndex = (wheel.getIndex() - 1) % wheel.getNumberOfSkills();
 			newIndex = (newIndex < 0) ? wheel.getNumberOfSkills() + newIndex : newIndex;
-			result = Result::Changed;
+			result = Changed;
 			wasPressed[0] = false;
 		}
 		else if(wasPressed[1] == true)
 		{
 			newIndex = (wheel.getIndex() + 1) % wheel.getNumberOfSkills();
-			result = Result::Changed;
+			result = Changed;
 			wasPressed[1] = false;
 		}
 
 		// Rotate wheel.
-		if (result == Result::Changed)
+		if (result == Changed)
 		{
 			wheel.setIndex(newIndex);
 			updateSkillInfo();
@@ -143,21 +143,21 @@ PlayerCustomizationUI::Result PlayerCustomizationUI::update(UpdateInfo info, Pla
 		if ((triggervalue * triggervalue) > 100)
 		{
 			value = triggervalue / 15;
-			result = Result::Changed;
+			result = Changed;
 		}
 		else if (UserInput::isButtonPressed(UIC_INCREASE_SKILL))
 		{
 			value = 4;
-			result = Result::Changed;
+			result = Changed;
 		}
 		else if (UserInput::isButtonPressed(UIC_DECREASE_SKILL))
 		{
 			value = -4;	
-			result = Result::Changed;
+			result = Changed;
 		}
 
 		// Apply change if possible.
-		if (result == Result::Changed)
+		if (result == Changed)
 		{
 			if (value > 0)
 			{
@@ -190,7 +190,7 @@ PlayerCustomizationUI::Result PlayerCustomizationUI::update(UpdateInfo info, Pla
 		skillPoints.setString(buffer);
 
 		// Save the moment in time it was modified.
-		if (result == Result::Changed)
+		if (result == Changed)
 		{
 			lastSkillModifed = info.elapsedGameTime;
 		}

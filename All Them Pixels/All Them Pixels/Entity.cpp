@@ -4,7 +4,7 @@ Entity::Entity(Vector2f position)
 {
 	this->position = position;
 
-	type = EntityTypes::UnknownEntity;
+	type = UnknownEntity;
 }
 
 Vector2f Entity::getPosition()
