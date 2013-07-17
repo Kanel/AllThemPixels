@@ -178,7 +178,7 @@ void Player::update(UpdateInfo info)
 	Vector2f spawn = aimBoxPosition;
 	Vector2f direction = Vector2fMath::unitVector(getJoystickVector(Joystick::Axis::U, Joystick::Axis::R));
 	
-	speed = getJoystickVector(Joystick::Axis::X, Joystick::Axis::Y) * config.speed;
+	speed = getJoystickVector(Joystick::Axis::X, Joystick::Axis::Y) * (float)config.speed;
 	aimVector = direction;
 
 	updateAim();

@@ -10,7 +10,7 @@ struct WeaponConfiguration
 	int spread; // degrees from center aim
 	int damage;
 	int piercing;
-	float speed;
+	int speed;
 	int ttl;
 };
 

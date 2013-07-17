@@ -4,23 +4,42 @@
 #include "UpdateInfo.h"
 #include "SkillWheel.h"
 #include "UserInput.h"
+#include <stdio.h>
 #include <SFML/Graphics.hpp>
+
+#if _MSC_VER
+#define snprintf _snprintf
+#endif
 
 // Transformable och Drawable verkar snälla men man måste transforma sig massa mer
 class PlayerCustomizationUI : public Transformable, public Drawable
 {
 private:
+	struct Custimazation
+	{
+		String title;
+		String description;
+		int * value;
+	};
+
+private:
+	vector<Custimazation> custimazations;
 	Vertex background[4];
 	Vector2f size;
 	SkillWheel wheel;
 	Font font;
 	Text skillTitle;
 	Text skillDescription;
-	String skillTitles[3];
-	String skillDescriptions[3];
+	Text skillPoints;
+	PlayerConfiguration config;
 	int lastSkillChange;
 	int lastSkillModifed;
 	bool wasPressed[4];
+
+private:
+	void prepareText(Text &text, Font &font, int characterSize);
+	void addCustomization(String title, String description, int * value);
+	void updateSkillInfo();
 
 public:
 	enum Result

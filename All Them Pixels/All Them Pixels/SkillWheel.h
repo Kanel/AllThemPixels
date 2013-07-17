@@ -9,10 +9,10 @@ using namespace sf;
 class SkillWheel : public Transformable, public Drawable
 {
 private:
+	int cornerCount;
 	Vertex * skillCorners;
-	float * skillValues;
+	vector<int *> skillValues;
 	int activeIndex;
-	int skills;
 	float size;
 
 private:
@@ -25,12 +25,12 @@ public:
 	int getIndex();
 	void setIndex(int index);
 
-	float getSkillValue();
-	void setSkillValue(float value);
+	int getSkillValue();
+	void setSkillValue(int value);
 
 	int getNumberOfSkills();
 
-	PlayerConfiguration getConfiguration();
+	void addSkill(int * value);
 	
 	virtual void draw(RenderTarget& target, RenderStates states) const;
 };

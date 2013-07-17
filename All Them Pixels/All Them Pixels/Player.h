@@ -15,7 +15,7 @@ using std::queue;
 struct PlayerConfiguration
 {
 	WeaponConfiguration weaponConfig;
-	float speed;
+	int speed;
 	int hp;
 };
 

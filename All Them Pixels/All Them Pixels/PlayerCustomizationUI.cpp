@@ -1,15 +1,53 @@
 #include  "PlayerCustomizationUI.h"
 
+void PlayerCustomizationUI::prepareText(Text &text, Font &font, int characterSize)
+{
+	text.setFont(font);
+	text.setCharacterSize(characterSize);
+	text.setColor(UI_FONT_COLOR);
+}
+
+void PlayerCustomizationUI::addCustomization(String title, String description, int * value)
+{
+	Custimazation customization;
+
+	customization.title = title;
+	customization.description = description;
+	customization.value = value;
+
+	wheel.addSkill(value);
+	custimazations.push_back(customization);
+}
+
+void PlayerCustomizationUI::updateSkillInfo()
+{
+	skillTitle.setString(custimazations[wheel.getIndex()].title);
+	skillDescription.setString(custimazations[wheel.getIndex()].description);
+}
+
 PlayerCustomizationUI::PlayerCustomizationUI(Vector2f position) : wheel(3, 100)
 {
 	Rect<float> bounds;
 	Rect<float> boundsDescription;
+	Rect<float> boundsSkillPoints;
+
+	config.hp = PLAYER_BASE_HP;
+	config.speed = PLAYER_BASE_SPEED;
+	config.weaponConfig.cooldown = PLAYER_BASE_WEAPON_COOLDOWN;
+	config.weaponConfig.damage = PLAYER_BASE_WEAPON_COOLDOWN;
+	config.weaponConfig.piercing = PLAYER_BASE_WEAPON_PIERCING;
+	config.weaponConfig.speed = PLAYER_BASE_WEAPON_SPEED;
+	config.weaponConfig.spread = PLAYER_BASE_WEAPON_SPREAD;
+	config.weaponConfig.ttl = PLAYER_BASE_WEAPON_TTL;
 
 	size = Vector2f(400, 200);
 	lastSkillChange = 0;
 	lastSkillModifed = 0;
 
-	for (int i = 0; i < 4; i++)	wasPressed[i] = false;
+	for (int i = 0; i < 4; i++)	
+	{
+		wasPressed[i] = false;
+	}
 
 	background[0] = Vertex(Vector2f(position.x - (size.x / 2), position.y - (size.y / 2)), UI_BACKGROUND_COLOR);
 	background[1] = Vertex(Vector2f(position.x + (size.x / 2), position.y - (size.y / 2)), UI_BACKGROUND_COLOR);
@@ -17,44 +55,48 @@ PlayerCustomizationUI::PlayerCustomizationUI(Vector2f position) : wheel(3, 100)
 	background[3] = Vertex(Vector2f(position.x - (size.x / 2), position.y + (size.y / 2)), UI_BACKGROUND_COLOR);
 
 	font.loadFromFile(UI_FONT_PATH);
-	skillTitle.setFont(font);
-	skillTitle.setCharacterSize(UI_FONT_SIZE);
-	skillTitle.setColor(UI_FONT_COLOR);
-	skillDescription.setFont(font);
-	skillDescription.setCharacterSize(UI_FONT_SMALL_SIZE);
-	skillDescription.setColor(UI_FONT_COLOR);	
 
-	skillTitles[0] = "Cooldown";
-	skillTitles[1] = "Speed";
-	skillTitles[2] = "Spread";
+	prepareText(skillTitle, font, UI_FONT_SIZE);
+	prepareText(skillDescription, font, UI_FONT_SMALL_SIZE);
+	prepareText(skillPoints, font, UI_FONT_SMALL_SIZE);
 
-	skillDescriptions[0] = "The cooldown decreases as it gets alloted more points.";
-	skillDescriptions[1] = "The speed increases as it gets alloted more points.";
-	skillDescriptions[2] = "The spread increases as it gets alloted more points.";
+	addCustomization("Cooldown",	"The cooldown decreases as it gets alloted more points.",		&config.weaponConfig.cooldown);
+	addCustomization("Damage",		"The damage increases as it gets alloted more points.",			&config.weaponConfig.damage);
+	addCustomization("Piercing",	"The piercing increases as it gets alloted more points.",		&config.weaponConfig.piercing);
+	addCustomization("Speed",		"The speed increases as it gets alloted more points.",			&config.weaponConfig.speed);
+	addCustomization("Spread",		"The spread increases as it gets alloted more points.",			&config.weaponConfig.spread);
+	addCustomization("TTL",			"The time to live increases as it gets alloted more points.",   &config.weaponConfig.ttl);
 
-	skillTitle.setString(skillTitles[wheel.getIndex()]);
-	skillDescription.setString(skillDescriptions[wheel.getIndex()]);
+	updateSkillInfo();
+	skillPoints.setString("Common Points:");
 
 	bounds = skillTitle.getLocalBounds();
-	boundsDescription = skillDescription.getLocalBounds(); 
+	boundsDescription = skillDescription.getLocalBounds();
+	boundsSkillPoints = skillPoints.getLocalBounds();
 
 	skillTitle.setPosition((-size.x / 2.0f) - bounds.left, (-size.y / 2.0f) - bounds.top);
 	skillDescription.setPosition((-size.x / 2.0f) - boundsDescription.left, (-size.y / 2.0f) - bounds.top + bounds.height + UI_TEXT_SPACING);
+	skillPoints.setPosition((-size.x / 2.0f) - boundsSkillPoints.left, (size.y / 2.0f) - boundsSkillPoints.height - boundsSkillPoints.top);
 	wheel.move(100, 0);
 }
 
 PlayerConfiguration PlayerCustomizationUI::getConfiguration()
 {
-	return wheel.getConfiguration();
+	PlayerConfiguration config = this->config;
+
+	config.weaponConfig.cooldown = (200 - config.weaponConfig.cooldown  > 0) ? 200 - config.weaponConfig.cooldown: 1;
+
+	return config;
 }
 	
 PlayerCustomizationUI::Result PlayerCustomizationUI::update(UpdateInfo info, Player * player)
 {
-	Result result = Result::NoChange;
-	int newIndex;
+	Result result = Result::NoChange;	
 
 	if (lastSkillChange + SKILL_CHANGE_COOLDOWN <= info.elapsedGameTime)
 	{
+		int newIndex;
+
 		// Check if the wheel should rotate.
 		if (UserInput::isButtonPressed(UIC_SCROLL_LEFT))
 		{
@@ -84,60 +126,76 @@ PlayerCustomizationUI::Result PlayerCustomizationUI::update(UpdateInfo info, Pla
 		if (result == Result::Changed)
 		{
 			wheel.setIndex(newIndex);
-			skillTitle.setString(skillTitles[wheel.getIndex()]);
-			skillDescription.setString(skillDescriptions[wheel.getIndex()]);
+			updateSkillInfo();
 
-			lastSkillChange =info.elapsedGameTime;
+			lastSkillChange = info.elapsedGameTime;
 		}
 	}
 
 	if (lastSkillModifed + SKILL_MODIFY_COOLDOWN <= info.elapsedGameTime)
 	{
+		int value = 0;
 		float triggervalue = UserInput::getJoystickPosition(Joystick::Axis::Z);
+		PlayerSkillPoints * playerSkillPoints = player->getPlayerSkillPoints();
 
-		// Increase ordecrease selected skill.
+		// Determine if selected skill should be increased or decreased.
+		// Get change value.
 		if ((triggervalue * triggervalue) > 100)
 		{
-			wheel.setSkillValue(wheel.getSkillValue() + triggervalue/15);
+			value = triggervalue / 15;
 			result = Result::Changed;
 		}
 		else if (UserInput::isButtonPressed(UIC_INCREASE_SKILL))
 		{
-			PlayerSkillPoints * playerSkillPoints = player->getPlayerSkillPoints();
-
-			if (playerSkillPoints->common - playerSkillPoints->commonUsed >= 4)
-			{
-				playerSkillPoints->commonUsed += 4;
-				wheel.setSkillValue(wheel.getSkillValue() + 4);
-
-				result = Result::Changed;			
-			}
+			value = 4;
+			result = Result::Changed;
 		}
 		else if (UserInput::isButtonPressed(UIC_DECREASE_SKILL))
 		{
-			PlayerSkillPoints * playerSkillPoints = player->getPlayerSkillPoints();
+			value = -4;	
+			result = Result::Changed;
+		}
 
-			if (playerSkillPoints->commonUsed >= 4)
+		// Apply change if possible.
+		if (result == Result::Changed)
+		{
+			if (value > 0)
 			{
-				playerSkillPoints->commonUsed -= 4;
-				wheel.setSkillValue(wheel.getSkillValue() - 4);
-
-				result = Result::Changed;			
+				if (playerSkillPoints->common - playerSkillPoints->commonUsed >= value)
+				{
+					playerSkillPoints->commonUsed += value;
+					wheel.setSkillValue(wheel.getSkillValue() + value);		
+				}
 			}
-			else if (playerSkillPoints->commonUsed >= 1)
+			else
 			{
-				playerSkillPoints->commonUsed -= playerSkillPoints->commonUsed;
-				wheel.setSkillValue(wheel.getSkillValue() - playerSkillPoints->commonUsed);
-
-				result = Result::Changed;
+				if (playerSkillPoints->commonUsed >= abs(value))
+				{
+					playerSkillPoints->commonUsed += value;
+					wheel.setSkillValue(wheel.getSkillValue() + value);		
+				}
+				else if (playerSkillPoints->commonUsed >= 1)
+				{
+					playerSkillPoints->commonUsed = 0;
+					wheel.setSkillValue(wheel.getSkillValue() - playerSkillPoints->commonUsed);
+				}
 			}
 		}
 
+		// Update display of unused points.
+		char buffer[100];
+		
+		snprintf(buffer, 100, "Common Points: %d", playerSkillPoints->common - playerSkillPoints->commonUsed);
+		
+		skillPoints.setString(buffer);
+
+		// Save the moment in time it was modified.
 		if (result == Result::Changed)
 		{
 			lastSkillModifed = info.elapsedGameTime;
 		}
 	}
+
 	return result;
 }
 
@@ -154,4 +212,5 @@ void PlayerCustomizationUI::draw(RenderTarget& target, RenderStates states) cons
 	target.draw(wheel, states);
 	target.draw(skillTitle, states);
 	target.draw(skillDescription, states);
+	target.draw(skillPoints, states);
 }

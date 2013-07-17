@@ -483,14 +483,21 @@ void Territory::update(UpdateInfo info)
 		int layers = 5;
 		int x = offset.x + coordinates.q;
 		int y = offset.y + coordinates.r;
-		Color color = gridMatrix[x][y]->getColor();
-		int additive = 2 * (layers + 1);
 
-		color.r = (color.r - additive >= 0) ? color.r - additive : 0;
-		color.g = (color.g - additive >= 0) ? color.g - additive : 0;
-		color.b = (color.b - additive >= 0) ? color.b - additive : 0;
+		if (0 <= x && x < matrixLength && 0 <= y && y < matrixLength)
+		{
+			if (gridMatrix[x][y] == NULL)
+			{
+				Color color = gridMatrix[x][y]->getColor();
+				int additive = 2 * (layers + 1);
 
-		gridMatrix[x][y]->setColor(color);
+				color.r = (color.r - additive >= 0) ? color.r - additive : 0;
+				color.g = (color.g - additive >= 0) ? color.g - additive : 0;
+				color.b = (color.b - additive >= 0) ? color.b - additive : 0;
+
+				gridMatrix[x][y]->setColor(color);
+			}
+		}
 
 		for (int k = 1; k <= layers; k++)
 		{
@@ -507,8 +514,8 @@ void Territory::update(UpdateInfo info)
 					{
 						if (gridMatrix[x][y] != NULL)
 						{
-							color = gridMatrix[x][y]->getColor();
-							additive = 2 * ((layers + 1) - k);
+							Color color = gridMatrix[x][y]->getColor();
+							int additive = 2 * ((layers + 1) - k);
 
 							color.r = (color.r - additive >= 0) ? color.r - additive : 0;
 							color.g = (color.g - additive >= 0) ? color.g - additive : 0;

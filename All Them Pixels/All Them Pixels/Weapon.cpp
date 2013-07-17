@@ -17,7 +17,7 @@ void Weapon::setConfiguration(WeaponConfiguration config)
 Projectile * Weapon::fire(Vector2f position, Vector2f direction, int gameTime, EntityTypes type)
 {
 	Transform transform;
-	Vector2f speedVector = direction * config.speed;
+	Vector2f speedVector = direction * (float)config.speed;
 	Color color;
 	unsigned int colorComposite = 0;
 
