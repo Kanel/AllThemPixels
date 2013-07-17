@@ -179,7 +179,7 @@ void Territory::addEntity(Entity * entity)
 // Note: Does not delete entities. Should it?
 void Territory::removeEntity(Entity * entity)
 {
-	if(Enum::isFlagSet(entity->getType(), EnemyProjectileEntity))
+	if(Flag::isFlagSet(entity->getType(), EnemyProjectileEntity))
 	{
 		for (std::list<Projectile *>::iterator it = enemyProjectiles.begin(); it != enemyProjectiles.end();)
 		{
@@ -195,7 +195,7 @@ void Territory::removeEntity(Entity * entity)
 			}
 		}
 	}
-	else if(Enum::isFlagSet(entity->getType(), ProjectileEntity))
+	else if(Flag::isFlagSet(entity->getType(), ProjectileEntity))
 	{
 		for (std::list<Projectile *>::iterator it = playerProjectile.begin(); it != playerProjectile.end();)
 		{
@@ -211,7 +211,7 @@ void Territory::removeEntity(Entity * entity)
 			}
 		}
 	}
-	else if(Enum::isFlagSet(entity->getType(), EnemyEntity))
+	else if(Flag::isFlagSet(entity->getType(), EnemyEntity))
 	{
 		for (std::list<Enemy *>::iterator it = enemies.begin(); it != enemies.end();)
 		{
@@ -235,15 +235,15 @@ void Territory::integrateSpawnQueue()
 	{
 		Entity * entity = spawnQueue.front();
 
-		if(Enum::isFlagSet(entity->getType(), EnemyProjectileEntity))
+		if(Flag::isFlagSet(entity->getType(), EnemyProjectileEntity))
 		{
 			enemyProjectiles.push_back((Projectile *)entity);
 		}
-		else if(Enum::isFlagSet(entity->getType(), ProjectileEntity))
+		else if(Flag::isFlagSet(entity->getType(), ProjectileEntity))
 		{
 			playerProjectile.push_back((Projectile *)entity);
 		}
-		else if(Enum::isFlagSet(entity->getType(), EnemyEntity))
+		else if(Flag::isFlagSet(entity->getType(), EnemyEntity))
 		{
 			enemies.push_back((Enemy *)entity);
 		}

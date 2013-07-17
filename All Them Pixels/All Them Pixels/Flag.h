@@ -1,6 +1,6 @@
 #pragma once
 
-static class Enum
+static class Flag
 {
 public:
 	static bool isFlagSet(int value, int flag);

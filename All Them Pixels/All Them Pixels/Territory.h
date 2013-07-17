@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Entity.h"
-#include "Enum.h"
+#include "Flag.h"
 #include "UpdateInfo.h"
 #include "Shapes.h"
 #include "Player.h"
