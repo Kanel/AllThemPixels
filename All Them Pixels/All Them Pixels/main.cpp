@@ -34,7 +34,7 @@ int main(int argc, char ** argv)
 	info.updateInterval = updateInterval;
 	info.elapsedGameTime = 0;
 
-	playerconfig.hp = 10000000;
+	playerconfig.hp = 1000000;
 	playerconfig.speed = 1.5;
 	playerconfig.weaponConfig.cooldown = 100;
 	playerconfig.weaponConfig.damage = 100;

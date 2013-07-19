@@ -129,6 +129,9 @@
     <ClCompile Include="World.cpp">
       <Filter>Source Files\World</Filter>
     </ClCompile>
+    <ClCompile Include="CircleBar.cpp">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="UpdateInfo.h">
@@ -217,6 +220,9 @@
     </ClInclude>
     <ClInclude Include="World.h">
       <Filter>Header Files\World</Filter>
+    </ClInclude>
+    <ClInclude Include="CircleBar.h">
+      <Filter>Header Files\UI</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

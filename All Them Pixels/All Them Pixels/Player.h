@@ -8,6 +8,7 @@
 #include "Weapon.h"
 #include "Collision.h"
 #include "SkillPoints.h"
+#include "CircleBar.h"
 #include <queue>
 
 using std::queue;
@@ -44,6 +45,7 @@ protected:
 	PlayerConfiguration config;
 	Vector2f speed;
 	PlayerSkillPoints playerSkillPoints;
+	CircleBar healthBar;
 
 protected:
 	void applyTransform(Transform transform, Vertex vertices[], int count);
@@ -63,6 +65,8 @@ public:
 	Vector2f getSpeed();
 
 	void applyTransform(Transform transform) override;
+
+	void setHP(int hp) override;
 
 	Rect<float> getBoundingBox() override;
 	ConvexHull getConvexHull() override;

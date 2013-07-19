@@ -61,7 +61,7 @@ void Player::updateAim()
 	aimDirection = direction;
 }
 
-Player::Player(queue<Entity *> *spawnQueue, PlayerConfiguration config, Vector2f position, VertexCollection * vertexSource) : Destructible(config.hp, position), weapon(config.weaponConfig, vertexSource)
+Player::Player(queue<Entity *> *spawnQueue, PlayerConfiguration config, Vector2f position, VertexCollection * vertexSource) : Destructible(config.hp, position), weapon(config.weaponConfig, vertexSource), healthBar(36, 40, 2, 2, hp, hp)
 {
 	const int size = 20;
 	const int aimboxSize = 4;
@@ -124,6 +124,15 @@ void Player::applyTransform(Transform transform)
 
 	applyTransform(transform, shape, shapeCount);
 	applyTransform(transform, aimBoxShape, aimboxShapeCount);
+
+	healthBar.setPosition(transform.transformPoint(healthBar.getPosition()));
+}
+
+void Player::setHP(int hp)
+{
+	Destructible::setHP(hp);
+
+	healthBar.setValue(hp);
 }
 
 Rect<float> Player::getBoundingBox()
@@ -170,6 +179,7 @@ void Player::draw(RenderWindow * window)
 {
 	window->draw(shape, shapeCount, PrimitiveType::Quads);
 	window->draw(aimBoxShape, aimboxShapeCount, PrimitiveType::Quads);
+	window->draw(healthBar);
 }
 
 void Player::update(UpdateInfo info)

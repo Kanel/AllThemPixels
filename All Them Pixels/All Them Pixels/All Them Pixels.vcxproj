@@ -85,6 +85,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AI.cpp" />
+    <ClCompile Include="CircleBar.cpp" />
     <ClCompile Include="Collision.cpp" />
     <ClCompile Include="ColorFade.cpp" />
     <ClCompile Include="Destructible.cpp" />
@@ -113,6 +114,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AI.h" />
+    <ClInclude Include="CircleBar.h" />
     <ClInclude Include="Collision.h" />
     <ClInclude Include="ColorFade.h" />
     <ClInclude Include="Config.h" />

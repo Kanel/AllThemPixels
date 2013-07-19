@@ -18,7 +18,7 @@ void Destructible::setHP(int hp)
 
 void Destructible::modHP(int hp)
 {
-	this->hp += hp;
+	setHP(this->hp + hp);
 }
 
 void Destructible::expend()

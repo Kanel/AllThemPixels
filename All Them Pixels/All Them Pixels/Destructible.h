@@ -12,7 +12,7 @@ public:
 	Destructible(int hp, Vector2f position);
 
 	int getHP();
-	void setHP(int hp);
+	virtual void setHP(int hp);
 	void modHP(int hp);
 
 	void expend() override;
