@@ -38,7 +38,7 @@ Projectile * Weapon::fire(Vector2f position, Vector2f direction, int gameTime, E
 
 	lastFired = gameTime;
 
-	return new Projectile(position, speedVector, config.damage, config.ttl, vertexSource, color, type);
+	return new Projectile(position, speedVector, config.damage, config.piercing, config.ttl, vertexSource, color, type);
 }
 
 bool Weapon::isReady(int gameTime, int updateInterval, int &shots)

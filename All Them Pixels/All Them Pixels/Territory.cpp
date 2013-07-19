@@ -362,9 +362,20 @@ void Territory::update(UpdateInfo info)
 			for (auto enemy : enemies)
 			{
 				if (Collision::isClose(enemy, projectile))
-				{
+				{					
 					enemy->modHP(-projectile->getDamage());
-					projectile->expend();
+
+					if (!projectile->hasPierced(enemy))
+					{
+						if (projectile->getPiercing() > 1)
+						{
+							projectile->addPiercedTarget(enemy);
+						}
+						else
+						{
+							projectile->expend();
+						}
+					}
 
 					if (enemy->isExpended())
 					{
@@ -390,7 +401,19 @@ void Territory::update(UpdateInfo info)
 		{
 			player->modHP(-projectile->getDamage()); //DIE();
 			player->fade();
-			projectile->expend();			
+			projectile->expend();
+
+			if (!projectile->hasPierced(player))
+			{
+				if (projectile->getPiercing() > 1)
+				{
+					projectile->addPiercedTarget(player);
+				}
+				else
+				{
+					projectile->expend();
+				}
+			}
 		}
 
 		if (player->getIsInSafeZone())
@@ -486,7 +509,7 @@ void Territory::update(UpdateInfo info)
 
 		if (0 <= x && x < matrixLength && 0 <= y && y < matrixLength)
 		{
-			if (gridMatrix[x][y] == NULL)
+			if (gridMatrix[x][y] != NULL)
 			{
 				Color color = gridMatrix[x][y]->getColor();
 				int additive = 2 * (layers + 1);

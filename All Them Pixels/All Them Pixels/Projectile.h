@@ -15,11 +15,17 @@ protected:
 	Vector2f speed;
 	int ttl;
 	float damage;
+	int piercing;
+	int piercedTargetsIndex;
+	vector<Entity *> piercedTargets;
 
 public:
-	Projectile(Vector2f position, Vector2f speed, float damage, int ttl, VertexCollection * vertexSource, Color color = Color(0,0,0,255), EntityTypes type = ProjectileEntity);
+	Projectile(Vector2f position, Vector2f speed, float damage, int piercing, int ttl, VertexCollection * vertexSource, Color color = Color(0,0,0,255), EntityTypes type = ProjectileEntity);
 
 	float getDamage();
+	int getPiercing();
+	void addPiercedTarget(Entity * entity);
+	bool hasPierced(Entity * entity);
 
 	void expend() override;
 	bool isExpended() override;
