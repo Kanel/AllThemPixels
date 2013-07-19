@@ -3,6 +3,7 @@
 #include "Territory.h"
 #include "HexagonGrid.h"
 #include "VertexCluster.h"
+#include "Sounds.h"
 #include <SFML/Graphics.hpp>
 #include <vector>
 
@@ -33,6 +34,6 @@ public:
 	bool isActive();
 
 	void draw(RenderWindow * window);
-	void update(UpdateInfo info);
+	void update(UpdateInfo info, Sounds * sounds);
 	View getView(View reference);
 };

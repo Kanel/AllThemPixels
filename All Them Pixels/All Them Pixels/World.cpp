@@ -98,7 +98,7 @@ void World::draw(RenderWindow * window)
 	}
 }
 
-void World::update(UpdateInfo info)
+void World::update(UpdateInfo info, Sounds * sounds)
 {
 	for (int i = 0; i < matrixSize; i++)
 	{
@@ -107,7 +107,7 @@ void World::update(UpdateInfo info)
 			if (territories[i][j] != NULL && territories[i][j]->active)
 			{
 				territories[i][j]->integrateSpawnQueue();
-				territories[i][j]->update(info);
+				territories[i][j]->update(info, sounds);
 				territories[i][j]->cleanup();
 			}
 		}

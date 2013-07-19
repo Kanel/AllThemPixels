@@ -8,6 +8,7 @@
 #include "Weapon.h"
 #include "Collision.h"
 #include "SkillPoints.h"
+#include "Sounds.h"
 #include "CircleBar.h"
 #include <queue>
 

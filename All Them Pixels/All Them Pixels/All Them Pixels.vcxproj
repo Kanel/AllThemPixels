@@ -59,7 +59,7 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>../../SFML/library;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>sfml-graphics-s-d.lib;sfml-window-s-d.lib;sfml-system-s-d.lib;sfml-main-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>sfml-graphics-s-d.lib;sfml-audio-s-d.lib;sfml-window-s-d.lib;sfml-system-s-d.lib;sfml-main-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -80,7 +80,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalLibraryDirectories>../../SFML/library;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>sfml-graphics-s.lib;sfml-window-s.lib;sfml-system-s.lib;sfml-main.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>sfml-graphics-s.lib;sfml-audio-s.lib;sfml-window-s.lib;sfml-system-s.lib;sfml-main.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -90,6 +90,7 @@
     <ClCompile Include="ColorFade.cpp" />
     <ClCompile Include="Destructible.cpp" />
     <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="EnemySpawner.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="Flag.cpp" />
     <ClCompile Include="FloorTile.cpp" />
@@ -104,6 +105,7 @@
     <ClCompile Include="SAT.cpp" />
     <ClCompile Include="Shapes.cpp" />
     <ClCompile Include="SkillWheel.cpp" />
+    <ClCompile Include="Sounds.cpp" />
     <ClCompile Include="Territory.cpp" />
     <ClCompile Include="UserInput.cpp" />
     <ClCompile Include="Vector2fMath.cpp" />
@@ -120,6 +122,7 @@
     <ClInclude Include="Config.h" />
     <ClInclude Include="Destructible.h" />
     <ClInclude Include="Enemy.h" />
+    <ClInclude Include="EnemySpawner.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="EntityTypes.h" />
     <ClInclude Include="Flag.h" />
@@ -135,6 +138,7 @@
     <ClInclude Include="Shapes.h" />
     <ClInclude Include="SkillPoints.h" />
     <ClInclude Include="SkillWheel.h" />
+    <ClInclude Include="Sounds.h" />
     <ClInclude Include="Territory.h" />
     <ClInclude Include="UpdateInfo.h" />
     <ClInclude Include="UserInput.h" />

@@ -94,6 +94,7 @@ Territory::Territory(Vector2f position, float radius, World * world)
 	this->position = position;
 	this->radius = radius;
 	this->world = world;
+	this->sounds = NULL;
 
 	hexagonWidth = hexagonRadius * 2;
 	hexagonHeight = sqrt(3)/2 * hexagonWidth;
@@ -237,6 +238,7 @@ void Territory::integrateSpawnQueue()
 
 		if(Flag::isFlagSet(entity->getType(), EnemyProjectileEntity))
 		{
+			if (!this->sounds) this->sounds->play(SoundTypes::Shot);
 			enemyProjectiles.push_back((Projectile *)entity);
 		}
 		else if(Flag::isFlagSet(entity->getType(), ProjectileEntity))
@@ -350,8 +352,9 @@ void Territory::draw(RenderWindow * window)
 	}
 }
 
-void Territory::update(UpdateInfo info)
+void Territory::update(UpdateInfo info, Sounds * sounds)
 {
+	if (!this->sounds) this->sounds = sounds; //this is dumb...
 	if (!player->getIsInSafeZone())
 	{
 		// Update all player projectiles
@@ -379,6 +382,7 @@ void Territory::update(UpdateInfo info)
 
 					if (enemy->isExpended())
 					{
+						sounds->play(SoundTypes::EnemyDeath, enemy->getPosition());
 						player->addSkillPoints(enemy->getSkillPoints());
 					}
 				}
@@ -399,7 +403,8 @@ void Territory::update(UpdateInfo info)
 
 		if (Collision::isClose(player, projectile))
 		{
-			player->modHP(-projectile->getDamage()); //DIE();
+			sounds->play(SoundTypes::PlayerHit);
+			player->modHP(-projectile->getDamage());
 			player->fade();
 			projectile->expend();
 

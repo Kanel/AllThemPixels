@@ -10,6 +10,7 @@
 #include "AI.h"
 #include "Weapon.h"
 #include "Collision.h"
+#include "Sounds.h"
 #include "World.h"
 #include "HexagonGrid.h"
 #include "VertexCluster.h"
@@ -55,6 +56,7 @@ private:
 	float hexagonRadius;
 	VertexCluster tileCluster;
 	VertexCluster entityCluster;
+	Sounds * sounds;
 
 	Weapon enemyWeapons[4];
 	AIProperties aiProperties[4];
@@ -85,5 +87,5 @@ public:
 
 	void cleanup();
 	void draw(RenderWindow * window);
-	void update(UpdateInfo info);
+	void update(UpdateInfo info, Sounds * sounds);
 };

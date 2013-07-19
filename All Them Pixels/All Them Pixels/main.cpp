@@ -4,6 +4,7 @@
 #include "World.h"
 #include "PlayerCustomizationUI.h"
 #include "VertexCluster.h"
+#include "Sounds.h"
 #include <SFML/Graphics.hpp>
 #include <iostream>
 
@@ -27,6 +28,8 @@ int main(int argc, char ** argv)
 	VertexCluster playerCluster;
 	Time sleepDuration = milliseconds(updateInterval);
 	UpdateInfo info;
+	Sounds sounds = Sounds();
+	//Listener listener;
 
 	playerCluster.create(VertexCluster::HexagonSource);
 	playerCluster.create(VertexCluster::RectangleSource);
@@ -62,20 +65,22 @@ int main(int argc, char ** argv)
 		}
 		info.elapsedGameTime += updateInterval;
 
-		world.update(info);
+		Vector2f center = window.getView().getCenter();
+		//listener.setPosition(center.x, center.y, 0.0f);
+		world.update(info, &sounds);
 		window.setView(world.getView(window.getView()));
 
 		if (player->getIsInSafeZone())
 		{
 			ui.align(window.getView());
 
-			if (ui.update(info, player) == PlayerCustomizationUI::Changed)
+			if (ui.update(info, player, &sounds) == PlayerCustomizationUI::Changed)
 			{
 				player->setConfiguration(ui.getConfiguration());
 			}
 		}
 
-		window.clear();		
+		window.clear();
 		world.draw(&window);
 		window.draw(playerCluster); // This contains the player and all its projectiles.
 		

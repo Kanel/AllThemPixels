@@ -89,48 +89,48 @@ PlayerConfiguration PlayerCustomizationUI::getConfiguration()
 	return config;
 }
 	
-PlayerCustomizationUI::Result PlayerCustomizationUI::update(UpdateInfo info, Player * player)
+PlayerCustomizationUI::Result PlayerCustomizationUI::update(UpdateInfo info, Player * player, Sounds * sounds)
 {
 	Result result = NoChange;	
 
-	if (lastSkillChange + SKILL_CHANGE_COOLDOWN <= info.elapsedGameTime)
+	//if (lastSkillChange + SKILL_CHANGE_COOLDOWN <= info.elapsedGameTime)
+	//{
+	int newIndex;
+
+	if (UserInput::isButtonPressed(UIC_SCROLL_LEFT))
 	{
-		int newIndex;
-
-		// Check if the wheel should rotate.
-		if (UserInput::isButtonPressed(UIC_SCROLL_LEFT))
-		{
-			wasPressed[0] = true;
-		}
-		else if (UserInput::isButtonPressed(UIC_SCROLL_RIGHT))
-		{
-			wasPressed[1] = true;
-		}
-
-		// Determine the rotation direction.
-		if(wasPressed[0] == true)
-		{
-			newIndex = (wheel.getIndex() - 1) % wheel.getNumberOfSkills();
-			newIndex = (newIndex < 0) ? wheel.getNumberOfSkills() + newIndex : newIndex;
-			result = Changed;
-			wasPressed[0] = false;
-		}
-		else if(wasPressed[1] == true)
-		{
-			newIndex = (wheel.getIndex() + 1) % wheel.getNumberOfSkills();
-			result = Changed;
-			wasPressed[1] = false;
-		}
-
-		// Rotate wheel.
-		if (result == Changed)
-		{
-			wheel.setIndex(newIndex);
-			updateSkillInfo();
-
-			lastSkillChange = info.elapsedGameTime;
-		}
+		wasPressed[0] = true;
 	}
+	else if(wasPressed[0] == true) //OnButtonUp
+	{
+		sounds->play(SoundTypes::SkillScroll);
+		newIndex = (wheel.getIndex() - 1) % wheel.getNumberOfSkills();
+		newIndex = (newIndex < 0) ? wheel.getNumberOfSkills() + newIndex : newIndex;
+		result = Changed;
+		wasPressed[0] = false;
+	}
+
+	if (UserInput::isButtonPressed(UIC_SCROLL_RIGHT))
+	{
+		wasPressed[1] = true;
+	}
+	else if(wasPressed[1] == true) //OnButtonUp
+	{
+		sounds->play(SoundTypes::SkillScroll);
+		newIndex = (wheel.getIndex() + 1) % wheel.getNumberOfSkills();
+		result = Changed;
+		wasPressed[1] = false;
+	}
+
+	// Rotate wheel.
+	if (result == Changed)
+	{
+		wheel.setIndex(newIndex);
+		updateSkillInfo();
+
+		lastSkillChange = info.elapsedGameTime;
+	}
+	//}
 
 	if (lastSkillModifed + SKILL_MODIFY_COOLDOWN <= info.elapsedGameTime)
 	{
