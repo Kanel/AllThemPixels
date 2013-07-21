@@ -5,15 +5,16 @@
 #include "Hexagon.h"
 #include "ColorFade.h"
 #include "HexagonGrid.h"
+#include <stack>
 #include <SFML\Graphics.hpp>
 
+using std::stack;
 using namespace sf;
 
 class FloorTile
 {
 private:
-	Color originalColor;
-	Color currentColor;
+	stack<Color> colorStack;
 	Hexagon hexagon;
 
 public:
@@ -21,10 +22,9 @@ public:
 
 	Color getColor();
 	void setColor(Color color);
+	void pushColor(Color color);
 	void resetColor();
-
-	void fadeToOriginalColor(int amount);
-
+	
 	Rect<float> getBoundingBox();
 	ConvexHull getConvexHull();
 

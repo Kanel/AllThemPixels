@@ -2,44 +2,37 @@
 
 FloorTile::FloorTile(Vector2f position, float radius, Color color, VertexCollection * vertexSource) : hexagon(position, radius, color, Hexagon::FlatTopped, vertexSource)
 {
-	originalColor = color;
+	colorStack.push(color);
 }
 
 Color FloorTile::getColor()
 {
-	return currentColor;
+	return colorStack.top();
 }
 
-void FloorTile::setColor(Color color)
+void FloorTile::pushColor(Color color)
 {
-	currentColor = color;
-
+	colorStack.push(color);
 	hexagon.setColor(color);
 }
 
 void FloorTile::resetColor()
 {
-	if (originalColor != currentColor)
+	while (colorStack.size() > 1)
 	{
-		setColor(originalColor);
+		colorStack.pop();
 	}
+	hexagon.setColor(colorStack.top());
 }
 
-void FloorTile::fadeToOriginalColor(int amount)
+void FloorTile::setColor(Color color)
 {
-	if (amount == 0)
+	while (colorStack.size() > 0)
 	{
-		resetColor();
+		colorStack.pop();
 	}
-	else
-	{
-		Color currentColor = getColor();
-		Color newColor = Color(originalColor.r - ((amount - 1) * (float)(originalColor.r - currentColor.r) / amount), //detta kan omöjligen förenklas!!
-							   originalColor.g - ((amount - 1) * (float)(originalColor.g - currentColor.g) / amount), 
-							   originalColor.b - ((amount - 1) * (float)(originalColor.b - currentColor.b) / amount));
-
-		setColor(newColor);
-	}
+	colorStack.push(color);
+	hexagon.setColor(color);
 }
 
 Rect<float> FloorTile::getBoundingBox()

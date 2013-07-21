@@ -17,9 +17,10 @@ void Territory::prepareSafeZoneTiles(int tileGridLayers)
 	{
 		int x = offset.x + origins[direction][0];
 		int y = offset.y + origins[direction][1];
+		int greenness = rand() % 50;
 		AxialCoordinates hexagon(origins[direction][0], origins[direction][1]);
 
-		gridMatrix[x][y]->setColor(Color(0, 255, 0));
+		gridMatrix[x][y]->setColor(Color(0, 255 - greenness, 0));
 		safeZonesTiles[direction].push_back(gridMatrix[x][y]);
 
 		for (int k = 1; k <= layers; k++)
@@ -37,7 +38,8 @@ void Territory::prepareSafeZoneTiles(int tileGridLayers)
 					{
 						if (gridMatrix[x][y] != NULL)
 						{
-							gridMatrix[x][y]->setColor(Color(0, 255, 0));
+							greenness = rand() % 50;
+							gridMatrix[x][y]->setColor(Color(0, 255 - greenness, 0));
 							safeZonesTiles[direction].push_back(gridMatrix[x][y]);
 						}
 					}
@@ -98,9 +100,9 @@ Territory::Territory(Vector2f position, float radius, World * world)
 
 	hexagonWidth = hexagonRadius * 2;
 	hexagonHeight = sqrt(3)/2 * hexagonWidth;
-	numberOfLayersHorizontal = (((radius * 2) - hexagonWidth) / (hexagonWidth * 1.5f)) + 1;
-	numberOfLayersVertical = ((((sqrt(3) / 2) *  radius * 2) / hexagonHeight) - 1) / 2;
-	layers = (numberOfLayersHorizontal+numberOfLayersVertical) / 2;//(numberOfLayersHorizontal < numberOfLayersVertical) ? numberOfLayersHorizontal : numberOfLayersVertical;
+	numberOfLayersHorizontal = ((2 * radius) - hexagonWidth) / (hexagonWidth * 1.5f);
+	numberOfLayersVertical = ((2 * radius) - hexagonHeight) / (2 * hexagonHeight);
+	layers = (numberOfLayersHorizontal < numberOfLayersVertical) ? numberOfLayersHorizontal : numberOfLayersVertical;
 	spawnRingSize = 47; //+2?
 
 	active = false;	
@@ -123,7 +125,9 @@ Territory::Territory(Vector2f position, float radius, World * world)
 
 	for (int i = 0; i < borderCoordinates.size(); i++)
 	{
-		gridMatrix[offset.x + borderCoordinates[i].q][offset.y + borderCoordinates[i].r]->setColor(Color(255, 0, 0));
+		int redness = rand() % 50;
+
+		gridMatrix[offset.x + borderCoordinates[i].q][offset.y + borderCoordinates[i].r]->setColor(Color(255 - redness, 0, 0));
 	}
 
 	prepareSafeZoneTiles(layers);
@@ -523,7 +527,7 @@ void Territory::update(UpdateInfo info, Sounds * sounds)
 				color.g = (color.g - additive >= 0) ? color.g - additive : 0;
 				color.b = (color.b - additive >= 0) ? color.b - additive : 0;
 
-				gridMatrix[x][y]->setColor(color);
+				gridMatrix[x][y]->pushColor(color);
 			}
 		}
 
@@ -549,7 +553,7 @@ void Territory::update(UpdateInfo info, Sounds * sounds)
 							color.g = (color.g - additive >= 0) ? color.g - additive : 0;
 							color.b = (color.b - additive >= 0) ? color.b - additive : 0;
 
-							gridMatrix[x][y]->setColor(color);
+							gridMatrix[x][y]->pushColor(color);
 						}
 					}
 					hexagon = grid.step(hexagon, (HexagonGrid::HexagonDirection)((HexagonGrid::DownRight + i) % 6));

@@ -16,10 +16,10 @@ Sounds::Sounds()
 	}
 	else ; //error loading music, no big deal.
 
-	coinBuffer.loadFromFile("D:/Temp/coin1.wav");
-	hurtBuffer.loadFromFile("D:/Temp/hurt1.wav");
-	selectBuffer.loadFromFile("D:/Temp/select1.wav");
-	shootBuffer.loadFromFile("D:/Temp/shoot1.wav");
+	coinBuffer.loadFromFile("coin1.wav");
+	hurtBuffer.loadFromFile("hurt1.wav");
+	selectBuffer.loadFromFile("select1.wav");
+	shootBuffer.loadFromFile("shoot1.wav");
 
 }
 
