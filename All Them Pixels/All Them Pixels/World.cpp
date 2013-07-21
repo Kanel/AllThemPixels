@@ -14,7 +14,7 @@ World::World(Vector2f position, float territoryRadius, float territorySpacing, i
 
 	territories = new Territory**[matrixSize];
 
-	// Matrix
+	// Territory matrix
 	for (int i = 0; i < matrixSize; i++)
 	{
 		territories[i] = new Territory*[matrixSize];
@@ -27,10 +27,10 @@ World::World(Vector2f position, float territoryRadius, float territorySpacing, i
 
 	territoryCount = 0;
 
-	// Center Territory
+	// Center territory
 	territories[offset.x][offset.y] = new Territory(position, territoryRadius, this);
 
-	// Layer Territories
+	// Layer territories
 	for (int k = 1; k <= layers; k++)
 	{
 		AxialCoordinates hexagon(-k, k);

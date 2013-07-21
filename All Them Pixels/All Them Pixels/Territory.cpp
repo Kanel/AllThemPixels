@@ -1,5 +1,44 @@
 #include "Territory.h"
 
+void Territory::colorFloorTiles()
+{
+	for (int i = 0; i < floorTilesLength; i++)
+	{
+		for (int j = 0; j < floorTilesLength; j++)
+		{
+			if (floorTiles[i][j] != NULL)
+			{
+				int grayness = rand() % 50;
+
+				floorTiles[i][j]->setColor(Color(255 - grayness, 255 - grayness, 255 -grayness));
+			}
+		}
+	}
+}
+
+void Territory::colorBorderTiles()
+{
+	for (int i = 0; i < borderCoordinates.size(); i++)
+	{
+		int redness = rand() % 50;
+
+		floorTiles[offset.x + borderCoordinates[i].q][offset.y + borderCoordinates[i].r]->setColor(Color(255 - redness, 0, 0));
+	}
+}
+
+void Territory::colorSafeZoneTiles()
+{
+	for (int i = 0; i < 6; i++)
+	{
+		for (int j = 0; j < safeZonesTiles[i].size(); j++)
+		{
+			int greenness = rand() % 50;
+
+			safeZonesTiles[i][j]->setColor(Color(0, 255 - greenness, 0));
+		}
+	}
+}
+
 void Territory::prepareSafeZoneTiles(int tileGridLayers)
 {
 	int origins[6][2]= {
@@ -17,11 +56,10 @@ void Territory::prepareSafeZoneTiles(int tileGridLayers)
 	{
 		int x = offset.x + origins[direction][0];
 		int y = offset.y + origins[direction][1];
-		int greenness = rand() % 50;
+		
 		AxialCoordinates hexagon(origins[direction][0], origins[direction][1]);
 
-		gridMatrix[x][y]->setColor(Color(0, 255 - greenness, 0));
-		safeZonesTiles[direction].push_back(gridMatrix[x][y]);
+		safeZonesTiles[direction].push_back(floorTiles[x][y]);
 
 		for (int k = 1; k <= layers; k++)
 		{
@@ -34,13 +72,11 @@ void Territory::prepareSafeZoneTiles(int tileGridLayers)
 					x = offset.x + hexagon.q;
 					y = offset.y + hexagon.r;
 
-					if (0 <= x && x < matrixLength && 0 <= y && y < matrixLength)
+					if (0 <= x && x < floorTilesLength && 0 <= y && y < floorTilesLength)
 					{
-						if (gridMatrix[x][y] != NULL)
+						if (floorTiles[x][y] != NULL)
 						{
-							greenness = rand() % 50;
-							gridMatrix[x][y]->setColor(Color(0, 255 - greenness, 0));
-							safeZonesTiles[direction].push_back(gridMatrix[x][y]);
+							safeZonesTiles[direction].push_back(floorTiles[x][y]);
 						}
 					}
 					hexagon = grid.step(hexagon, (HexagonGrid::HexagonDirection)((HexagonGrid::DownRight + i) % 6));
@@ -48,6 +84,31 @@ void Territory::prepareSafeZoneTiles(int tileGridLayers)
 			}
 		}
 	}
+}
+
+void Territory::prepareAI()
+{
+	aiProperties[0] = AI::generate((rand() % 5) + 1);
+	aiProperties[1] = AI::generate((rand() % 5) + 1);
+	aiProperties[2] = AI::generate((rand() % 5) + 1);
+	aiProperties[3] = AI::generate((rand() % 5) + 1);
+}
+
+void Territory::prepareWeapons()
+{
+	WeaponConfiguration config;
+
+	config.cooldown = 500;
+	config.damage = 20;
+	config.piercing = 1;
+	config.speed = 8;
+	config.spread = 4;
+	config.ttl = 500;
+
+	enemyWeapons[0] = Weapon(config, entityCluster.getCollection(0));
+	enemyWeapons[1] = Weapon(config, entityCluster.getCollection(0));
+	enemyWeapons[2] = Weapon(config, entityCluster.getCollection(0));
+	enemyWeapons[3] = Weapon(config, entityCluster.getCollection(0));
 }
 
 void Territory::spatialPartitionSafeRoomTiles()
@@ -81,89 +142,101 @@ void Territory::spatialPartitionSafeRoomTiles()
 Territory::Territory(Vector2f position, float radius, World * world)
 {
 	// Flat topped hexagons
-	// Todo: clean it a bit
-	// Todo: figure out number of layers
 	float hexagonWidth;
 	float hexagonHeight;
 	int numberOfLayersHorizontal;
 	int numberOfLayersVertical;
 	int layers;
-	int spawnRingSize;
+	int spawnRingSize = 47;
 	HexagonGrid grid(Hexagon::FlatTopped);
 	WeaponConfiguration wc;
 
+	// Some variables.
 	this->hexagonRadius = TERRITORY_TILE_SIZE;
 	this->position = position;
 	this->radius = radius;
 	this->world = world;
 	this->sounds = NULL;
 
+	active = false;	
+	player = NULL;
+
+	// Calculate how many layers will fit the radius.
 	hexagonWidth = hexagonRadius * 2;
 	hexagonHeight = sqrt(3)/2 * hexagonWidth;
 	numberOfLayersHorizontal = ((2 * radius) - hexagonWidth) / (hexagonWidth * 1.5f);
 	numberOfLayersVertical = ((2 * radius) - hexagonHeight) / (2 * hexagonHeight);
 	layers = (numberOfLayersHorizontal < numberOfLayersVertical) ? numberOfLayersHorizontal : numberOfLayersVertical;
-	spawnRingSize = 47; //+2?
 
-	active = false;	
-	player = NULL;
+	// Floor tile matrix grid
 	offset.x = layers;
 	offset.y = layers;
-	matrixLength = (layers * 2) + 1;
+	floorTilesLength = (layers * 2) + 1;
+
+	// Prepare bounding box.
 	boundingBox.width = (layers * hexagonWidth * 1.5f) + hexagonWidth;
 	boundingBox.height = ((layers * 2) + 1) * hexagonHeight;
 	boundingBox.left = position.x - (boundingBox.width / 2);
 	boundingBox.top = position.y - (boundingBox.height / 2);
 
+	// Prepare vertex collections.
 	tileCluster.create(8, grid.getNumberOfTiles(layers), 1, PrimitiveType::TrianglesStrip);
 	entityCluster.create(VertexCluster::HexagonSource);
 	entityCluster.create(VertexCluster::RectangleSource);
 
-	gridMatrix = FloorTile::generateGrid(position, hexagonRadius, layers, tileCluster.getCollection(0));
+	// Prepare the floor tiles.
+	floorTiles = FloorTile::generateGrid(position, hexagonRadius, layers, tileCluster.getCollection(0));
+	
+	// Prepare border.
 	borderCoordinates = grid.getRingCoordinates(layers);
+
+	// Preapare the spawn grid.
 	spawnGrid = grid.getRingCoordinates(spawnRingSize);
 
-	for (int i = 0; i < borderCoordinates.size(); i++)
-	{
-		int redness = rand() % 50;
-
-		gridMatrix[offset.x + borderCoordinates[i].q][offset.y + borderCoordinates[i].r]->setColor(Color(255 - redness, 0, 0));
-	}
-
+	// Prepare safe zones.
 	prepareSafeZoneTiles(layers);
 	spatialPartitionSafeRoomTiles();
+	
+	// Prepare weapon & AI.
+	prepareAI();
+	prepareWeapons();
 
-	wc.cooldown = 500;
-	wc.damage = 20;
-	wc.piercing = 1;
-	wc.speed = 8;
-	wc.spread = 4;
-	wc.ttl = 500;
+	// Color tiles.
+	colorFloorTiles();
+	colorBorderTiles();
+	colorSafeZoneTiles();
 
-	enemyWeapons[0] = Weapon(wc, entityCluster.getCollection(0));
-	enemyWeapons[1] = Weapon(wc, entityCluster.getCollection(0));
-	enemyWeapons[2] = Weapon(wc, entityCluster.getCollection(0));
-	enemyWeapons[3] = Weapon(wc, entityCluster.getCollection(0));
-
-	aiProperties[0] = AI::generate((rand() % 5) + 1);
-	aiProperties[1] = AI::generate((rand() % 5) + 1);
-	aiProperties[2] = AI::generate((rand() % 5) + 1);
-	aiProperties[3] = AI::generate((rand() % 5) + 1);
 }
 
 Territory::~Territory()
 {
-	// Todo: fix, does not work now
 	integrateSpawnQueue();
 
-	/*for (std::list<Entity *>::iterator it = entities.begin(); it != entities.end();)
+	for (auto projectile : enemyProjectiles)
 	{
-		Entity * entity = *it;
+		delete projectile;		
+	}
 
-		it = entities.erase(it);
+	for (auto projectile : playerProjectile)
+	{
+		delete projectile;		
+	}
 
-		delete entity;
-	}*/
+	for (auto projectile : enemies)
+	{
+		delete projectile;		
+	}
+
+	for (int i = 0; i < floorTilesLength; i++)
+	{
+		for (int j = 0; j < floorTilesLength; j++)
+		{
+			if (floorTiles[i][j] != NULL)
+			{
+				delete floorTiles[i][j];
+			}
+		}
+	}
 }
 
 queue<Entity *> *Territory::getSpawnQueue()
@@ -190,8 +263,10 @@ void Territory::removeEntity(Entity * entity)
 		{
 			if ((*it) == entity)
 			{
-				enemyProjectiles.erase(it);
+				delete *(it);
 
+				enemyProjectiles.erase(it);
+				
 				break;
 			}
 			else
@@ -206,6 +281,8 @@ void Territory::removeEntity(Entity * entity)
 		{
 			if ((*it) == entity)
 			{
+				delete *(it);
+
 				playerProjectile.erase(it);
 
 				break;
@@ -222,6 +299,8 @@ void Territory::removeEntity(Entity * entity)
 		{
 			if ((*it) == entity)
 			{
+				delete *(it);
+
 				enemies.erase(it);
 
 				break;
@@ -242,7 +321,10 @@ void Territory::integrateSpawnQueue()
 
 		if(Flag::isFlagSet(entity->getType(), EnemyProjectileEntity))
 		{
-			if (!this->sounds) this->sounds->play(SoundTypes::Shot);
+			if (!this->sounds) 
+			{
+				this->sounds->play(SoundTypes::Shot);
+			}
 			enemyProjectiles.push_back((Projectile *)entity);
 		}
 		else if(Flag::isFlagSet(entity->getType(), ProjectileEntity))
@@ -272,9 +354,9 @@ Vector2f Territory::getSpawnLocation()
 		int x = offset.x + q;
 		int y = offset.y + r;
 
-		if (0 <= x && x < matrixLength && 0 <= y && y < matrixLength)
+		if (0 <= x && x < floorTilesLength && 0 <= y && y < floorTilesLength)
 		{
-			if (gridMatrix[x][y] != NULL)
+			if (floorTiles[x][y] != NULL)
 			{
 				found = true;
 				spawnPosition += grid.getPosition(AxialCoordinates(q, r), hexagonRadius);
@@ -298,6 +380,7 @@ void Territory::cleanup()
 		if (entity->isExpended())
 		{
 			it = enemyProjectiles.erase(it);
+
 			delete entity;
 		}
 		else
@@ -313,6 +396,7 @@ void Territory::cleanup()
 		if (entity->isExpended())
 		{
 			it = playerProjectile.erase(it);
+
 			delete entity;
 		}
 		else
@@ -328,6 +412,7 @@ void Territory::cleanup()
 		if (entity->isExpended())
 		{
 			it = enemies.erase(it);
+
 			delete entity;
 		}
 		else
@@ -358,49 +443,50 @@ void Territory::draw(RenderWindow * window)
 
 void Territory::update(UpdateInfo info, Sounds * sounds)
 {
-	if (!this->sounds) this->sounds = sounds; //this is dumb...
-	if (!player->getIsInSafeZone())
+	this->sounds = sounds;
+
+	// Update all projectiles projectiles
+	for (auto projectile : playerProjectile)
 	{
-		// Update all player projectiles
-		for (auto projectile : playerProjectile)
+		projectile->update(info);
+
+		for (auto enemy : enemies)
 		{
-			projectile->update(info);
+			if (Collision::isClose(enemy, projectile))
+			{					
+				enemy->modHP(-projectile->getDamage());
 
-			for (auto enemy : enemies)
-			{
-				if (Collision::isClose(enemy, projectile))
-				{					
-					enemy->modHP(-projectile->getDamage());
-
-					if (!projectile->hasPierced(enemy))
+				if (!projectile->hasPierced(enemy))
+				{
+					if (projectile->getPiercing() > 1)
 					{
-						if (projectile->getPiercing() > 1)
-						{
-							projectile->addPiercedTarget(enemy);
-						}
-						else
-						{
-							projectile->expend();
-						}
+						projectile->addPiercedTarget(enemy);
 					}
-
-					if (enemy->isExpended())
+					else
 					{
-						sounds->play(SoundTypes::EnemyDeath, enemy->getPosition());
-						player->addSkillPoints(enemy->getSkillPoints());
+						projectile->expend();
 					}
 				}
-			}
-		}
 
-		// Update all enemies.
+				if (enemy->isExpended())
+				{
+					sounds->play(SoundTypes::EnemyDeath, enemy->getPosition());
+					player->addSkillPoints(enemy->getSkillPoints());
+				}
+			}
+		}		
+	}
+
+	// Update all enemies.
+	if (!player->getIsInSafeZone())
+	{
 		for (auto enemy : enemies)
 		{
 			AI::update(&spawnQueue, enemy, player, info);
 		}
 	}
 
-	// Check if the player is hit by projectiles.
+	// Check if the player is hit by enemy projectiles.
 	for (auto projectile : enemyProjectiles)
 	{
 		projectile->update(info);
@@ -488,7 +574,7 @@ void Territory::update(UpdateInfo info, Sounds * sounds)
 		}
 	}
 
-	// Spawn enemies
+	// Spawn enemy
 	Enemy * enemy = new Enemy(100, getSpawnLocation(), entityCluster.getCollection(1));
 
 	enemy->educate(aiProperties[0]);
@@ -498,16 +584,18 @@ void Territory::update(UpdateInfo info, Sounds * sounds)
 	// Background tile stuff.
 	HexagonGrid grid(Hexagon::FlatTopped);
 
-	for (int i = 0; i < matrixLength; i++)
+	for (int i = 0; i < floorTilesLength; i++)
 	{
-		for (int j = 0; j < matrixLength; j++)
+		for (int j = 0; j < floorTilesLength; j++)
 		{
-			if (gridMatrix[i][j] != NULL)
+			if (floorTiles[i][j] != NULL)
 			{
-				gridMatrix[i][j]->resetColor();
+				floorTiles[i][j]->resetColor();
 			}
 		}
 	}
+
+	// Enemy aura colorization on floor tiles. 
 	for (auto enemy : enemies)
 	{
 		AxialCoordinates coordinates = grid.getAxialCoordinates(enemy->getPosition() - getPosition(), hexagonRadius);
@@ -516,21 +604,23 @@ void Territory::update(UpdateInfo info, Sounds * sounds)
 		int x = offset.x + coordinates.q;
 		int y = offset.y + coordinates.r;
 
-		if (0 <= x && x < matrixLength && 0 <= y && y < matrixLength)
+		// Core tile
+		if (0 <= x && x < floorTilesLength && 0 <= y && y < floorTilesLength)
 		{
-			if (gridMatrix[x][y] != NULL)
+			if (floorTiles[x][y] != NULL)
 			{
-				Color color = gridMatrix[x][y]->getColor();
+				Color color = floorTiles[x][y]->getColor();
 				int additive = 2 * (layers + 1);
 
 				color.r = (color.r - additive >= 0) ? color.r - additive : 0;
 				color.g = (color.g - additive >= 0) ? color.g - additive : 0;
 				color.b = (color.b - additive >= 0) ? color.b - additive : 0;
 
-				gridMatrix[x][y]->pushColor(color);
+				floorTiles[x][y]->pushColor(color);
 			}
 		}
 
+		// Layer tiles
 		for (int k = 1; k <= layers; k++)
 		{
 			hexagon = AxialCoordinates(-k, k);
@@ -542,18 +632,18 @@ void Territory::update(UpdateInfo info, Sounds * sounds)
 					int x = offset.x + hexagon.q + coordinates.q;
 					int y = offset.y + hexagon.r + coordinates.r;
 
-					if (0 <= x && x < matrixLength && 0 <= y && y < matrixLength)
+					if (0 <= x && x < floorTilesLength && 0 <= y && y < floorTilesLength)
 					{
-						if (gridMatrix[x][y] != NULL)
+						if (floorTiles[x][y] != NULL)
 						{
-							Color color = gridMatrix[x][y]->getColor();
+							Color color = floorTiles[x][y]->getColor();
 							int additive = 2 * ((layers + 1) - k);
 
 							color.r = (color.r - additive >= 0) ? color.r - additive : 0;
 							color.g = (color.g - additive >= 0) ? color.g - additive : 0;
 							color.b = (color.b - additive >= 0) ? color.b - additive : 0;
 
-							gridMatrix[x][y]->pushColor(color);
+							floorTiles[x][y]->pushColor(color);
 						}
 					}
 					hexagon = grid.step(hexagon, (HexagonGrid::HexagonDirection)((HexagonGrid::DownRight + i) % 6));
@@ -563,9 +653,10 @@ void Territory::update(UpdateInfo info, Sounds * sounds)
 	}
 
 	// Beware this section can change if this territory is active.
+	// Handle the case of the player trying to cross the territory border.
 	for (int i = 0; i < borderCoordinates.size(); i++)
 	{
-		FloorTile * tile = gridMatrix[offset.x + borderCoordinates[i].q][offset.y + borderCoordinates[i].r];
+		FloorTile * tile = floorTiles[offset.x + borderCoordinates[i].q][offset.y + borderCoordinates[i].r];
 
 		if (Collision::hitBoxesOverlap(tile->getBoundingBox(), player->getBoundingBox()))
 		{
@@ -573,6 +664,7 @@ void Territory::update(UpdateInfo info, Sounds * sounds)
 
 			if (SAT::collides(player->getConvexHull(), tile->getConvexHull(), player->getSpeed(), penetration))
 			{
+				// Move the player into another territory if the player is in a safe zone.
 				if (player->getIsInSafeZone())
 				{
 					Vector2f direction = Vector2fMath::unitVector(player->getPosition() - position);

@@ -44,9 +44,9 @@ private:
 	list<Projectile *> enemyProjectiles;
 	list<Projectile *> playerProjectile;
 	list<Enemy *> enemies;
-	int matrixLength;
+	int floorTilesLength;
 	Vector2i offset;
-	FloorTile *** gridMatrix;
+	FloorTile *** floorTiles;
 	vector<AxialCoordinates> borderCoordinates;
 	World * world;
 	Rect<float> boundingBox;
@@ -62,7 +62,12 @@ private:
 	AIProperties aiProperties[4];
 
 private:
+	void colorFloorTiles();
+	void colorBorderTiles();
+	void colorSafeZoneTiles();
 	void prepareSafeZoneTiles(int tileGridLayers);
+	void prepareAI();
+	void prepareWeapons();	
 	void spatialPartitionSafeRoomTiles();
 
 public:

@@ -84,8 +84,7 @@ FloorTile *** FloorTile::generateGrid(Vector2f position, float hexagonRadius, in
 			for (int j = 0; j < k; j++)
 			{
 				hexagonPosition = position + grid.getPosition(hexagon, hexagonRadius);
-				int grayness = rand() % 30;
-				matrix[offset.x + hexagon.q][offset.y + hexagon.r] = new FloorTile(hexagonPosition, hexagonRadius - spacing, Color(255-grayness, 255-grayness, 255-grayness), vertexSource);
+				matrix[offset.x + hexagon.q][offset.y + hexagon.r] = new FloorTile(hexagonPosition, hexagonRadius - spacing, Color(), vertexSource);
 				
 				hexagon = grid.step(hexagon, (HexagonGrid::HexagonDirection)((HexagonGrid::DownRight + i) % 6));
 			}
