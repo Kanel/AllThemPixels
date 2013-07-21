@@ -18,11 +18,14 @@ void FloorTile::pushColor(Color color)
 
 void FloorTile::resetColor()
 {
-	while (colorStack.size() > 1)
+	if (colorStack.size() > 1)
 	{
-		colorStack.pop();
+		while (colorStack.size() > 1)
+		{
+			colorStack.pop();
+		}
+		hexagon.setColor(colorStack.top());
 	}
-	hexagon.setColor(colorStack.top());
 }
 
 void FloorTile::setColor(Color color)
