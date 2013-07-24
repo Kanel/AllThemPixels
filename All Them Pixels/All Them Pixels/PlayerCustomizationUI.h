@@ -51,7 +51,7 @@ public:
 	};
 
 public:
-	PlayerCustomizationUI(Vector2f position);
+	PlayerCustomizationUI(Vector2f position = Vector2f());
 
 	PlayerConfiguration getConfiguration();
 	Result update(UpdateInfo info, Player * player, Sounds * sounds);

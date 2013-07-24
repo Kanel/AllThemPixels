@@ -16,6 +16,7 @@
 #include "VertexCluster.h"
 #include "Config.h"
 #include "FloorTile.h"
+#include "EnemySpawner.h"
 #include <SFML/Graphics.hpp>
 #include <list>
 #include <queue>
@@ -38,13 +39,15 @@ class VertexCluster;
 class Territory
 {
 private:
-	Vector2f position;
+	bool active;
 	float radius;
+	int floorTilesLength;
+	float hexagonRadius;
+	Vector2f position;
 	queue<Entity *> spawnQueue;
 	list<Projectile *> enemyProjectiles;
-	list<Projectile *> playerProjectile;
+	list<Projectile *> playerProjectiles;
 	list<Enemy *> enemies;
-	int floorTilesLength;
 	Vector2i offset;
 	FloorTile *** floorTiles;
 	vector<AxialCoordinates> borderCoordinates;
@@ -53,30 +56,32 @@ private:
 	vector<FloorTile *> safeZonesTiles[6];
 	unordered_map<Uint32, list<FloorTile *>> partitionedSafeZonesTiles[6];
 	vector<AxialCoordinates> spawnGrid;
-	float hexagonRadius;
 	VertexCluster tileCluster;
 	VertexCluster entityCluster;
 	Sounds * sounds;
 
-	Weapon enemyWeapons[4];
-	AIProperties aiProperties[4];
+	EnemySpawner enemySpawner;
 
 private:
 	void colorFloorTiles();
 	void colorBorderTiles();
 	void colorSafeZoneTiles();
-	void prepareSafeZoneTiles(int tileGridLayers);
-	void prepareAI();
-	void prepareWeapons();	
+	void colorEnemyAuraTiles();
+	void cleanFloorTiles();
+	void prepareSafeZoneTiles(int tileGridLayers);	
 	void spatialPartitionSafeRoomTiles();
+	void updatePlayerProjectiles(UpdateInfo info);
+	void updateEnemyProjectiles(UpdateInfo info);
+	void updateEnemies(UpdateInfo info);
+	void updatePlayer(UpdateInfo info);
+	void updateBorderTiles();
 
-public:
-	bool active;
+public:	
 	Player * player;
 
 public:
 	Territory();
-	Territory(Vector2f position, float radius, World * world);
+	Territory(Vector2f position, float radius, World * world, SpawnConfiguration spawnConfig);
 	~Territory();
 	queue<Entity *> *getSpawnQueue();
 
@@ -86,7 +91,12 @@ public:
 	void removeEntity(Entity * entity);
 	void integrateSpawnQueue();
 
-	Vector2f getSpawnLocation();
+	vector<Vector2f> getSpawnPoints();
+
+	void activate(Player * player);
+	void deactivate();
+	bool isActive();
+	bool isCleared();
 
 	Rect<float> getBoundingBox();
 

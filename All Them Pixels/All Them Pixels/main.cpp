@@ -22,39 +22,22 @@ int main(int argc, char ** argv)
     RenderWindow window(videoMode, windowtitle, 7, settings);
 	World world(Vector2f(), 2048, 0, 1);
 	Territory * t = world.getTerritory(AxialCoordinates(0, 0));
-	Player * player;
-	PlayerConfiguration playerconfig;
-	PlayerCustomizationUI ui(Vector2f(0, 0));
-	VertexCluster playerCluster;
+	
+	PlayerCustomizationUI ui;
 	Time sleepDuration = milliseconds(updateInterval);
 	UpdateInfo info;
 	Sounds sounds = Sounds();
 	//Listener listener;
 
-	playerCluster.create(VertexCluster::HexagonSource);
-	playerCluster.create(VertexCluster::RectangleSource);
-
 	info.updateInterval = updateInterval;
 	info.elapsedGameTime = 0;
 
-	playerconfig.hp = 1000000;
-	playerconfig.speed = 1.5;
-	playerconfig.weaponConfig.cooldown = 100;
-	playerconfig.weaponConfig.damage = 100;
-	playerconfig.weaponConfig.piercing = 1;
-	playerconfig.weaponConfig.speed = 20;
-	playerconfig.weaponConfig.spread = 5;
-	playerconfig.weaponConfig.ttl = 55;
+	world.activate(AxialCoordinates());
 
-	player = new Player(t->getSpawnQueue(), playerconfig, Vector2f(0, 0), playerCluster.getCollection(0));
-
-	t->active = true;
-	t->player = player;
-	t->addEntity(player);
-
-	while (world.isActive() && window.isOpen())
+	while (!world.isCleared() && window.isOpen())
     {
 		Event event;
+		Player * player = world.getCurrentTerritory()->player;
 
 		while (window.pollEvent(event))
 		{
@@ -65,8 +48,6 @@ int main(int argc, char ** argv)
 		}
 		info.elapsedGameTime += updateInterval;
 
-		Vector2f center = window.getView().getCenter();
-		//listener.setPosition(center.x, center.y, 0.0f);
 		world.update(info, &sounds);
 		window.setView(world.getView(window.getView()));
 
@@ -82,7 +63,6 @@ int main(int argc, char ** argv)
 
 		window.clear();
 		world.draw(&window);
-		window.draw(playerCluster); // This contains the player and all its projectiles.
 		
 		if (player->getIsInSafeZone())
 		{
