@@ -36,7 +36,7 @@ class Enemy;
 class Weapon;
 class VertexCluster;
 
-class Territory
+class Territory : public Drawable
 {
 private:
 	bool active;
@@ -101,6 +101,7 @@ public:
 	Rect<float> getBoundingBox();
 
 	void cleanup();
-	void draw(RenderWindow * window);
+	virtual void draw(RenderTarget& target, RenderStates states) const;
+
 	void update(UpdateInfo info, Sounds * sounds);
 };

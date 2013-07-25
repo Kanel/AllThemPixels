@@ -12,7 +12,7 @@ using namespace sf;
 
 class Territory;
 
-class World
+class World : public Drawable
 {
 private:
 	float territoryRadius;
@@ -42,7 +42,8 @@ public:
 	bool isActive();
 	bool isCleared();
 
-	void draw(RenderWindow * window);
+	virtual void draw(RenderTarget& target, RenderStates states) const;
+
 	void update(UpdateInfo info, Sounds * sounds);
 	View getView(View reference);
 };

@@ -55,15 +55,18 @@
     <Filter Include="Header Files\AI">
       <UniqueIdentifier>{f1a61966-e5dc-43ed-af20-c103e78b84f5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Effect">
+      <UniqueIdentifier>{ac14750b-f33f-4583-b21e-1c432fb7e489}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Effect">
+      <UniqueIdentifier>{abc15f6b-47df-4a94-be17-ee8412e0aa25}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Entity.cpp">
-      <Filter>Source Files\Entities</Filter>
-    </ClCompile>
-    <ClCompile Include="GlareEffect.cpp">
       <Filter>Source Files\Entities</Filter>
     </ClCompile>
     <ClCompile Include="Destructible.cpp">
@@ -147,11 +150,14 @@
     <ClCompile Include="AlphaShape.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Cero.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="DelaunayTessalation.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Cero.cpp">
+      <Filter>Source Files\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="GlareEffect.cpp">
+      <Filter>Source Files\Effect</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -159,9 +165,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Entity.h">
-      <Filter>Header Files\Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="GlareEffect.h">
       <Filter>Header Files\Entities</Filter>
     </ClInclude>
     <ClInclude Include="Player.h">
@@ -257,8 +260,14 @@
     <ClInclude Include="DelaunayTessalation.h">
       <Filter>Header Files\Shapes</Filter>
     </ClInclude>
+    <ClInclude Include="Effect.h">
+      <Filter>Header Files\Effect</Filter>
+    </ClInclude>
     <ClInclude Include="Cero.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="GlareEffect.h">
+      <Filter>Header Files\Effect</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

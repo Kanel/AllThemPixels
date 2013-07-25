@@ -164,7 +164,7 @@ bool World::isCleared()
 	return territory->isCleared();
 }
 
-void World::draw(RenderWindow * window)
+void World::draw(RenderTarget& target, RenderStates states) const
 {
 	for (int i = 0; i < matrixSize; i++)
 	{
@@ -172,14 +172,14 @@ void World::draw(RenderWindow * window)
 		{
 			if (territories[i][j] != NULL)
 			{
-				if (Collision::isWithinWindow(territories[i][j]->getBoundingBox(), window->getView()))
+				if (Collision::isWithinWindow(territories[i][j]->getBoundingBox(), target.getView()))
 				{
-					territories[i][j]->draw(window);
+					target.draw(*(territories[i][j]));
 				}
 			}
 		}
 	}
-	window->draw(playerCluster);
+	target.draw(playerCluster);
 }
 
 void World::update(UpdateInfo info, Sounds * sounds)

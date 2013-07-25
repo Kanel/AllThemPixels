@@ -127,6 +127,7 @@
     <ClInclude Include="Config.h" />
     <ClInclude Include="DelaunayTessalation.h" />
     <ClInclude Include="Destructible.h" />
+    <ClInclude Include="Effect.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="EnemySpawner.h" />
     <ClInclude Include="Entity.h" />

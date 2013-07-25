@@ -679,14 +679,14 @@ void Territory::cleanup()
 	}
 }
 
-void Territory::draw(RenderWindow * window)
+void Territory::draw(RenderTarget& target, RenderStates states) const
 {	
-	window->draw(tileCluster);
-	window->draw(entityCluster);
+	target.draw(tileCluster);
+	target.draw(entityCluster);
 
 	if (active)
 	{
-		player->draw(window);
+		target.draw(*player);
 	}
 }
 

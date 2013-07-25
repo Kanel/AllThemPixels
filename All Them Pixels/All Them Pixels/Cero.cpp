@@ -83,7 +83,6 @@ void Cero::update(UpdateInfo info)
 			B = D;
 			AA = CC;
 		}
-		bool gröt = true;
 	}
 
 	centerCircle[0] = Vertex(Vector2f(), Color(255, 0, 0));

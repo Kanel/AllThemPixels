@@ -175,11 +175,11 @@ void Player::fade()
 	}
 }
 
-void Player::draw(RenderWindow * window)
+void Player::draw(RenderTarget& target, RenderStates states) const
 {
-	window->draw(shape, shapeCount, PrimitiveType::Quads);
-	window->draw(aimBoxShape, aimboxShapeCount, PrimitiveType::Quads);
-	window->draw(healthBar);
+	target.draw(shape, shapeCount, PrimitiveType::Quads);
+	target.draw(aimBoxShape, aimboxShapeCount, PrimitiveType::Quads);
+	target.draw(healthBar);
 }
 
 void Player::update(UpdateInfo info)

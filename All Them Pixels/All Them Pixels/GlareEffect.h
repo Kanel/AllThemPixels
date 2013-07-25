@@ -6,7 +6,7 @@
 
 using namespace sf;
 
-class GlareEffect : public Entity
+class GlareEffect : public Entity, public Drawable
 {
 private:
 	float hwd;
@@ -56,6 +56,7 @@ public:
 	Rect<float> getBoundingBox() override;
 
 	void applyTransform(Transform transform) override;
-	void draw(RenderWindow * window);
+
+	virtual void draw(RenderTarget& target, RenderStates states) const;
 	void update(UpdateInfo info) override;
 };

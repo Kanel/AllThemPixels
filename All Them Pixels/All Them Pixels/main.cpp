@@ -5,6 +5,7 @@
 #include "PlayerCustomizationUI.h"
 #include "VertexCluster.h"
 #include "Sounds.h"
+#include "Cero.h";
 #include <SFML/Graphics.hpp>
 #include <iostream>
 
@@ -28,6 +29,8 @@ int main(int argc, char ** argv)
 	UpdateInfo info;
 	Sounds sounds = Sounds();
 	//Listener listener;
+	//GlareEffect effect(Vector2f());
+	Cero cero(Vector2f(), 200);
 
 	info.updateInterval = updateInterval;
 	info.elapsedGameTime = 0;
@@ -48,6 +51,7 @@ int main(int argc, char ** argv)
 		}
 		info.elapsedGameTime += updateInterval;
 
+		cero.update(info);
 		world.update(info, &sounds);
 		window.setView(world.getView(window.getView()));
 
@@ -62,7 +66,7 @@ int main(int argc, char ** argv)
 		}
 
 		window.clear();
-		world.draw(&window);
+		window.draw(world);
 		
 		if (player->getIsInSafeZone())
 		{

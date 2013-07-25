@@ -27,7 +27,7 @@ struct PlayerSkillPoints
 	int commonUsed;
 };
 
-class Player : public Destructible
+class Player : public Destructible, public Drawable
 {
 public:
 	queue<Entity *> *spawnQueue;
@@ -78,6 +78,6 @@ public:
 
 	void fade();
 
-	void draw(RenderWindow * window);
+	virtual void draw(RenderTarget& target, RenderStates states) const;
 	void update(UpdateInfo info) override;
 };

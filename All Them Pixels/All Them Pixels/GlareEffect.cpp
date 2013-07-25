@@ -1,22 +1,5 @@
 #include "GlareEffect.h"
 
-		/*if (c1.getElapsedTime().asMilliseconds() >= 10)
-		{
-			Time t = c.getElapsedTime();
-			float a = 10 / t.asMilliseconds() + 0.1;
-			float b = 40 / t.asMilliseconds() + 2;
-
-			glare.outerShape[10].position.y += a;
-			glare.outerShape[0].position.y -= a;
-			glare.outerShape[20].position.y -= a;
-			glare.outerShape[6].position.x -= b;
-			glare.outerShape[4].position.x -= b;
-			glare.outerShape[14].position.x += b;
-			glare.outerShape[16].position.x += b;
-			
-			c1.restart();
-		}*/
-
 void GlareEffect::applyTransform(Transform transform, VertexArray &vertices)
 {
 	for (int i = 0; i < vertices.getVertexCount(); i++)
@@ -164,13 +147,13 @@ void GlareEffect::applyTransform(Transform transform)
 	applyTransform(transform, outerShape);
 }
 
-void GlareEffect::draw(RenderWindow * window)
+void GlareEffect::draw(RenderTarget& target, RenderStates states) const
 {
-	window->draw(circle);
-	window->draw(innerShape);
-	window->draw(outerShape);
+	target.draw(circle);
+	target.draw(innerShape);
+	target.draw(outerShape);
 	
-	window->draw(aimVertices, 2, PrimitiveType::Lines);
+	target.draw(aimVertices, 2, PrimitiveType::Lines);
 
 }
 
