@@ -85,9 +85,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AI.cpp" />
+    <ClCompile Include="AlphaShape.cpp" />
+    <ClCompile Include="Cero.cpp" />
     <ClCompile Include="CircleBar.cpp" />
     <ClCompile Include="Collision.cpp" />
     <ClCompile Include="ColorFade.cpp" />
+    <ClCompile Include="DelaunayTessalation.cpp" />
     <ClCompile Include="Destructible.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="EnemySpawner.cpp" />
@@ -116,10 +119,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AI.h" />
+    <ClInclude Include="AlphaShape.h" />
+    <ClInclude Include="Cero.h" />
     <ClInclude Include="CircleBar.h" />
     <ClInclude Include="Collision.h" />
     <ClInclude Include="ColorFade.h" />
     <ClInclude Include="Config.h" />
+    <ClInclude Include="DelaunayTessalation.h" />
     <ClInclude Include="Destructible.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="EnemySpawner.h" />

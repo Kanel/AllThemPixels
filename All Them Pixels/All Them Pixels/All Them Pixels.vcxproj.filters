@@ -144,6 +144,15 @@
     <ClCompile Include="EnemySpawner.cpp">
       <Filter>Source Files\AI</Filter>
     </ClCompile>
+    <ClCompile Include="AlphaShape.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Cero.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DelaunayTessalation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="UpdateInfo.h">
@@ -241,6 +250,15 @@
     </ClInclude>
     <ClInclude Include="EnemySpawner.h">
       <Filter>Header Files\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="AlphaShape.h">
+      <Filter>Header Files\Shapes</Filter>
+    </ClInclude>
+    <ClInclude Include="DelaunayTessalation.h">
+      <Filter>Header Files\Shapes</Filter>
+    </ClInclude>
+    <ClInclude Include="Cero.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
