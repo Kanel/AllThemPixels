@@ -218,6 +218,7 @@ void Territory::updatePlayerProjectiles(UpdateInfo info)
 					else
 					{
 						projectile->expend();
+						effects.push_back(new ParticleSystem(info.elapsedGameTime, 100, projectile->getPosition(), entityCluster.getCollection(1)));
 					}
 				}
 			}
@@ -248,6 +249,7 @@ void Territory::updateEnemyProjectiles(UpdateInfo info)
 				else
 				{
 					projectile->expend();
+					effects.push_back(new ParticleSystem(info.elapsedGameTime, 100, projectile->getPosition(), entityCluster.getCollection(1)));
 				}
 			}
 		}
@@ -327,6 +329,14 @@ void Territory::updatePlayer(UpdateInfo info)
 				}
 			}
 		}
+	}
+}
+
+void Territory::updateEffects(UpdateInfo info)
+{
+	for (auto effect : effects)
+	{
+		effect->update(info);
 	}
 }
 
@@ -426,7 +436,6 @@ Territory::Territory(Vector2f position, float radius, World * world, SpawnConfig
 	colorFloorTiles();
 	colorBorderTiles();
 	colorSafeZoneTiles();
-
 }
 
 Territory::~Territory()
@@ -448,6 +457,11 @@ Territory::~Territory()
 		delete projectile;		
 	}
 
+	for (auto effect : effects)
+	{
+		delete effect;		
+	}
+
 	for (int i = 0; i < floorTilesLength; i++)
 	{
 		for (int j = 0; j < floorTilesLength; j++)
@@ -457,7 +471,9 @@ Territory::~Territory()
 				delete floorTiles[i][j];
 			}
 		}
+		delete[] floorTiles[i];
 	}
+	delete[] floorTiles;
 }
 
 queue<Entity *> *Territory::getSpawnQueue()
@@ -625,7 +641,7 @@ void Territory::cleanup()
 
 		if (entity->isExpended())
 		{
-			it = enemyProjectiles.erase(it);
+			it = enemyProjectiles.erase(it);			
 
 			delete entity;
 		}
@@ -703,8 +719,11 @@ void Territory::update(UpdateInfo info, Sounds * sounds)
 	// Check if the player is hit by enemy projectiles.
 	updateEnemyProjectiles(info);
 
-	// Player update and safe zone checks.
+	// Update player and safe zone checks.
 	updatePlayer(info);
+
+	// Update all effects.
+	updateEffects(info);
 
 	// Spawn enemy
 	enemySpawner.update(getSpawnPoints(), spawnQueue, entityCluster.getCollection(1), entityCluster.getCollection(0), info);

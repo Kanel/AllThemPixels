@@ -21,6 +21,7 @@ class Cero : public Transformable, public Drawable
 {
 private:
 	int particleCount;
+	int radius;
 	int centerRadius;
 	int centerSides;
 	Vector2f position;

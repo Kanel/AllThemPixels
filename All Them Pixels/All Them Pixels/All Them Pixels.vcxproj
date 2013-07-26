@@ -92,6 +92,7 @@
     <ClCompile Include="ColorFade.cpp" />
     <ClCompile Include="DelaunayTessalation.cpp" />
     <ClCompile Include="Destructible.cpp" />
+    <ClCompile Include="Effect.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="EnemySpawner.cpp" />
     <ClCompile Include="Entity.cpp" />
@@ -102,6 +103,7 @@
     <ClCompile Include="HexagonGrid.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MontoneChain.cpp" />
+    <ClCompile Include="ParticleSystem.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayerCustomizationUI.cpp" />
     <ClCompile Include="Projectile.cpp" />
@@ -138,6 +140,7 @@
     <ClInclude Include="Hexagon.h" />
     <ClInclude Include="HexagonGrid.h" />
     <ClInclude Include="MonotoneChain.h" />
+    <ClInclude Include="ParticleSystem.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerCustomizationUI.h" />
     <ClInclude Include="Projectile.h" />

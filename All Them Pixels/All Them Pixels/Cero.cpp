@@ -5,6 +5,8 @@ Cero::Cero(Vector2f position, int radius)
 	float angle;
 	float currentAngle = 0;
 
+	this->radius = radius;
+
 	centerSides = 32;
 	centerRadius = 10;	
 	spirals = 5;
@@ -45,7 +47,7 @@ void Cero::update(UpdateInfo info)
 	activeSegemnts = spiralSegments * progress;
 	rotation = info.elapsedGameTime / 25.0f;
 	spiralBend = 30 + (20 * log10(info.elapsedGameTime / 150.0f));	
-	centerRadius = 50 - 50 * exp(-info.elapsedGameTime / 250.0f);
+	centerRadius = radius - radius * exp(-info.elapsedGameTime / 250.0f);
 
 	for (int a = 0; a < spirals; a++, spiralAngle += spiralAngleIncrement)
 	{

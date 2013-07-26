@@ -17,6 +17,7 @@
 #include "Config.h"
 #include "FloorTile.h"
 #include "EnemySpawner.h"
+#include "ParticleSystem.h"
 #include <SFML/Graphics.hpp>
 #include <list>
 #include <queue>
@@ -48,6 +49,7 @@ private:
 	list<Projectile *> enemyProjectiles;
 	list<Projectile *> playerProjectiles;
 	list<Enemy *> enemies;
+	list<Effect *> effects;
 	Vector2i offset;
 	FloorTile *** floorTiles;
 	vector<AxialCoordinates> borderCoordinates;
@@ -74,6 +76,7 @@ private:
 	void updateEnemyProjectiles(UpdateInfo info);
 	void updateEnemies(UpdateInfo info);
 	void updatePlayer(UpdateInfo info);
+	void updateEffects(UpdateInfo info);
 	void updateBorderTiles();
 
 public:	

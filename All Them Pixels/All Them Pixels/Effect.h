@@ -5,13 +5,22 @@
 
 using namespace sf;
 
-class Effect : public Drawable, public Transformable
+class Effect
 {
-private:
-
+protected:
+	int start;
+	int duration;
+	int age;
+	bool expended;
+	Vector2f position;
 
 public:
-	virtual bool isExpended() = 0;
+	Effect(int start, int duration);
+	virtual ~Effect();
+
+	virtual Vector2f getPosition();
+	virtual void setPosition(Vector2f position);
+
+	virtual bool isExpended();
 	virtual void update(UpdateInfo info) = 0;
-	virtual void draw(RenderTarget& target, RenderStates states) const = 0;
 };
