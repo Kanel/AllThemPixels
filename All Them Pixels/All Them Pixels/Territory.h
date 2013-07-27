@@ -78,6 +78,7 @@ private:
 	void updatePlayer(UpdateInfo info);
 	void updateEffects(UpdateInfo info);
 	void updateBorderTiles();
+	void borderControl();
 
 public:	
 	Player * player;

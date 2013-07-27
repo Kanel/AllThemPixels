@@ -62,7 +62,7 @@ World::World(Vector2f position, float territoryRadius, float territorySpacing, i
 	this->player = NULL;
 
 	playerconfig.hp = 1000000;
-	playerconfig.speed = 1.5;
+	playerconfig.speed = 3.5;
 	playerconfig.weaponConfig.cooldown = 100;
 	playerconfig.weaponConfig.damage = 100;
 	playerconfig.weaponConfig.piercing = 1;
@@ -136,7 +136,7 @@ void World::changeTerritory(Vector2f position)
 	current->deactivate();
 	next->activate(player);
 
-	player->setPosition(next->getPosition());
+	player->setPosition(position);//next->getPosition());
 
 	currentTerritoryCoordinates = nextCoordinates;
 }
