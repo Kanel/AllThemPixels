@@ -5,7 +5,6 @@
 #include "PlayerCustomizationUI.h"
 #include "VertexCluster.h"
 #include "Sounds.h"
-#include "Cero.h";
 #include <SFML/Graphics.hpp>
 #include <iostream>
 
@@ -21,7 +20,7 @@ int main(int argc, char ** argv)
 	ContextSettings settings(0, 0, 8, 2, 0);
 	VideoMode videoMode(1024, 1024);
     RenderWindow window(videoMode, windowtitle, 7, settings);
-	World world(Vector2f(), 2048, 0, 4);
+	World world(Vector2f(), 2048, 0, 1);
 	Territory * t = world.getTerritory(AxialCoordinates(0, 0));
 	
 	PlayerCustomizationUI ui;
@@ -29,8 +28,6 @@ int main(int argc, char ** argv)
 	UpdateInfo info;
 	Sounds sounds = Sounds();
 	//Listener listener;
-	//GlareEffect effect(Vector2f());
-	Cero cero(Vector2f(), 200);
 
 	info.updateInterval = updateInterval;
 	info.elapsedGameTime = 0;
@@ -51,7 +48,6 @@ int main(int argc, char ** argv)
 		}
 		info.elapsedGameTime += updateInterval;
 
-		cero.update(info);
 		world.update(info, &sounds);
 		window.setView(world.getView(window.getView()));
 

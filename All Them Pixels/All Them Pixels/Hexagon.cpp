@@ -92,6 +92,23 @@ ConvexHull Hexagon::getConvexHull()
 	return convexHull;
 }
 
+Vector2f * Hexagon::getPoints(int &count)
+{
+	Vector2f * points;
+
+	count = 6;
+	points = new Vector2f[count];
+
+	points[0] = (*vertexSource)[vertexOffset + 1].position;
+	points[1] = (*vertexSource)[vertexOffset + 2].position;
+	points[2] = (*vertexSource)[vertexOffset + 3].position;
+	points[3] = (*vertexSource)[vertexOffset + 4].position;
+	points[4] = (*vertexSource)[vertexOffset + 5].position;
+	points[5] = (*vertexSource)[vertexOffset + 6].position;
+
+	return points;
+}
+
 Color Hexagon::getColor()
 {
 	return (*vertexSource)[vertexOffset].color;

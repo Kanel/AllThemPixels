@@ -1,6 +1,6 @@
 #include  "Projectile.h"
 
-Projectile::Projectile(Vector2f position, Vector2f speed, float damage, int piercing, int ttl, VertexCollection * vertexSource, Color color, EntityTypes type) : Entity(position), shape(position, 5, color, Hexagon::FlatTopped, vertexSource), piercedTargets(piercing - 1)
+Projectile::Projectile(Vector2f position, Vector2f speed, float damage, int piercing, int ttl, VertexCollection * vertexSource, Color color, EntityTypes type) : Entity(position), shape(position, 5, color, Hexagon::FlatTopped, vertexSource), piercedTargets(piercing)
 {
 	this->ttl = ttl;
 	this->speed = speed;
@@ -10,6 +10,11 @@ Projectile::Projectile(Vector2f position, Vector2f speed, float damage, int pier
 	this->piercing = piercing;
 
 	piercedTargetsIndex = 0;
+}
+
+Vector2f Projectile::getSpeed()
+{
+	return speed;
 }
 
 float Projectile::getDamage()
@@ -28,13 +33,15 @@ void Projectile::addPiercedTarget(Entity * entity)
 
 	piercedTargets[piercedTargetsIndex++] = entity;
 	piercing--;
+
+	expended = piercing <= 0;
 }
 
 bool Projectile::hasPierced(Entity * entity)
 {
-	for (auto entity : piercedTargets)
+	for (auto target : piercedTargets)
 	{
-		if (entity == entity)
+		if (target == entity)
 		{
 			return true;
 		}

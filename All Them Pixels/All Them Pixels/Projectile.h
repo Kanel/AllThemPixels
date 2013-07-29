@@ -22,6 +22,8 @@ protected:
 public:
 	Projectile(Vector2f position, Vector2f speed, float damage, int piercing, int ttl, VertexCollection * vertexSource, Color color = Color(0,0,0,255), EntityTypes type = ProjectileEntity);
 
+	Vector2f getSpeed();
+
 	float getDamage();
 	int getPiercing();
 	void addPiercedTarget(Entity * entity);

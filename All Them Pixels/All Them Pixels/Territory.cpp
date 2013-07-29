@@ -203,26 +203,27 @@ void Territory::updatePlayerProjectiles(UpdateInfo info)
 	{
 		projectile->update(info);
 
-		for (auto enemy : enemies)
+		if (!projectile->isExpended())
 		{
-			if (Collision::isClose(enemy, projectile))
-			{					
-				enemy->modHP(-projectile->getDamage());
-
-				if (!projectile->hasPierced(enemy))
+			for (auto enemy : enemies)
+			{
+				if (Collision::isClose(enemy, projectile))
 				{
-					if (projectile->getPiercing() > 1)
+					if (!projectile->hasPierced(enemy))
 					{
+						enemy->modHP(-projectile->getDamage());						
 						projectile->addPiercedTarget(enemy);
-					}
-					else
-					{
-						projectile->expend();
-						effects.push_back(new ParticleSystem(info.elapsedGameTime, 100, projectile->getPosition(), entityCluster.getCollection(1)));
+
+						if (projectile->isExpended())
+						{
+							effects.push_back(new ParticleSystem(info.elapsedGameTime, 100, projectile->getPosition(), projectile->getSpeed(), entityCluster.getCollection(2)));
+						
+							break;
+						}
 					}
 				}
 			}
-		}		
+		}
 	}
 }
 
@@ -249,7 +250,7 @@ void Territory::updateEnemyProjectiles(UpdateInfo info)
 				else
 				{
 					projectile->expend();
-					effects.push_back(new ParticleSystem(info.elapsedGameTime, 100, projectile->getPosition(), entityCluster.getCollection(1)));
+					effects.push_back(new ParticleSystem(info.elapsedGameTime, 100, projectile->getPosition(), projectile->getSpeed(), entityCluster.getCollection(2)));
 				}
 			}
 		}
@@ -470,6 +471,7 @@ Territory::Territory(Vector2f position, float radius, World * world, SpawnConfig
 
 	// Prepare vertex collections.
 	tileCluster.create(8, grid.getNumberOfTiles(layers), 1, PrimitiveType::TrianglesStrip);
+	entityCluster.create(VertexCluster::HexagonSource);
 	entityCluster.create(VertexCluster::HexagonSource);
 	entityCluster.create(VertexCluster::RectangleSource);
 

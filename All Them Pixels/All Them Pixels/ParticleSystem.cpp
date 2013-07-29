@@ -42,7 +42,7 @@ Vector2f ParticleSystem::getRandomDirection(float base, float variance)
 	return Vector2f(cosf(angle), sinf(angle));
 }
 
-ParticleSystem::ParticleSystem(int start, int duration, Vector2f position, VertexCollection * vertexSource) : Effect(start, duration)
+ParticleSystem::ParticleSystem(int start, int duration, Vector2f position, Vector2f systemSpeed, VertexCollection * vertexSource) : Effect(start, duration)
 {
 	// Default settings
 	age = 0;
@@ -62,7 +62,7 @@ ParticleSystem::ParticleSystem(int start, int duration, Vector2f position, Verte
 	directionVariance = 6.29f;
 	speed = 100;
 	speedVariance = 100;
-	spawnRate = 200;
+	spawnRate = 1500;
 	lastSpawnEvent = 0;
 	color[0] = Color(0, 0, 255, 150);
 	color[1] = Color(0, 0, 255, 50);
@@ -70,6 +70,7 @@ ParticleSystem::ParticleSystem(int start, int duration, Vector2f position, Verte
 
 	this->position = position;
 	this->vertexSource = vertexSource;
+	this->systemSpeed = systemSpeed;
 
 	// Make sure to initilize random (should unravel why)
 	srand (time(NULL));
@@ -156,7 +157,7 @@ void ParticleSystem::update(UpdateInfo info)
 		(*vertexSource)[particle.vertexOffset + 3].color = particle.color;
 		Vector2f abc = particle.speed * (info.updateInterval / 1000.0f);	
 		// Update particle position
-		particle.position += particle.speed * (info.updateInterval / 1000.0f);
+		particle.position += systemSpeed * 0.3f + particle.speed * (info.updateInterval / 1000.0f);
 
 		// Update particle visual
 		(*vertexSource)[particle.vertexOffset + 0].position = Vector2f(particle.position.x + (particle.size / 2), particle.position.y + (particle.size / 2));

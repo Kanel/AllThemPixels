@@ -35,6 +35,7 @@ public:
 	Style getStyle();
 	Rect<float> getBoundingBox();
 	ConvexHull getConvexHull();
+	Vector2f * getPoints(int &count);
 	Color getColor();
 	void setColor(Color color);
 

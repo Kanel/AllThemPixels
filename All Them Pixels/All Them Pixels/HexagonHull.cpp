@@ -50,3 +50,58 @@ void HexagonHull::applyTransform(Transform transform)
 		hexagons[i]->applyTransform(transform);
 	}
 }
+
+Rect<float> HexagonHull::getBoundingBox()
+{
+	float minX = FLT_MAX;
+	float maxX = FLT_MIN;
+	float minY = FLT_MAX;
+	float maxY = FLT_MIN;
+
+	for (int i = 0; i < hexagonCount; i++)
+	{
+		int count;
+		Vector2f * points = hexagons[i]->getPoints(count);
+
+		for (int j = 0; j < count; j++)
+		{
+			if (points[j].x < minX)
+			{
+				minX = points[j].x;
+			}
+			else if (maxX < points[j].x)
+			{
+				maxX = points[j].x;
+			}
+
+			if (points[j].y < minY)
+			{
+				minY = points[j].y;
+			}
+			else if (maxY < points[j].y)
+			{
+				maxY = points[j].y;
+			}
+		}
+		delete[] points;
+	}
+	return Rect<float>(minX, minY, maxX - minX, maxY - minY);
+}
+
+ConvexHull HexagonHull::getConvexHull()
+{
+	vector<Vector2f> vertices;
+
+	for (int i = 0; i < hexagonCount; i++)
+	{
+		int count;
+		Vector2f * points = hexagons[i]->getPoints(count);
+
+		for (int j = 1; j < count; j++)
+		{
+			vertices.push_back(points[i]);
+		}
+		delete[] points;
+	}
+	return MonotoneChain::getConvexHull(vertices);
+}

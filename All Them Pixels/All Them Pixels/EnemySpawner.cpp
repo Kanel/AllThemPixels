@@ -61,7 +61,7 @@ void EnemySpawner::update(vector<Vector2f> spawnPoints, queue<Entity *> &spawnQu
 		{
 			int spawnIndex = rand() % spawnPoints.size();
 			EnemyClass enemyClass = enemyClasses[rand() % enemyClasses.size()];
-			Enemy * enemy = new Enemy(100, spawnPoints[spawnIndex], new HexagonHull(spawnPoints[spawnIndex], enemyClass.points / 10, sqrtf(enemyClass.points), Hexagon::FlatTopped, projectileVertexSource));
+			Enemy * enemy = new Enemy(100, spawnPoints[spawnIndex], new HexagonHull(spawnPoints[spawnIndex], enemyClass.points / 10, sqrtf(enemyClass.points), Hexagon::FlatTopped, enemyVertexSource));
 			
 			enemy->educate(enemyClass.aiProperties);
 			enemy->arm(Weapon(enemyClass.weaponconfiguration, projectileVertexSource));

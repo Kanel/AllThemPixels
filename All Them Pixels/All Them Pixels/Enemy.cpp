@@ -40,20 +40,12 @@ void Enemy::applyTransform(Transform transform)
 
 Rect<float> Enemy::getBoundingBox()
 {
-	return Rect<float>(position.x - 10, position.y - 10, 20, 20);
+	return hull->getBoundingBox();
 }
 
 ConvexHull Enemy::getConvexHull()
 {
-	vector<Vector2f> vertices;
-
-	/*for (int i = 0; i < vertexCount; i++)
-	{
-		vertices.push_back((*vertexSource)[vertexOffset + i].position);
-	}*/
-	assert(false && "Cannot be used, fix it!");
-
-	return MonotoneChain::getConvexHull(vertices);
+	return hull->getConvexHull();
 }
 
 void Enemy::update(UpdateInfo info)

@@ -42,6 +42,7 @@ public:
 	Color color[3];
 	VertexCollection * vertexSource;
 	list<Particle> particles;
+	Vector2f systemSpeed;
 	
 private:
 	int getRandomInt(int min, int max);
@@ -52,7 +53,7 @@ private:
 	Vector2f getRandomDirection(float base, float variance);
 
 public:
-	ParticleSystem(int start, int duration, Vector2f position, VertexCollection * vertexSource);
+	ParticleSystem(int start, int duration, Vector2f position, Vector2f systemSpeed, VertexCollection * vertexSource);
 	virtual ~ParticleSystem();
 
 	void spawnParticle();
