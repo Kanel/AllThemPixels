@@ -3,7 +3,7 @@
 #define _USE_MATH_DEFINES
 
 #include "UpdateInfo.h"
-#include "AlphaShape.h"
+#include "Vector2fMath.h"
 #include <math.h>
 #include <list>
 #include <SFML\Graphics.hpp>

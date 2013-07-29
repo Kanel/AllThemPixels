@@ -64,9 +64,9 @@ ParticleSystem::ParticleSystem(int start, int duration, Vector2f position, Verte
 	speedVariance = 100;
 	spawnRate = 200;
 	lastSpawnEvent = 0;
-	color[0] = Color(0, 0, 0, 150);
-	color[1] = Color(0, 0, 0, 50);
-	color[2] = Color(0, 0, 0, 15);
+	color[0] = Color(0, 0, 255, 150);
+	color[1] = Color(0, 0, 255, 50);
+	color[2] = Color(0, 0, 255, 15);
 
 	this->position = position;
 	this->vertexSource = vertexSource;

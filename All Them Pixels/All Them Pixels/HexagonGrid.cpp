@@ -41,9 +41,14 @@ Vector3i HexagonGrid::hexRound(Vector3f cubeCoordiantes)
 	return Vector3i(rx, ry, rz);
 }
 
-HexagonGrid::HexagonGrid(Hexagon::Style style)
+HexagonGrid::HexagonGrid(Hexagon::Style style, float size)
 {
 	this->style = style;
+	this->size = size;
+	this->layer = 0;
+	this->segment = 6;
+	this->segmentPosition = 0;
+	this->nextCoordinate = AxialCoordinates();
 
 	neighbors[Up]		 = AxialCoordinates(0, -1);
 	neighbors[UpRight]	 = AxialCoordinates(1, -1);
@@ -63,7 +68,7 @@ int HexagonGrid::getNumberOfTilesInLayer(int layer)
 	return (layer > 0) ? layer * 6 : 1;
 }
 
-Vector2f HexagonGrid::getPosition(AxialCoordinates axialCoordinates, float size)
+Vector2f HexagonGrid::getPosition(AxialCoordinates axialCoordinates)
 {
 	float x;
 	float y;
@@ -81,7 +86,7 @@ Vector2f HexagonGrid::getPosition(AxialCoordinates axialCoordinates, float size)
 	return Vector2f(x, y);
 }
 
-AxialCoordinates HexagonGrid::getAxialCoordinates(Vector2f position, float size)
+AxialCoordinates HexagonGrid::getAxialCoordinates(Vector2f position)
 {
 	float q;
 	float r;
@@ -107,6 +112,37 @@ AxialCoordinates HexagonGrid::step(AxialCoordinates axialCoordinates, HexagonDir
 	return axialCoordinates + neighbors[direction]; 
 }
 
+AxialCoordinates HexagonGrid::next()
+{
+	AxialCoordinates current = nextCoordinate;
+
+	nextCoordinate = step(nextCoordinate, (HexagonGrid::HexagonDirection)((HexagonGrid::DownRight + segment) % 6));
+	segmentPosition++;
+
+	if (segmentPosition >= layer) // Check if the step was into a another segment.
+	{
+		segment++;
+		segmentPosition = 0;
+	}
+	if (segment >= 6) // Check if the segment has already been visited.
+	{
+		layer++;
+		segment = 0;
+		segmentPosition = 0;
+		nextCoordinate = AxialCoordinates(-layer, layer); // Change layer.
+	}
+	return current;
+}
+
+AxialCoordinates HexagonGrid::next(Vector2f &position)
+{
+	AxialCoordinates current = next();
+
+	position = getPosition(current);
+
+	return current;
+}
+
 vector<AxialCoordinates> HexagonGrid::getCornerRegionCoordinates(int corner)
 {
 	return vector<AxialCoordinates>();
@@ -130,13 +166,13 @@ vector<AxialCoordinates> HexagonGrid::getRingCoordinates(int layer)
 	return coordinates;
 }
 
-Hexagon *** HexagonGrid::generateGrid(Vector2f position, float hexagonRadius, int layers, VertexCollection * vertexSource)
+Hexagon *** HexagonGrid::generateGrid(Vector2f position, int layers, VertexCollection * vertexSource)
 {
 	int spacing = 0;
 	int matrixLength = (layers * 2) + 1;
 	Vector2i offset(layers, layers);
 	Hexagon *** matrix;
-	Vector2f hexagonPosition = position + getPosition(AxialCoordinates(0, 0), hexagonRadius);
+	Vector2f hexagonPosition = position + getPosition(AxialCoordinates(0, 0));
 	
 	// Allocate matrix.
 	matrix = new Hexagon**[matrixLength];
@@ -152,7 +188,7 @@ Hexagon *** HexagonGrid::generateGrid(Vector2f position, float hexagonRadius, in
 	}
 
 	// Populate matrix.
-	matrix[offset.x][offset.y] = new Hexagon(hexagonPosition, hexagonRadius - spacing, Color(255, 255, 255), style, vertexSource);
+	matrix[offset.x][offset.y] = new Hexagon(hexagonPosition, size - spacing, Color(255, 255, 255), style, vertexSource);
 
 	for (int k = 1; k <= layers; k++)
 	{
@@ -162,9 +198,9 @@ Hexagon *** HexagonGrid::generateGrid(Vector2f position, float hexagonRadius, in
 		{
 			for (int j = 0; j < k; j++)
 			{
-				hexagonPosition = position + getPosition(hexagon, hexagonRadius);
+				hexagonPosition = position + getPosition(hexagon);
 				int grayness = rand() % 30;
-				matrix[offset.x + hexagon.q][offset.y + hexagon.r] = new Hexagon(hexagonPosition, hexagonRadius - spacing, Color(255-grayness, 255-grayness, 255-grayness), style, vertexSource);
+				matrix[offset.x + hexagon.q][offset.y + hexagon.r] = new Hexagon(hexagonPosition, size - spacing, Color(255-grayness, 255-grayness, 255-grayness), style, vertexSource);
 				
 				hexagon = step(hexagon, (HexagonGrid::HexagonDirection)((HexagonGrid::DownRight + i) % 6));
 			}

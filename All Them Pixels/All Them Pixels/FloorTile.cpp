@@ -57,10 +57,10 @@ FloorTile *** FloorTile::generateGrid(Vector2f position, float hexagonRadius, in
 {
 	int spacing = 0;
 	int matrixLength = (layers * 2) + 1;
-	HexagonGrid grid(Hexagon::FlatTopped);
+	HexagonGrid grid(Hexagon::FlatTopped, hexagonRadius);
 	Vector2i offset(layers, layers);
 	FloorTile *** matrix;
-	Vector2f hexagonPosition = position + grid.getPosition(AxialCoordinates(0, 0), hexagonRadius);
+	Vector2f hexagonPosition = position + grid.getPosition(AxialCoordinates(0, 0));
 	
 	// Allocate matrix.
 	matrix = new FloorTile**[matrixLength];
@@ -86,7 +86,7 @@ FloorTile *** FloorTile::generateGrid(Vector2f position, float hexagonRadius, in
 		{
 			for (int j = 0; j < k; j++)
 			{
-				hexagonPosition = position + grid.getPosition(hexagon, hexagonRadius);
+				hexagonPosition = position + grid.getPosition(hexagon);
 				matrix[offset.x + hexagon.q][offset.y + hexagon.r] = new FloorTile(hexagonPosition, hexagonRadius - spacing, Color(), vertexSource);
 				
 				hexagon = grid.step(hexagon, (HexagonGrid::HexagonDirection)((HexagonGrid::DownRight + i) % 6));

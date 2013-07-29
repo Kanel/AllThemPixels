@@ -43,11 +43,11 @@ void Territory::colorSafeZoneTiles()
 // effect fades as the distance between the enemy and floor tiles increses.
 void Territory::colorEnemyAuraTiles()
 {
-	HexagonGrid grid(Hexagon::FlatTopped);
+	HexagonGrid grid(Hexagon::FlatTopped, hexagonRadius);
 
 	for (auto enemy : enemies)
 	{
-		AxialCoordinates coordinates = grid.getAxialCoordinates(enemy->getPosition() - getPosition(), hexagonRadius);
+		AxialCoordinates coordinates = grid.getAxialCoordinates(enemy->getPosition() - getPosition());
 		AxialCoordinates hexagon;
 		int layers = 5;
 		int x = offset.x + coordinates.q;
@@ -105,7 +105,7 @@ void Territory::colorEnemyAuraTiles()
 // Remove effects such as enemy aura from floor tiles.
 void Territory::cleanFloorTiles()
 {
-	HexagonGrid grid(Hexagon::FlatTopped);
+	HexagonGrid grid(Hexagon::FlatTopped, hexagonRadius);
 
 	for (int i = 0; i < floorTilesLength; i++)
 	{
@@ -131,7 +131,7 @@ void Territory::prepareSafeZoneTiles(int tileGridLayers)
 		{-tileGridLayers,	0 },
 	};
 	int layers = 10;	
-	HexagonGrid grid(Hexagon::FlatTopped);
+	HexagonGrid grid(Hexagon::FlatTopped, hexagonRadius);
 
 	for(int direction = 0; direction < 6; direction++)
 	{
@@ -437,11 +437,11 @@ Territory::Territory(Vector2f position, float radius, World * world, SpawnConfig
 	int numberOfLayersVertical;
 	int layers;
 	int spawnRingSize = 47;
-	HexagonGrid grid(Hexagon::FlatTopped);
+	HexagonGrid grid(Hexagon::FlatTopped, TERRITORY_TILE_SIZE);
 	WeaponConfiguration wc;
 
 	// Some variables.
-	this->hexagonRadius = TERRITORY_TILE_SIZE;
+	this->hexagonRadius = TERRITORY_TILE_SIZE; // If changed change the parameter to grid!
 	this->position = position;
 	this->radius = radius;
 	this->world = world;
@@ -638,8 +638,8 @@ void Territory::integrateSpawnQueue()
 vector<Vector2f> Territory::getSpawnPoints()
 {
 	bool found = false;	
-	HexagonGrid grid(Hexagon::FlatTopped);
-	AxialCoordinates origin = grid.getAxialCoordinates(player->getPosition() - position, hexagonRadius);
+	HexagonGrid grid(Hexagon::FlatTopped, hexagonRadius);
+	AxialCoordinates origin = grid.getAxialCoordinates(player->getPosition() - position);
 	vector<Vector2f> spawnPoints;
 
 	for (auto coordinate : spawnGrid)
@@ -651,7 +651,7 @@ vector<Vector2f> Territory::getSpawnPoints()
 		{
 			if (floorTiles[x][y] != NULL)
 			{
-				spawnPoints.push_back(grid.getPosition(coordinate, hexagonRadius));
+				spawnPoints.push_back(grid.getPosition(coordinate));
 			}
 		}
 	}

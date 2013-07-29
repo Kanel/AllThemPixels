@@ -1,22 +1,14 @@
 #include "Enemy.h"
 
-Enemy::Enemy(unsigned int hp, Vector2f position, VertexCollection * vertexSource) : Destructible(hp, position)
+Enemy::Enemy(unsigned int hp, Vector2f position, HexagonHull * hull) : Destructible(hp, position)
 {
-	Vertex vertices[6];
-
-	this->vertexSource = vertexSource;
-
 	type = EnemyEntity;
-	vertexCount = 4;	
-
-	Shapes::rectangle(vertices, 0, position, 20, 20, Color(0, 0, 160, 255));
-
-	vertexOffset = vertexSource->add(vertices);
+	this->hull = hull;
 }
 
 Enemy::~Enemy()
 {
-	vertexSource->remove(vertexOffset);
+	delete hull;
 }
 
 void Enemy::educate(AIProperties aiProperties)
@@ -43,10 +35,7 @@ void Enemy::applyTransform(Transform transform)
 {
 	Destructible::applyTransform(transform);
 
-	for (int i = 0; i < vertexCount; i++)
-	{
-		(*vertexSource)[vertexOffset + i].position = transform.transformPoint((*vertexSource)[vertexOffset + i].position);
-	}
+	hull->applyTransform(transform);
 }
 
 Rect<float> Enemy::getBoundingBox()
@@ -58,10 +47,11 @@ ConvexHull Enemy::getConvexHull()
 {
 	vector<Vector2f> vertices;
 
-	for (int i = 0; i < vertexCount; i++)
+	/*for (int i = 0; i < vertexCount; i++)
 	{
 		vertices.push_back((*vertexSource)[vertexOffset + i].position);
-	}
+	}*/
+	assert(false && "Cannot be used, fix it!");
 
 	return MonotoneChain::getConvexHull(vertices);
 }

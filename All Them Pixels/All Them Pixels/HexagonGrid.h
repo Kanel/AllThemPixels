@@ -42,6 +42,11 @@ public:
 	Hexagon::Style style;
 
 private:
+	int layer;
+	int segment;
+	int segmentPosition;
+	float size;
+	AxialCoordinates nextCoordinate;
 	Vector3f convertToCubeCoordinates(Vector2f axialCoordinates);
 	AxialCoordinates convertToAxialCoordinates(Vector3i cubeCoordinates);
 	Vector3i hexRound(Vector3f cubeCoordiantes);
@@ -58,16 +63,20 @@ public:
 	};
 
 public:
-	HexagonGrid(Hexagon::Style style);
+	HexagonGrid(Hexagon::Style style, float size);
+	//HexagonGrid(Hexagon::Style style, float size, AxialCoordinates origin);
 
 	int getNumberOfTiles(int layers);
 	int getNumberOfTilesInLayer(int layer);
 
-	Vector2f getPosition(AxialCoordinates axialCoordinates, float size);
-	AxialCoordinates getAxialCoordinates(Vector2f position, float size);
+	Vector2f getPosition(AxialCoordinates axialCoordinates);
+	AxialCoordinates getAxialCoordinates(Vector2f position);
 	AxialCoordinates step(AxialCoordinates axialCoordinates, HexagonDirection direction);
+
+	AxialCoordinates next();
+	AxialCoordinates next(Vector2f &position);
 
 	vector<AxialCoordinates> getCornerRegionCoordinates(int corner);
 	vector<AxialCoordinates> getRingCoordinates(int layer);
-	Hexagon *** generateGrid(Vector2f position, float hexagonRadius, int layers, VertexCollection * vertexSource);
+	Hexagon *** generateGrid(Vector2f position, int layers, VertexCollection * vertexSource);
 };

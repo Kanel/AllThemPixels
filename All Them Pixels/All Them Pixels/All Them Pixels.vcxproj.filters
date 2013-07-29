@@ -147,12 +147,6 @@
     <ClCompile Include="EnemySpawner.cpp">
       <Filter>Source Files\AI</Filter>
     </ClCompile>
-    <ClCompile Include="AlphaShape.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="DelaunayTessalation.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Cero.cpp">
       <Filter>Source Files\Effect</Filter>
     </ClCompile>
@@ -163,6 +157,9 @@
       <Filter>Source Files\Effect</Filter>
     </ClCompile>
     <ClCompile Include="ParticleSystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="HexagonHull.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -260,12 +257,6 @@
     <ClInclude Include="EnemySpawner.h">
       <Filter>Header Files\AI</Filter>
     </ClInclude>
-    <ClInclude Include="AlphaShape.h">
-      <Filter>Header Files\Shapes</Filter>
-    </ClInclude>
-    <ClInclude Include="DelaunayTessalation.h">
-      <Filter>Header Files\Shapes</Filter>
-    </ClInclude>
     <ClInclude Include="Effect.h">
       <Filter>Header Files\Effect</Filter>
     </ClInclude>
@@ -276,6 +267,9 @@
       <Filter>Header Files\Effect</Filter>
     </ClInclude>
     <ClInclude Include="ParticleSystem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="HexagonHull.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

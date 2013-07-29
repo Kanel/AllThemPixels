@@ -49,7 +49,7 @@ vector<WeaponConfiguration> World::getWeaponConfigurations()
 
 World::World(Vector2f position, float territoryRadius, float territorySpacing, int layers)
 {
-	HexagonGrid grid(Hexagon::PointyTopped);
+	HexagonGrid grid(Hexagon::PointyTopped, tileSize);
 	SpawnConfiguration spawnConfig;
 	PlayerConfiguration playerconfig;
 
@@ -107,7 +107,7 @@ World::World(Vector2f position, float territoryRadius, float territorySpacing, i
 		{
 			for (int j = 0; j < k; j++)
 			{
-				territories[offset.x + hexagon.q][offset.y + hexagon.r] = new Territory(position + grid.getPosition(hexagon, tileSize), territoryRadius, this, spawnConfig);
+				territories[offset.x + hexagon.q][offset.y + hexagon.r] = new Territory(position + grid.getPosition(hexagon), territoryRadius, this, spawnConfig);
 
 				hexagon = grid.step(hexagon, (HexagonGrid::HexagonDirection)((HexagonGrid::DownRight + i) % 6));
 			}
@@ -127,8 +127,8 @@ Territory * World::getTerritory(AxialCoordinates coordinates)
 
 void World::changeTerritory(Vector2f position)
 {
-	HexagonGrid grid(Hexagon::PointyTopped);
-	AxialCoordinates nextCoordinates = grid.getAxialCoordinates(position, tileSize);
+	HexagonGrid grid(Hexagon::PointyTopped, tileSize);
+	AxialCoordinates nextCoordinates = grid.getAxialCoordinates(position);
 	Territory * current = getTerritory(currentTerritoryCoordinates);
 	Territory * next = getTerritory(nextCoordinates);
 	Player * player = current->player;

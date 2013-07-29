@@ -5,6 +5,7 @@
 #include "Weapon.h"
 #include "VertexCollection.h"
 #include "SkillPoints.h"
+#include "HexagonHull.h"
 #include <SFML/Graphics/Vertex.hpp>
 
 using std::vector;
@@ -21,18 +22,16 @@ struct AIProperties
 class Enemy : public Destructible
 {
 protected:
-	int vertexCount;
-	int vertexOffset;
-	VertexCollection * vertexSource;
+	HexagonHull * hull;
 
 public:
 	AIProperties aiProperties;
 	Weapon weapon;
 
 public:
-	Enemy(unsigned int hp, Vector2f position, VertexCollection * vertexSource);
+	Enemy(unsigned int hp, Vector2f position, HexagonHull * hull);
 	~Enemy();
-	
+
 	void educate(AIProperties aiProperties);
 	void arm(Weapon weapon);
 

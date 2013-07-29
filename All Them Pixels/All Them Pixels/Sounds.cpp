@@ -36,7 +36,7 @@ void Sounds::toggleBGMusic(bool inSafe, bool on)
 
 void Sounds::play(SoundTypes what, Vector2f where)
 {
-	Sound * sound = new Sound();
+	/*Sound * sound = new Sound();
 
 	switch (what)
 	{
@@ -64,6 +64,6 @@ void Sounds::play(SoundTypes what, Vector2f where)
 	sound = soundQueue.back();
 	if (sound->getStatus() == Sound::Stopped) //not sure if works
 		soundQueue.pop_back();
-
+		*/
 	
 }
