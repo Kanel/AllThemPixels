@@ -36,25 +36,29 @@ void Sounds::toggleBGMusic(bool inSafe, bool on)
 
 void Sounds::play(SoundTypes what, Vector2f where)
 {
-	/*Sound * sound = new Sound();
+	Sound * sound = new Sound();
 
 	switch (what)
 	{
-	case SoundTypes::EnemyDeath:
-		sound->setBuffer(this->coinBuffer);
-		//sound->setPosition(where.x, where.y, 0);
-		break;
-	case SoundTypes::PlayerHit:
-		sound->setBuffer(this->hurtBuffer);
-		break;
-	case SoundTypes::SkillScroll:
-		sound->setBuffer(this->selectBuffer);
-		break;
-	case SoundTypes::Shot:
-		sound->setBuffer(this->shootBuffer);
-		break;
-	default:
-		break;
+		case SoundTypes::EnemyDeath:
+			sound->setBuffer(this->coinBuffer);
+			//sound->setPosition(where.x, where.y, 0);
+			break;
+
+		case SoundTypes::PlayerHit:
+			sound->setBuffer(this->hurtBuffer);
+			break;
+
+		case SoundTypes::SkillScroll:
+			sound->setBuffer(this->selectBuffer);
+			break;
+
+		case SoundTypes::Shot:
+			sound->setBuffer(this->shootBuffer);
+			break;
+
+		default:
+			break;
 	}
 	
 	sound->setPitch(1 + (float)(rand() % 100) / 100.0f);
@@ -62,8 +66,13 @@ void Sounds::play(SoundTypes what, Vector2f where)
 	soundQueue.push_front(sound);
 
 	sound = soundQueue.back();
+
 	if (sound->getStatus() == Sound::Stopped) //not sure if works
+	{
 		soundQueue.pop_back();
-		*/
+		
+		delete sound;
+	}
+		
 	
 }
