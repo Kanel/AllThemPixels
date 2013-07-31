@@ -97,6 +97,7 @@
     <ClCompile Include="Flag.cpp" />
     <ClCompile Include="FloorTile.cpp" />
     <ClCompile Include="GlareEffect.cpp" />
+    <ClCompile Include="Helper.cpp" />
     <ClCompile Include="Hexagon.cpp" />
     <ClCompile Include="HexagonGrid.cpp" />
     <ClCompile Include="HexagonHull.cpp" />
@@ -134,6 +135,7 @@
     <ClInclude Include="Flag.h" />
     <ClInclude Include="FloorTile.h" />
     <ClInclude Include="GlareEffect.h" />
+    <ClInclude Include="Helper.h" />
     <ClInclude Include="Hexagon.h" />
     <ClInclude Include="HexagonGrid.h" />
     <ClInclude Include="HexagonHull.h" />

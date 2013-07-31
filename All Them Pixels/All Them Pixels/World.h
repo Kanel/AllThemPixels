@@ -25,7 +25,6 @@ private:
 	Vector2i offset;
 	AxialCoordinates currentTerritoryCoordinates;
 	Territory *** territories;
-	VertexCluster playerCluster;
 
 private:
 	vector<AIProperties> getAIProperties();
@@ -41,6 +40,8 @@ public:
 	void activate(AxialCoordinates coordinates);
 	bool isActive();
 	bool isCleared();
+
+	Player * getPlayer();
 
 	virtual void draw(RenderTarget& target, RenderStates states) const;
 

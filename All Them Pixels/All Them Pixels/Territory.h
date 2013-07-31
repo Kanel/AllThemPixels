@@ -18,6 +18,7 @@
 #include "FloorTile.h"
 #include "EnemySpawner.h"
 #include "ParticleSystem.h"
+#include "Helper.h"
 #include <SFML/Graphics.hpp>
 #include <list>
 #include <queue>
@@ -40,6 +41,14 @@ class VertexCluster;
 class Territory : public Drawable
 {
 private:
+	struct Probe
+	{
+		float speed;
+		Vector2f position;
+		Vector2f direction;
+	};
+
+private:
 	bool active;
 	float radius;
 	int floorTilesLength;
@@ -60,12 +69,14 @@ private:
 	vector<AxialCoordinates> spawnGrid;
 	VertexCluster tileCluster;
 	VertexCluster entityCluster;
+	VertexCluster fadeTileCluster;
 	Sounds * sounds;
-
+	vector<Probe> probes;
+	FloorTile *** fadeTiles;
 	EnemySpawner enemySpawner;
 
 private:
-	void colorFloorTiles();
+	void colorTiles(FloorTile *** tiles, Color base);
 	void colorBorderTiles();
 	void colorSafeZoneTiles();
 	void colorEnemyAuraTiles();
@@ -79,6 +90,8 @@ private:
 	void updateEffects(UpdateInfo info);
 	void updateBorderTiles();
 	void borderControl();
+	void prepareProbes(Vector2f center);
+	void updateProbes(Color color, Vector2f center);
 
 public:	
 	Player * player;
@@ -101,6 +114,7 @@ public:
 	void deactivate();
 	bool isActive();
 	bool isCleared();
+	void fade(Color color, Vector2f center);
 
 	Rect<float> getBoundingBox();
 

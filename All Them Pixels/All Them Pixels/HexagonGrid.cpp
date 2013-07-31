@@ -112,6 +112,11 @@ AxialCoordinates HexagonGrid::step(AxialCoordinates axialCoordinates, HexagonDir
 	return axialCoordinates + neighbors[direction]; 
 }
 
+void HexagonGrid::setOrigin(AxialCoordinates origin)
+{
+	this->origin = origin;
+}
+
 AxialCoordinates HexagonGrid::next()
 {
 	AxialCoordinates current = nextCoordinate;
@@ -131,6 +136,16 @@ AxialCoordinates HexagonGrid::next()
 		segmentPosition = 0;
 		nextCoordinate = AxialCoordinates(-layer, layer); // Change layer.
 	}
+	return current + origin;
+}
+
+AxialCoordinates HexagonGrid::next(int &layer)
+{
+	AxialCoordinates current;
+
+	layer = this->layer;
+	current = next();
+
 	return current;
 }
 

@@ -34,10 +34,10 @@ int main(int argc, char ** argv)
 
 	world.activate(AxialCoordinates());
 
-	while (!world.isCleared() && window.isOpen())
+	while (!world.isCleared() && world.isActive() && window.isOpen())
     {
 		Event event;
-		Player * player = world.getCurrentTerritory()->player;
+		Player * player = world.getPlayer();
 
 		while (window.pollEvent(event))
 		{
@@ -73,6 +73,31 @@ int main(int argc, char ** argv)
 		// Sleep until the next frame needs to be rendered.
 		sleep(sleepDuration);
     }
+	if (window.isOpen())
+	{
+		Color fadeColor = (world.isCleared()) ? Color::White : Color::Black;
+		Territory * territory = world.getCurrentTerritory();
+
+		for (int i = 0; i < 2000 && window.isOpen(); i += sleepDuration.asMilliseconds())
+		{
+			Event event;
+
+			while (window.pollEvent(event))
+			{
+				if (event.type == Event::Closed)
+				{
+					window.close();
+				}
+			}
+			territory->fade(fadeColor, world.getPlayer()->getPosition());
+
+			window.clear();
+			window.draw(world);
+			window.display();
+
+			sleep(sleepDuration);
+		}		
+	}
 
     return 0;
 }

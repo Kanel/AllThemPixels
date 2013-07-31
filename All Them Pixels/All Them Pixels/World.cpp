@@ -53,15 +53,12 @@ World::World(Vector2f position, float territoryRadius, float territorySpacing, i
 	SpawnConfiguration spawnConfig;
 	PlayerConfiguration playerconfig;
 
-	playerCluster.create(VertexCluster::HexagonSource);
-	playerCluster.create(VertexCluster::RectangleSource);
-
 	this->territoryRadius = territoryRadius;
 	this->territorySpacing = territorySpacing;
 	this->layers = layers;
 	this->player = NULL;
 
-	playerconfig.hp = 1000000;
+	playerconfig.hp = 10000;
 	playerconfig.speed = 3.5;
 	playerconfig.weaponConfig.cooldown = 100;
 	playerconfig.weaponConfig.damage = 100;
@@ -70,7 +67,7 @@ World::World(Vector2f position, float territoryRadius, float territorySpacing, i
 	playerconfig.weaponConfig.spread = 5;
 	playerconfig.weaponConfig.ttl = 55;
 
-	player = new Player(NULL, playerconfig, Vector2f(0, 0), playerCluster.getCollection(0));
+	player = new Player(NULL, playerconfig, Vector2f(0, 0));
 	tileSize = territoryRadius + (territorySpacing / 2);
 	matrixSize = (layers * 2) + 1;
 	offset = Vector2i(layers, layers);
@@ -164,6 +161,11 @@ bool World::isCleared()
 	return territory->isCleared();
 }
 
+Player * World::getPlayer()
+{
+	return player;
+}
+
 void World::draw(RenderTarget& target, RenderStates states) const
 {
 	for (int i = 0; i < matrixSize; i++)
@@ -179,7 +181,6 @@ void World::draw(RenderTarget& target, RenderStates states) const
 			}
 		}
 	}
-	target.draw(playerCluster);
 }
 
 void World::update(UpdateInfo info, Sounds * sounds)

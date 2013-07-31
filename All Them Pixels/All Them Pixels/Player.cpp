@@ -61,7 +61,7 @@ void Player::updateAim()
 	aimDirection = direction;
 }
 
-Player::Player(queue<Entity *> *spawnQueue, PlayerConfiguration config, Vector2f position, VertexCollection * vertexSource) : Destructible(config.hp, position), weapon(config.weaponConfig, vertexSource), healthBar(36, 40, 2, 2, hp, hp)
+Player::Player(queue<Entity *> *spawnQueue, PlayerConfiguration config, Vector2f position) : Destructible(config.hp, position), projectileVertexSource(8, 50, 50, PrimitiveType::TrianglesStrip), weapon(config.weaponConfig, &projectileVertexSource), healthBar(36, 40, 2, 2, hp, hp)
 {
 	const int size = 20;
 	const int aimboxSize = 4;
@@ -180,6 +180,7 @@ void Player::draw(RenderTarget& target, RenderStates states) const
 	target.draw(shape, shapeCount, PrimitiveType::Quads);
 	target.draw(aimBoxShape, aimboxShapeCount, PrimitiveType::Quads);
 	target.draw(healthBar);
+	target.draw(projectileVertexSource);
 }
 
 void Player::update(UpdateInfo info)

@@ -47,6 +47,7 @@ protected:
 	Vector2f speed;
 	PlayerSkillPoints playerSkillPoints;
 	CircleBar healthBar;
+	VertexCollection projectileVertexSource;
 
 protected:
 	void applyTransform(Transform transform, Vertex vertices[], int count);
@@ -55,7 +56,7 @@ protected:
 	void updateAim();
 
 public:
-	Player(queue<Entity *> *spawnQueue, PlayerConfiguration config, Vector2f position, VertexCollection * vertexSource);
+	Player(queue<Entity *> *spawnQueue, PlayerConfiguration config, Vector2f position);
 
 	bool getIsInSafeZone();
 	void setIsInSafeZone(bool isInSafeZone);

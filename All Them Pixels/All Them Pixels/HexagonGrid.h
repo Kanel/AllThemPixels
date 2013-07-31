@@ -46,6 +46,7 @@ private:
 	int segment;
 	int segmentPosition;
 	float size;
+	AxialCoordinates origin;
 	AxialCoordinates nextCoordinate;
 	Vector3f convertToCubeCoordinates(Vector2f axialCoordinates);
 	AxialCoordinates convertToAxialCoordinates(Vector3i cubeCoordinates);
@@ -73,7 +74,10 @@ public:
 	AxialCoordinates getAxialCoordinates(Vector2f position);
 	AxialCoordinates step(AxialCoordinates axialCoordinates, HexagonDirection direction);
 
+	void setOrigin(AxialCoordinates origin);
+
 	AxialCoordinates next();
+	AxialCoordinates next(int &layer);
 	AxialCoordinates next(Vector2f &position);
 
 	vector<AxialCoordinates> getCornerRegionCoordinates(int corner);
