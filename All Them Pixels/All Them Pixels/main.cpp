@@ -27,7 +27,7 @@ int main(int argc, char ** argv)
 	Time sleepDuration = milliseconds(updateInterval);
 	UpdateInfo info;
 	Sounds sounds = Sounds();
-	//Listener listener;
+	Listener listener;
 
 	info.updateInterval = updateInterval;
 	info.elapsedGameTime = 0;
@@ -48,8 +48,12 @@ int main(int argc, char ** argv)
 		}
 		info.elapsedGameTime += updateInterval;
 
+		listener.setPosition(player->getPosition().x, player->getPosition().y, 0);
+
 		world.update(info, &sounds);
 		window.setView(world.getView(window.getView()));
+
+		
 
 		if (player->getIsInSafeZone())
 		{

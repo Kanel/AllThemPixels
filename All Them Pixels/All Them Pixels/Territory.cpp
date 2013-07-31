@@ -195,6 +195,7 @@ void Territory::updatePlayerProjectiles(UpdateInfo info)
 				{
 					if (!projectile->hasPierced(enemy))
 					{
+						// Todo: play sounds
 						enemy->modHP(-projectile->getDamage());						
 						projectile->addPiercedTarget(enemy);
 
@@ -220,21 +221,21 @@ void Territory::updateEnemyProjectiles(UpdateInfo info)
 
 		if (Collision::isClose(player, projectile))
 		{
-			sounds->play(SoundTypes::PlayerHit);
-			player->modHP(-projectile->getDamage());
-			player->fade();
-			projectile->expend();
-
 			if (!projectile->hasPierced(player))
 			{
-				if (projectile->getPiercing() > 1)
+				Vector2f direction = Vector2fMath::unitVector(projectile->getPosition() - player->getPosition());
+
+				sounds->play(SoundTypes::PlayerHit, player->getPosition() + direction * 20.0f);
+				player->modHP(-projectile->getDamage());
+				player->fade();
+
+				projectile->addPiercedTarget(player);
+
+				if (projectile->isExpended())
 				{
-					projectile->addPiercedTarget(player);
-				}
-				else
-				{
-					projectile->expend();
 					effects.push_back(new ParticleSystem(info.elapsedGameTime, 100, projectile->getPosition(), projectile->getSpeed(), entityCluster.getCollection(2)));
+						
+					continue;
 				}
 			}
 		}
@@ -672,7 +673,7 @@ void Territory::integrateSpawnQueue()
 		{
 			if (!this->sounds) 
 			{
-				this->sounds->play(SoundTypes::Shot);
+				this->sounds->play(SoundTypes::Shot, entity->getPosition());
 			}
 			enemyProjectiles.push_back((Projectile *)entity);
 		}

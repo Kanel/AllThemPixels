@@ -60,9 +60,9 @@ void Sounds::play(SoundTypes what, Vector2f where)
 		default:
 			break;
 	}
-	
+	sound->setPosition(where.x, where.y, 0);
 	sound->setPitch(1 + (float)(rand() % 100) / 100.0f);
-	//sound->play();
+	sound->play();
 	soundQueue.push_front(sound);
 
 	sound = soundQueue.back();
