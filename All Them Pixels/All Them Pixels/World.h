@@ -2,6 +2,7 @@
 
 #include "Territory.h"
 #include "HexagonGrid.h"
+#include "Map.h"
 #include "VertexCluster.h"
 #include "Sounds.h"
 #include <SFML/Graphics.hpp>
@@ -25,6 +26,7 @@ private:
 	Vector2i offset;
 	AxialCoordinates currentTerritoryCoordinates;
 	Territory *** territories;
+	Map * map;
 
 private:
 	vector<AIProperties> getAIProperties();

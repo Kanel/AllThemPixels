@@ -89,7 +89,6 @@ private:
 	void updatePlayer(UpdateInfo info);
 	void updateEffects(UpdateInfo info);
 	void updateBorderTiles();
-	void borderControl();
 	void prepareProbes(Vector2f center);
 	void updateProbes(Color color, Vector2f center);
 

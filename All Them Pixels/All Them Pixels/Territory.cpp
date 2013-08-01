@@ -360,60 +360,6 @@ void Territory::updateBorderTiles()
 	}
 }
 
-
-void Territory::borderControl()
-{
-	Vector2f center = position;
-
-	Vector2f playerCenter = player->getPosition();
-	playerCenter.x += 10; //fix
-	playerCenter.y += 10; //fix
-
-	int quadrant;
-
-	if (playerCenter.x < center.x)
-		if (playerCenter.y < center.y)
-			quadrant = 4;
-		else
-			quadrant = 3;
-	else
-		if (playerCenter.y < center.y)
-			quadrant = 1;
-		else
-			quadrant = 2;
-
-	//imagine player position in quadrant four.
-	switch (quadrant)
-	{
-	case 1:
-		playerCenter.x = playerCenter.x - 2*(playerCenter.x - center.x);
-		break;
-	case 2:
-		playerCenter.x = playerCenter.x - 2*(playerCenter.x - center.x);
-		playerCenter.y = playerCenter.y - 2*(playerCenter.y - center.y);
-		break;
-	case 3:
-		playerCenter.y = playerCenter.y - 2*(playerCenter.y - center.y);
-		break;
-	case 4:
-		break;
-	default:
-		break;
-	}
-	/*
-		Vector2f a = corner position;
-		Vector2f p = player center;
-		Vector2f n = unit vector pointing to next corner or down;
-		Vector2f v1 = Vector2fMath::dot((a-p), n)*n;
-
-		float distance = Vector2fMath::length((a-p)-v1);
-		if distance is less than some radius of player:
-			player->translate
-		if in safe and distance is smaller.
-			change territory
-	*/
-}
-
 void Territory::prepareProbes(Vector2f center)
 {
 	float angle = 0;

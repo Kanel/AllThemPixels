@@ -110,6 +110,8 @@ World::World(Vector2f position, float territoryRadius, float territorySpacing, i
 			}
 		}
 	}
+
+	map = new Map(Vector2f(0,0), layers, 50, Hexagon::Style::FlatTopped);
 }
 
 Territory * World::getCurrentTerritory()
@@ -134,6 +136,8 @@ void World::changeTerritory(Vector2f position)
 	next->activate(player);
 
 	player->setPosition(position);//next->getPosition());
+
+	map->setPlayerLocation(nextCoordinates);
 
 	currentTerritoryCoordinates = nextCoordinates;
 }
@@ -168,6 +172,11 @@ Player * World::getPlayer()
 
 void World::draw(RenderTarget& target, RenderStates states) const
 {
+	if (Joystick::isButtonPressed(0,6)) //is this the back button?
+	{
+		target.draw(*map);
+
+	}
 	for (int i = 0; i < matrixSize; i++)
 	{
 		for (int j = 0; j < matrixSize; j++)
@@ -185,15 +194,24 @@ void World::draw(RenderTarget& target, RenderStates states) const
 
 void World::update(UpdateInfo info, Sounds * sounds)
 {
-	for (int i = 0; i < matrixSize; i++)
+	if (Joystick::isButtonPressed(0,6))
 	{
-		for (int j = 0; j < matrixSize; j++)
+		//paused = true;
+		map->setPosition(player->getPosition());// plus some offset?
+
+	}
+	else
+	{
+		for (int i = 0; i < matrixSize; i++)
 		{
-			if (territories[i][j] != NULL && territories[i][j]->isActive())
+			for (int j = 0; j < matrixSize; j++)
 			{
-				territories[i][j]->integrateSpawnQueue();
-				territories[i][j]->update(info, sounds);
-				territories[i][j]->cleanup();
+				if (territories[i][j] != NULL && territories[i][j]->isActive())
+				{
+					territories[i][j]->integrateSpawnQueue();
+					territories[i][j]->update(info, sounds);
+					territories[i][j]->cleanup();
+				}
 			}
 		}
 	}

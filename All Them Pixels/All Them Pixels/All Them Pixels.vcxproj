@@ -102,6 +102,7 @@
     <ClCompile Include="HexagonGrid.cpp" />
     <ClCompile Include="HexagonHull.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Map.cpp" />
     <ClCompile Include="MontoneChain.cpp" />
     <ClCompile Include="ParticleSystem.cpp" />
     <ClCompile Include="Player.cpp" />
@@ -139,6 +140,7 @@
     <ClInclude Include="Hexagon.h" />
     <ClInclude Include="HexagonGrid.h" />
     <ClInclude Include="HexagonHull.h" />
+    <ClInclude Include="Map.h" />
     <ClInclude Include="MonotoneChain.h" />
     <ClInclude Include="ParticleSystem.h" />
     <ClInclude Include="Player.h" />

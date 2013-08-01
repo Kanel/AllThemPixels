@@ -27,6 +27,7 @@ private:
 	int allocateSlot();
 
 public:
+	VertexCollection();
 	// verticesPerShape: The number of vertices in each shape to be stored.
 	// size: The number of slots for shapes the collection can store.
 	// increment: The number of slots the container will grow by once it's full.
