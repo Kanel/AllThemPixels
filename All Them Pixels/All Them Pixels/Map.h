@@ -7,10 +7,10 @@
 class Map : public Drawable
 {
 private:
-	int hexagonCount;
+	int hexagonLength;
 	Vector2f position;
 	Hexagon *** hexagons;
-	VertexCollection mapVertexCollection;
+	VertexCollection * mapVertexCollection;
 	vector<AxialCoordinates> beenThere;
 	vector<AxialCoordinates> doneThat;
 	AxialCoordinates playerLocation;

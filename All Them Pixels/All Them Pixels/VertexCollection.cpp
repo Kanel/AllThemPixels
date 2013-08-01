@@ -23,8 +23,6 @@ int VertexCollection::allocateSlot()
 	return index;
 }
 
-VertexCollection::VertexCollection(){}
-
 VertexCollection::VertexCollection(int verticesPerShape, int size, int increment, PrimitiveType type)
 {
 	this->verticesPerShape = verticesPerShape;

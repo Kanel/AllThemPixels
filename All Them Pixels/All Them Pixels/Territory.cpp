@@ -89,8 +89,6 @@ void Territory::colorEnemyAuraTiles()
 // Remove effects such as enemy aura from floor tiles.
 void Territory::cleanFloorTiles()
 {
-	HexagonGrid grid(Hexagon::FlatTopped, hexagonRadius);
-
 	for (int i = 0; i < floorTilesLength; i++)
 	{
 		for (int j = 0; j < floorTilesLength; j++)
@@ -343,7 +341,7 @@ void Territory::updateBorderTiles()
 				if (player->getIsInSafeZone())
 				{
 					Vector2f direction = Vector2fMath::unitVector(player->getPosition() - position);
-					Vector2f seekPosition = position + (direction * radius * 1.01f);
+					Vector2f seekPosition = position + (direction * radius * 1.1f);
 
 					world->changeTerritory(seekPosition);
 

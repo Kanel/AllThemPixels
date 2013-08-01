@@ -136,7 +136,7 @@ void World::changeTerritory(Vector2f position)
 
 	player->setPosition(position);//next->getPosition());
 
-	//map->setPlayerLocation(nextCoordinates);
+	map->setPlayerLocation(nextCoordinates);
 
 	currentTerritoryCoordinates = nextCoordinates;
 }
@@ -171,11 +171,6 @@ Player * World::getPlayer()
 
 void World::draw(RenderTarget& target, RenderStates states) const
 {
-	if (Joystick::isButtonPressed(0,6)) //is this the back button?
-	{
-		//target.draw(*map);
-
-	}
 	for (int i = 0; i < matrixSize; i++)
 	{
 		for (int j = 0; j < matrixSize; j++)
@@ -189,6 +184,11 @@ void World::draw(RenderTarget& target, RenderStates states) const
 			}
 		}
 	}
+	if (Joystick::isButtonPressed(0,6)) //is this the back button?
+	{
+		target.draw(*map);
+
+	}
 }
 
 void World::update(UpdateInfo info, Sounds * sounds)
@@ -196,7 +196,7 @@ void World::update(UpdateInfo info, Sounds * sounds)
 	if (Joystick::isButtonPressed(0,6))
 	{
 		//paused = true;
-		//map->setPosition(player->getPosition());// plus some offset?
+		map->setPosition(player->getPosition());// plus some offset?
 
 	}
 	else
