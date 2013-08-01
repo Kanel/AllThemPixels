@@ -19,7 +19,6 @@ private:
 	float territoryRadius;
 	float territorySpacing;
 	int layers;
-	int tileSize;
 	int territoryCount;
 	int matrixSize;
 	Player * player;

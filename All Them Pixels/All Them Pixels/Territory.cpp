@@ -774,7 +774,7 @@ void Territory::draw(RenderTarget& target, RenderStates states) const
 	{
 		target.draw(*player);
 	}
-	if (probes.size())
+	if (probes.size() > 0)
 	{
 		target.draw(fadeTileCluster);
 	}

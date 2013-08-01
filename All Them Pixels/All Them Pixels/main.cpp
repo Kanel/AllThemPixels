@@ -20,7 +20,7 @@ int main(int argc, char ** argv)
 	ContextSettings settings(0, 0, 8, 2, 0);
 	VideoMode videoMode(1024, 1024);
     RenderWindow window(videoMode, windowtitle, 7, settings);
-	World world(Vector2f(), 2048, 0, 3);
+	World world(Vector2f(), 2048, 0, 2);
 	Territory * t = world.getTerritory(AxialCoordinates(0, 0));
 	
 	PlayerCustomizationUI ui;
@@ -51,9 +51,7 @@ int main(int argc, char ** argv)
 		listener.setPosition(player->getPosition().x, player->getPosition().y, 0);
 
 		world.update(info, &sounds);
-		window.setView(world.getView(window.getView()));
-
-		
+		window.setView(world.getView(window.getView()));		
 
 		if (player->getIsInSafeZone())
 		{

@@ -49,7 +49,7 @@ vector<WeaponConfiguration> World::getWeaponConfigurations()
 
 World::World(Vector2f position, float territoryRadius, float territorySpacing, int layers)
 {
-	HexagonGrid grid(Hexagon::PointyTopped, tileSize);
+	HexagonGrid grid(Hexagon::PointyTopped, territoryRadius);
 	SpawnConfiguration spawnConfig;
 	PlayerConfiguration playerconfig;
 
@@ -68,7 +68,6 @@ World::World(Vector2f position, float territoryRadius, float territorySpacing, i
 	playerconfig.weaponConfig.ttl = 55;
 
 	player = new Player(NULL, playerconfig, Vector2f(0, 0));
-	tileSize = territoryRadius + (territorySpacing / 2);
 	matrixSize = (layers * 2) + 1;
 	offset = Vector2i(layers, layers);
 
@@ -111,7 +110,7 @@ World::World(Vector2f position, float territoryRadius, float territorySpacing, i
 		}
 	}
 
-	map = new Map(Vector2f(0,0), layers, 50, Hexagon::Style::FlatTopped);
+	map = new Map(Vector2f(), layers, 50, Hexagon::Style::FlatTopped);
 }
 
 Territory * World::getCurrentTerritory()
@@ -126,7 +125,7 @@ Territory * World::getTerritory(AxialCoordinates coordinates)
 
 void World::changeTerritory(Vector2f position)
 {
-	HexagonGrid grid(Hexagon::PointyTopped, tileSize);
+	HexagonGrid grid(Hexagon::PointyTopped, territoryRadius);
 	AxialCoordinates nextCoordinates = grid.getAxialCoordinates(position);
 	Territory * current = getTerritory(currentTerritoryCoordinates);
 	Territory * next = getTerritory(nextCoordinates);
@@ -137,7 +136,7 @@ void World::changeTerritory(Vector2f position)
 
 	player->setPosition(position);//next->getPosition());
 
-	map->setPlayerLocation(nextCoordinates);
+	//map->setPlayerLocation(nextCoordinates);
 
 	currentTerritoryCoordinates = nextCoordinates;
 }
@@ -174,7 +173,7 @@ void World::draw(RenderTarget& target, RenderStates states) const
 {
 	if (Joystick::isButtonPressed(0,6)) //is this the back button?
 	{
-		target.draw(*map);
+		//target.draw(*map);
 
 	}
 	for (int i = 0; i < matrixSize; i++)
@@ -197,7 +196,7 @@ void World::update(UpdateInfo info, Sounds * sounds)
 	if (Joystick::isButtonPressed(0,6))
 	{
 		//paused = true;
-		map->setPosition(player->getPosition());// plus some offset?
+		//map->setPosition(player->getPosition());// plus some offset?
 
 	}
 	else
