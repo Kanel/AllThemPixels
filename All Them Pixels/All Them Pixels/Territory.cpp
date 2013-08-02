@@ -655,7 +655,7 @@ vector<Vector2f> Territory::getSpawnPoints()
 		{
 			if (floorTiles[x][y] != NULL)
 			{
-				spawnPoints.push_back(grid.getPosition(coordinate));
+				spawnPoints.push_back(position + grid.getPosition(coordinate));
 			}
 		}
 	}
