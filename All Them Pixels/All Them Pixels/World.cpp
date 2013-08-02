@@ -111,6 +111,7 @@ World::World(Vector2f position, float territoryRadius, float territorySpacing, i
 	}
 
 	map = new Map(Vector2f(), layers, 50, Hexagon::Style::FlatTopped);
+	map->setPlayerLocation(currentTerritoryCoordinates);
 }
 
 Territory * World::getCurrentTerritory()
@@ -137,6 +138,7 @@ void World::changeTerritory(Vector2f position)
 	player->setPosition(position);//next->getPosition());
 
 	map->setPlayerLocation(nextCoordinates);
+	if (current->isCleared()) map->addClearedTerritory(currentTerritoryCoordinates);
 
 	currentTerritoryCoordinates = nextCoordinates;
 }

@@ -214,8 +214,7 @@ Hexagon *** HexagonGrid::generateGrid(Vector2f position, int layers, VertexColle
 			for (int j = 0; j < k; j++)
 			{
 				hexagonPosition = position + getPosition(hexagon);
-				int grayness = rand() % 30;
-				matrix[offset.x + hexagon.q][offset.y + hexagon.r] = new Hexagon(hexagonPosition, size - spacing, Color(255-grayness, 255-grayness, 255-grayness), style, vertexSource);
+				matrix[offset.x + hexagon.q][offset.y + hexagon.r] = new Hexagon(hexagonPosition, size - spacing, Color(255, 255, 255), style, vertexSource);
 				
 				hexagon = step(hexagon, (HexagonGrid::HexagonDirection)((HexagonGrid::DownRight + i) % 6));
 			}

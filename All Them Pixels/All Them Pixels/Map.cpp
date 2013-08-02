@@ -11,6 +11,7 @@ Map::Map(Vector2f position, int layers, float hexagonRadius, Hexagon::Style styl
 
 	mapVertexCollection = new VertexCollection(8, grid.getNumberOfTiles(layers), 1, PrimitiveType::TrianglesStrip);
 	hexagonLength = (layers * 2) + 1;
+	offset = Vector2i(layers, layers);
 	hexagons = grid.generateGrid(position, layers, mapVertexCollection);	
 }
 
@@ -60,16 +61,17 @@ void Map::setPosition(Vector2f position)
 
 void Map::colorize()
 {
+
 	int i;
 	for (i = 0; i < beenThere.size(); i++)
 	{
-		hexagons[beenThere[i].q][beenThere[i].r]->setColor(Color::Blue);
+		hexagons[offset.x + beenThere[i].q][offset.y + beenThere[i].r]->setColor(Color::Blue);
 	}
 	for (i = 0; i < doneThat.size(); i++)
 	{
-		hexagons[beenThere[i].q][beenThere[i].r]->setColor(Color::Green);
+		hexagons[offset.x + doneThat[i].q][offset.y + doneThat[i].r]->setColor(Color::Green);
 	}
-	hexagons[playerLocation.q][playerLocation.r]->setColor(Color::Black);
+	hexagons[offset.x + playerLocation.q][offset.y + playerLocation.r]->setColor(Color::Black);
 }
 
 void Map::applyTransform(Transform transform)

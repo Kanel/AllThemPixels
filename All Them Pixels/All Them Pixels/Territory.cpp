@@ -8,7 +8,7 @@ void Territory::colorTiles(FloorTile *** tiles, Color base)
 		{
 			if (tiles[i][j] != NULL)
 			{
-				int grayness = rand() % 50;
+				int grayness = rand() % 30;
 
 				tiles[i][j]->setColor(Color(base.r - grayness, base.g - grayness, base.b -grayness, base.a));
 			}
@@ -20,7 +20,7 @@ void Territory::colorBorderTiles()
 {
 	for (int i = 0; i < borderCoordinates.size(); i++)
 	{
-		int redness = rand() % 50;
+		int redness = rand() % 40;
 
 		floorTiles[offset.x + borderCoordinates[i].q][offset.y + borderCoordinates[i].r]->setColor(Color(255 - redness, 0, 0));
 	}
@@ -32,7 +32,7 @@ void Territory::colorSafeZoneTiles()
 	{
 		for (int j = 0; j < safeZonesTiles[i].size(); j++)
 		{
-			int greenness = rand() % 50;
+			int greenness = rand() % 40;
 
 			safeZonesTiles[i][j]->setColor(Color(0, 255 - greenness, 0));
 		}

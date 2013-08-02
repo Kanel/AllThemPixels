@@ -14,6 +14,7 @@ private:
 	vector<AxialCoordinates> beenThere;
 	vector<AxialCoordinates> doneThat;
 	AxialCoordinates playerLocation;
+	Vector2i offset;
 
 public:
 	Map();
