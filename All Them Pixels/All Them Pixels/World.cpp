@@ -110,8 +110,11 @@ World::World(Vector2f position, float territoryRadius, float territorySpacing, i
 		}
 	}
 
+	//randomize starting territory
+	grid.getRingCoordinates(layers);
+
 	map = new Map(Vector2f(), layers, 50, Hexagon::Style::FlatTopped);
-	map->setPlayerLocation(currentTerritoryCoordinates);
+
 }
 
 Territory * World::getCurrentTerritory()
@@ -148,6 +151,8 @@ void World::activate(AxialCoordinates coordinates)
 	Territory * territory = getTerritory(coordinates);
 
 	currentTerritoryCoordinates = coordinates;
+
+	map->setPlayerLocation(currentTerritoryCoordinates);
 
 	territory->activate(player);
 

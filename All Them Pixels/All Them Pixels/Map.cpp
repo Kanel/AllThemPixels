@@ -35,7 +35,6 @@ Map::~Map()
 
 void Map::addClearedTerritory(AxialCoordinates what)
 {
-	hexagons[what.q][what.r]->setColor(Color::Green);
 	doneThat.push_back(what);
 	colorize();
 }

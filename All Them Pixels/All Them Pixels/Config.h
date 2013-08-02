@@ -6,6 +6,9 @@
 #define UI_BACKGROUND_COLOR Color(255, 255, 255)
 #define UI_TEXT_SPACING 10
 
+//World
+#define WORLD_LAYERS 2
+
 // Territory
 #define TERRITORY_CELL_SIZE 50.0f
 #define TERRITORY_TILE_SIZE 10

@@ -5,6 +5,7 @@
 #include "PlayerCustomizationUI.h"
 #include "VertexCluster.h"
 #include "Sounds.h"
+#include "config.h"
 #include <SFML/Graphics.hpp>
 #include <iostream>
 
@@ -20,8 +21,7 @@ int main(int argc, char ** argv)
 	ContextSettings settings(0, 0, 8, 2, 0);
 	VideoMode videoMode(1024, 1024);
     RenderWindow window(videoMode, windowtitle, 7, settings);
-	World world(Vector2f(), 2048, 0, 2);
-	Territory * t = world.getTerritory(AxialCoordinates(0, 0));
+	World world(Vector2f(), 2048, 0, WORLD_LAYERS);
 	
 	PlayerCustomizationUI ui;
 	Time sleepDuration = milliseconds(updateInterval);
@@ -32,12 +32,13 @@ int main(int argc, char ** argv)
 	info.updateInterval = updateInterval;
 	info.elapsedGameTime = 0;
 
-	world.activate(AxialCoordinates());
+	world.activate(AxialCoordinates(0, WORLD_LAYERS));
 
 	while (!world.isCleared() && world.isActive() && window.isOpen())
     {
 		Event event;
 		Player * player = world.getPlayer();
+		bool paused = false;
 
 		while (window.pollEvent(event))
 		{
@@ -45,14 +46,21 @@ int main(int argc, char ** argv)
 			{
 				window.close();
 			}
+			if (event.type == Event::JoystickButtonReleased)
+			{
+				if (event.joystickButton.button == 7)
+					paused = !paused;
+			}
 		}
-		info.elapsedGameTime += updateInterval;
+		if (!paused)
+		{
+			info.elapsedGameTime += updateInterval;
 
-		listener.setPosition(player->getPosition().x, player->getPosition().y, 0);
+			listener.setPosition(player->getPosition().x, player->getPosition().y, 0);
 
-		world.update(info, &sounds);
-		window.setView(world.getView(window.getView()));		
-
+			world.update(info, &sounds);
+			window.setView(world.getView(window.getView()));		
+		}
 		if (player->getIsInSafeZone())
 		{
 			ui.align(window.getView());
