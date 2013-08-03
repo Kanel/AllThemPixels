@@ -31,6 +31,7 @@ PlayerCustomizationUI::PlayerCustomizationUI(Vector2f position) : wheel(3, 100)
 	Rect<float> boundsDescription;
 	Rect<float> boundsSkillPoints;
 
+	// Load default values for skills.
 	config.hp = PLAYER_BASE_HP;
 	config.speed = PLAYER_BASE_SPEED;
 	config.weaponConfig.cooldown = PLAYER_BASE_WEAPON_COOLDOWN;
@@ -40,26 +41,25 @@ PlayerCustomizationUI::PlayerCustomizationUI(Vector2f position) : wheel(3, 100)
 	config.weaponConfig.spread = PLAYER_BASE_WEAPON_SPREAD;
 	config.weaponConfig.ttl = PLAYER_BASE_WEAPON_TTL;
 
-	size = Vector2f(400, 200);
+	// UI dimensions
+	size = Vector2f(UI_PLAYER_CUSTOMIZATION_WIDTH, UI_PLAYER_CUSTOMIZATION_HEIGHT);
+	
+	// Initlize 
 	lastSkillChange = 0;
 	lastSkillModifed = 0;
+	increasePressed = false;
+	decreasePressed = false;
 
-	for (int i = 0; i < 4; i++)	
-	{
-		wasPressed[i] = false;
-	}
-
+	// Create background.
 	background[0] = Vertex(Vector2f(position.x - (size.x / 2), position.y - (size.y / 2)), UI_BACKGROUND_COLOR);
 	background[1] = Vertex(Vector2f(position.x + (size.x / 2), position.y - (size.y / 2)), UI_BACKGROUND_COLOR);
 	background[2] = Vertex(Vector2f(position.x + (size.x / 2), position.y + (size.y / 2)), UI_BACKGROUND_COLOR);
 	background[3] = Vertex(Vector2f(position.x - (size.x / 2), position.y + (size.y / 2)), UI_BACKGROUND_COLOR);
 
+	// Load font.
 	font.loadFromFile(UI_FONT_PATH);
 
-	prepareText(skillTitle, font, UI_FONT_SIZE);
-	prepareText(skillDescription, font, UI_FONT_SMALL_SIZE);
-	prepareText(skillPoints, font, UI_FONT_SMALL_SIZE);
-
+	// Add all skills that can be modified.
 	addCustomization("Cooldown",	"The cooldown decreases as it gets alloted more points.",		&config.weaponConfig.cooldown);
 	addCustomization("Damage",		"The damage increases as it gets alloted more points.",			&config.weaponConfig.damage);
 	addCustomization("Piercing",	"The piercing increases as it gets alloted more points.",		&config.weaponConfig.piercing);
@@ -67,13 +67,21 @@ PlayerCustomizationUI::PlayerCustomizationUI(Vector2f position) : wheel(3, 100)
 	addCustomization("Spread",		"The spread increases as it gets alloted more points.",			&config.weaponConfig.spread);
 	addCustomization("TTL",			"The time to live increases as it gets alloted more points.",   &config.weaponConfig.ttl);
 
+	// Prepare labels.
+	prepareText(skillTitle, font, UI_FONT_SIZE);
+	prepareText(skillDescription, font, UI_FONT_SMALL_SIZE);
+	prepareText(skillPoints, font, UI_FONT_SMALL_SIZE);
+
+	// Select default skill.
 	updateSkillInfo();
 	skillPoints.setString("Common Points:");
 
+	// Get bounding boxes for labels.
 	bounds = skillTitle.getLocalBounds();
 	boundsDescription = skillDescription.getLocalBounds();
 	boundsSkillPoints = skillPoints.getLocalBounds();
 
+	// Position labels.
 	skillTitle.setPosition((-size.x / 2.0f) - bounds.left, (-size.y / 2.0f) - bounds.top);
 	skillDescription.setPosition((-size.x / 2.0f) - boundsDescription.left, (-size.y / 2.0f) - bounds.top + bounds.height + UI_TEXT_SPACING);
 	skillPoints.setPosition((-size.x / 2.0f) - boundsSkillPoints.left, (size.y / 2.0f) - boundsSkillPoints.height - boundsSkillPoints.top);
@@ -93,36 +101,38 @@ PlayerCustomizationUI::Result PlayerCustomizationUI::update(UpdateInfo info, Pla
 {
 	Result result = NoChange;	
 
-	//if (lastSkillChange + SKILL_CHANGE_COOLDOWN <= info.elapsedGameTime)
-	//{
 	int newIndex;
 
+	// Determine if the skill wheel should be rotated to the left and if so the what 
+	// skill.
 	if (UserInput::isButtonPressed(UIC_SCROLL_LEFT))
 	{
-		wasPressed[0] = true;
+		increasePressed = true;
 	}
-	else if(wasPressed[0] == true) //OnButtonUp
+	else if(increasePressed == true) //OnButtonUp
 	{
 		sounds->play(SoundTypes::SkillScroll);
 		newIndex = (wheel.getIndex() - 1) % wheel.getNumberOfSkills();
 		newIndex = (newIndex < 0) ? wheel.getNumberOfSkills() + newIndex : newIndex;
 		result = Changed;
-		wasPressed[0] = false;
+		increasePressed = false;
 	}
 
+	// Determine if the skill wheel should be rotated to the right and if so the what 
+	// skill.
 	if (UserInput::isButtonPressed(UIC_SCROLL_RIGHT))
 	{
-		wasPressed[1] = true;
+		decreasePressed = true;
 	}
-	else if(wasPressed[1] == true) //OnButtonUp
+	else if(decreasePressed == true) //OnButtonUp
 	{
 		sounds->play(SoundTypes::SkillScroll);
 		newIndex = (wheel.getIndex() + 1) % wheel.getNumberOfSkills();
 		result = Changed;
-		wasPressed[1] = false;
+		decreasePressed = false;
 	}
 
-	// Rotate wheel.
+	// Rotate skill wheel.
 	if (result == Changed)
 	{
 		wheel.setIndex(newIndex);
@@ -130,29 +140,30 @@ PlayerCustomizationUI::Result PlayerCustomizationUI::update(UpdateInfo info, Pla
 
 		lastSkillChange = info.elapsedGameTime;
 	}
-	//}
 
+	// Determine if a skills value should be modified and if so update the skill value.
 	if (lastSkillModifed + SKILL_MODIFY_COOLDOWN <= info.elapsedGameTime)
 	{
+		char buffer[100];
 		int value = 0;
 		float triggervalue = UserInput::getJoystickPosition(Joystick::Axis::Z);
 		PlayerSkillPoints * playerSkillPoints = player->getPlayerSkillPoints();
 
-		// Determine if selected skill should be increased or decreased.
-		// Get change value.
-		if ((triggervalue * triggervalue) > 100)
+		// Determine if selected skill should be increased or decreased and
+		// get the amount of change.
+		if (powf(triggervalue, 2) > 100)
 		{
 			value = triggervalue / 15;
 			result = Changed;
 		}
 		else if (UserInput::isButtonPressed(UIC_INCREASE_SKILL))
 		{
-			value = 4;
+			value = UI_PLAYER_CUSTOMIZATION_MODIFY_VALUE;
 			result = Changed;
 		}
 		else if (UserInput::isButtonPressed(UIC_DECREASE_SKILL))
 		{
-			value = -4;	
+			value = -UI_PLAYER_CUSTOMIZATION_MODIFY_VALUE;	
 			result = Changed;
 		}
 
@@ -183,8 +194,6 @@ PlayerCustomizationUI::Result PlayerCustomizationUI::update(UpdateInfo info, Pla
 		}
 
 		// Update display of unused points.
-		char buffer[100];
-		
 		snprintf(buffer, 100, "Common Points: %d", playerSkillPoints->common - playerSkillPoints->commonUsed);
 		
 		skillPoints.setString(buffer);

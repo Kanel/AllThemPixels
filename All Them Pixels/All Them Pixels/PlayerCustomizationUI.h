@@ -35,7 +35,8 @@ private:
 	PlayerConfiguration config;
 	int lastSkillChange;
 	int lastSkillModifed;
-	bool wasPressed[4];
+	bool increasePressed;
+	bool decreasePressed;
 	Sounds sounds;
 
 private:

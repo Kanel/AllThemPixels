@@ -8,7 +8,7 @@ void Territory::colorTiles(FloorTile *** tiles, Color base)
 		{
 			if (tiles[i][j] != NULL)
 			{
-				int grayness = rand() % 30;
+				int grayness = rand() % TERRITORY_FLOOR_TILES_GRAYNESS;
 
 				tiles[i][j]->setColor(Color(base.r - grayness, base.g - grayness, base.b -grayness, base.a));
 			}
@@ -20,9 +20,9 @@ void Territory::colorBorderTiles()
 {
 	for (int i = 0; i < borderCoordinates.size(); i++)
 	{
-		int redness = rand() % 40;
+		int redness = rand() % TERRITORY_BORDER_TILES_REDNESS;
 
-		floorTiles[offset.x + borderCoordinates[i].q][offset.y + borderCoordinates[i].r]->setColor(Color(255 - redness, 0, 0));
+		floorTiles[offset.x + borderCoordinates[i].q][offset.y + borderCoordinates[i].r]->setColor(Color(UCHAR_MAX - redness, 0, 0));
 	}
 }
 
@@ -32,9 +32,9 @@ void Territory::colorSafeZoneTiles()
 	{
 		for (int j = 0; j < safeZonesTiles[i].size(); j++)
 		{
-			int greenness = rand() % 40;
+			int greenness = rand() % TERRITORY_SAFE_TILES_GREENESS;
 
-			safeZonesTiles[i][j]->setColor(Color(0, 255 - greenness, 0));
+			safeZonesTiles[i][j]->setColor(Color(0, UCHAR_MAX - greenness, 0));
 		}
 	}
 }
@@ -43,14 +43,14 @@ void Territory::colorSafeZoneTiles()
 // effect fades as the distance between the enemy and floor tiles increses.
 void Territory::colorEnemyAuraTiles()
 {
-	Color color(0, 0, 0);
+	Color color = TERRITORY_ENEMY_AURA_COLOR;
 	HexagonGrid grid(Hexagon::FlatTopped, hexagonRadius);
 	
 	for (auto enemy : enemies)
 	{
 		HexagonGrid grid(Hexagon::FlatTopped, hexagonRadius);
 		AxialCoordinates coordinates = grid.getAxialCoordinates(enemy->getPosition() - getPosition());
-		int layers = 5;
+		int layers = TERRITORY_ENEMY_AURA_SIZE;
 		int x = offset.x + coordinates.q;
 		int y = offset.y + coordinates.r;
 
@@ -74,10 +74,10 @@ void Territory::colorEnemyAuraTiles()
 					int g = tileColor.g + sign(color.g - tileColor.g) * amount;
 					int b = tileColor.b + sign(color.b - tileColor.b) * amount;
 					int a = tileColor.a;
-
-					r = limit(r, 0, 255);
-					g = limit(g, 0, 255);
-					b = limit(b, 0, 255);
+					
+					r = limit(r, 0, UCHAR_MAX);
+					g = limit(g, 0, UCHAR_MAX);
+					b = limit(b, 0, UCHAR_MAX);
 
 					floorTiles[x][y]->pushColor(Color(r, g, b, a));
 				}
@@ -364,7 +364,7 @@ void Territory::prepareProbes(Vector2f center)
 	float angleStep;
 	HexagonGrid grid(Hexagon::FlatTopped, hexagonRadius);
 
-	probes.resize(16);
+	probes.resize(TERRITORY_PROBE_COUNT);
 
 	angleStep = (2 * M_PI) / probes.size();
 
@@ -489,8 +489,8 @@ Territory::Territory(Vector2f position, float radius, World * world, SpawnConfig
 	spatialPartitionSafeRoomTiles();
 
 	// Color tiles.
-	colorTiles(floorTiles, Color(255, 255, 255, 255));
-	colorTiles(fadeTiles, Color(255, 255, 255, 0));
+	colorTiles(floorTiles, Color(UCHAR_MAX, UCHAR_MAX, UCHAR_MAX, UCHAR_MAX));
+	colorTiles(fadeTiles, Color(UCHAR_MAX, UCHAR_MAX, UCHAR_MAX, 0));
 	colorBorderTiles();
 	colorSafeZoneTiles();
 }

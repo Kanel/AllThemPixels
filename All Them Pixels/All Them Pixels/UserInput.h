@@ -1,9 +1,11 @@
 #pragma once
 
-#define UIC_SCROLL_LEFT 4 //left bumper
-#define UIC_SCROLL_RIGHT 5 //right bumper
-#define UIC_INCREASE_SKILL 6 //start
-#define UIC_DECREASE_SKILL 7 //back
+#include "Config.h"
+
+#define UIC_SCROLL_LEFT GAMEPAD_LB
+#define UIC_SCROLL_RIGHT GAMEPAD_RB
+#define UIC_INCREASE_SKILL GAMEPAD_START
+#define UIC_DECREASE_SKILL GAMEPAD_BACK
 
 #include <SFML/Graphics.hpp>
 

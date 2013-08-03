@@ -14,20 +14,21 @@ using namespace sf;
 int main(int argc, char ** argv)
 {
 	int elapsedGameTime = 0;
-	int updateInterval = 10;
-	char * windowtitle = "All them Pixels!";
+	int updateInterval = GAME_UPDATE_INTERVAL;
+	char * windowtitle = GAME_TITLE;
 	bool fullscreen = true;
 	Uint32 windowStyle = Style::Resize;	
 	ContextSettings settings(0, 0, 8, 2, 0);
-	VideoMode videoMode(1024, 1024);
+	VideoMode videoMode(WORLD_VIEW_WIDTH, WORLD_VIEW_HEIGHT);
     RenderWindow window(videoMode, windowtitle, 7, settings);
-	World world(Vector2f(), 2048, 0, WORLD_LAYERS);
+	World world(Vector2f(), WORLD_TERRITORY_RADIUS, WORLD_TERRITORY_SPACING, WORLD_LAYERS);
 	
 	PlayerCustomizationUI ui;
 	Time sleepDuration = milliseconds(updateInterval);
 	UpdateInfo info;
 	Sounds sounds = Sounds();
 	Listener listener;
+	bool paused = false;
 
 	info.updateInterval = updateInterval;
 	info.elapsedGameTime = 0;
@@ -38,7 +39,6 @@ int main(int argc, char ** argv)
     {
 		Event event;
 		Player * player = world.getPlayer();
-		bool paused = false;
 
 		while (window.pollEvent(event))
 		{
@@ -48,8 +48,10 @@ int main(int argc, char ** argv)
 			}
 			if (event.type == Event::JoystickButtonReleased)
 			{
-				if (event.joystickButton.button == 7)
+				if (event.joystickButton.button == GAMEPAD_BACK)
+				{
 					paused = !paused;
+				}
 			}
 		}
 		if (!paused)
@@ -88,7 +90,7 @@ int main(int argc, char ** argv)
 		Color fadeColor = (world.isCleared()) ? Color::White : Color::Black;
 		Territory * territory = world.getCurrentTerritory();
 
-		for (int i = 0; i < 2000 && window.isOpen(); i += sleepDuration.asMilliseconds())
+		for (int i = 0; i < GAME_FADE_TIME && window.isOpen(); i += sleepDuration.asMilliseconds())
 		{
 			Event event;
 

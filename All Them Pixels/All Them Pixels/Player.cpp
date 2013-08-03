@@ -63,9 +63,9 @@ void Player::updateAim()
 
 Player::Player(queue<Entity *> *spawnQueue, PlayerConfiguration config, Vector2f position) : Destructible(config.hp, position), projectileVertexSource(8, 50, 50, PrimitiveType::TrianglesStrip), weapon(config.weaponConfig, &projectileVertexSource), healthBar(36, 40, 2, 2, hp, hp)
 {
-	const int size = 20;
-	const int aimboxSize = 4;
-	Color color(0, 0, 0);
+	const int size = PLAYER_SIZE;
+	const int aimboxSize = PLAYER_AIM_BOX_SIZE;
+	Color color = PLAYER_COLOR;
 
 	this->spawnQueue = spawnQueue;
 	this->config = config;
@@ -167,7 +167,7 @@ PlayerSkillPoints * Player::getPlayerSkillPoints()
 
 void Player::fade()
 {
-	float a = 255.0f * ((float)hp / (float)originalHp);
+	float a = (float)UCHAR_MAX * (hp / (float)originalHp);
 
 	for (int i = 0; i < 4; i++)
 	{
@@ -195,7 +195,7 @@ void Player::update(UpdateInfo info)
 	updateAim();
 	translate(speed);
 	
-	if (weapon.isReady(info.elapsedGameTime, info.updateInterval, shots) && !(direction == Vector2f(0.0,0.0)))
+	if (weapon.isReady(info.elapsedGameTime, info.updateInterval, shots) && !(direction == Vector2f()))
 	{
 		for (int i = 0; i < shots; i++)
 		{

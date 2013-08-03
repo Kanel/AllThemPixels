@@ -58,7 +58,7 @@ World::World(Vector2f position, float territoryRadius, float territorySpacing, i
 	this->layers = layers;
 	this->player = NULL;
 
-	playerconfig.hp = 100000;
+	playerconfig.hp = 10000000;
 	playerconfig.speed = 3.5;
 	playerconfig.weaponConfig.cooldown = 100;
 	playerconfig.weaponConfig.damage = 100;
@@ -200,7 +200,7 @@ void World::draw(RenderTarget& target, RenderStates states) const
 
 void World::update(UpdateInfo info, Sounds * sounds)
 {
-	if (Joystick::isButtonPressed(0,6))
+	if (Joystick::isButtonPressed(0, GAMEPAD_BACK))
 	{
 		//paused = true;
 		map->setPosition(player->getPosition());// plus some offset?
