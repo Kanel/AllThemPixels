@@ -4,35 +4,19 @@ using namespace sf;
 
 Sounds::Sounds()
 {
-	char cwd[FILENAME_MAX];
-	if (!_getcwd(cwd, sizeof(cwd)));//error
-	std::string currentPath(cwd);
-	currentPath += "\\";//replace \\ with / somehow *-)
-
-	if(this->music.openFromFile("D:/Temp/battle_prelude.ogg"))
+	if(this->music.openFromFile(SOUNDS_BACKGROUND_MUSIC))
 	{
 		music.setLoop(true);
 		music.play();
 	}
 	else ; //error loading music, no big deal.
 
-	coinBuffer.loadFromFile("coin1.wav");
-	hurtBuffer.loadFromFile("hurt1.wav");
-	selectBuffer.loadFromFile("select1.wav");
-	shootBuffer.loadFromFile("shoot1.wav");
+	coinBuffer.loadFromFile(SOUNDS_ENEMY_DEATH);
+	hurtBuffer.loadFromFile(SOUNDS_PLAYER_HIT);
+	selectBuffer.loadFromFile(SOUNDS_SELECTED);
+	shootBuffer.loadFromFile(SOUNDS_FIREING);
 
 }
-
-/*
-void Sounds::toggleBGMusic(bool inSafe, bool on)
-{
-	if(this->music.openFromFile(inSafe ? "D:/Temp/elevator_music.ogg" : "D:/Temp/battle_prelude.ogg"))
-	{
-		music.setLoop(true);
-		music.play();
-	}
-	else ;
-}*/
 
 void Sounds::play(SoundTypes what, Vector2f where)
 {

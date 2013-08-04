@@ -76,6 +76,8 @@ World::World(Vector2f position, float territoryRadius, float territorySpacing, i
 	spawnConfig.enemyWeapons = getWeaponConfigurations();
 
 	// Territory storage
+	territories = HexagonGridStorage<Territory *>(layers);
+
 	for (int i = 0; i < tiles; i++)
 	{
 		Vector2f territoryPosition;

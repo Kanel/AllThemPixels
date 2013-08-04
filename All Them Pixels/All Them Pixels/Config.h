@@ -9,6 +9,13 @@
 #define UI_PLAYER_CUSTOMIZATION_HEIGHT 200
 #define UI_PLAYER_CUSTOMIZATION_MODIFY_VALUE 4
 
+// Sounds
+#define SOUNDS_BACKGROUND_MUSIC "battle_prelude.ogg"
+#define SOUNDS_ENEMY_DEATH "coin1.wav"
+#define SOUNDS_PLAYER_HIT "hurt1.wav"
+#define SOUNDS_SELECTED "select1.wav"
+#define SOUNDS_FIREING "shoot1.wav"
+
 // Game
 #define GAME_UPDATE_INTERVAL 10
 #define GAME_TITLE "All them Pixels!"

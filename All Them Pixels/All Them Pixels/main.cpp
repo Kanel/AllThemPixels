@@ -34,7 +34,7 @@ int main(int argc, char ** argv)
 	info.elapsedGameTime = 0;
 
 	world.activate(AxialCoordinates(0, WORLD_LAYERS));
-
+	
 	while (!world.isCleared() && world.isActive() && window.isOpen())
     {
 		Event event;
@@ -54,6 +54,7 @@ int main(int argc, char ** argv)
 				}
 			}
 		}
+		std::cout << 1;
 		if (!paused)
 		{
 			info.elapsedGameTime += updateInterval;

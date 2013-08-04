@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Config.h"
 #include <SFML/Audio.hpp>
 #include <list>
 #include <direct.h>
@@ -24,5 +25,6 @@ protected:
 
 public:
 	Sounds();
+
 	void play(SoundTypes what, sf::Vector2f = sf::Vector2f(0,0));
 };
