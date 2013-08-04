@@ -58,7 +58,7 @@ private:
 	list<Projectile *> playerProjectiles;
 	list<Enemy *> enemies;
 	list<Effect *> effects;
-	HexagonGridStorage floorTiles;
+	HexagonGridStorage<Hexagon *> floorTiles;
 	vector<AxialCoordinates> borderCoordinates;
 	World * world;
 	Rect<float> boundingBox;
@@ -70,11 +70,11 @@ private:
 	VertexCluster fadeTileCluster;
 	Sounds * sounds;
 	vector<Probe> probes;
-	HexagonGridStorage fadeTiles;
+	HexagonGridStorage<Hexagon *> fadeTiles;
 	EnemySpawner enemySpawner;
 
 private:
-	void colorTiles(HexagonGridStorage &storage, Color base);
+	void colorTiles(HexagonGridStorage<Hexagon *> &storage, Color base);
 	void colorBorderTiles();
 	void colorSafeZoneTiles();
 	void colorEnemyAuraTiles();
@@ -89,7 +89,7 @@ private:
 	void updateBorderTiles();
 	void prepareProbes(Vector2f center);
 	void updateProbes(Color color, Vector2f center);
-	void populateHexagonGrid(HexagonGridStorage &storage, VertexCollection * vertexSource);
+	void populateHexagonGrid(HexagonGridStorage<Hexagon *> &storage, VertexCollection * vertexSource);
 
 public:	
 	Player * player;

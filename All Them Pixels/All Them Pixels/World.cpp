@@ -69,33 +69,19 @@ World::World(Vector2f position, float territoryRadius, float territorySpacing, i
 	playerconfig.weaponConfig.ttl = PLAYER_DEFAULT_WEAPON_TTL;
 
 	player = new Player(NULL, playerconfig, Vector2f(0, 0));
-	matrixSize = (layers * 2) + 1;
-	offset = Vector2i(layers, layers);
 
 	spawnConfig.spawnPoints = 10000;
 	spawnConfig.spawnRate = 500;
 	spawnConfig.aiProperties = getAIProperties();
 	spawnConfig.enemyWeapons = getWeaponConfigurations();
 
-	territories = new Territory**[matrixSize];
-
-	// Territory matrix
-	for (int i = 0; i < matrixSize; i++)
-	{
-		territories[i] = new Territory*[matrixSize];
-
-		for (int j = 0; j < matrixSize; j++)
-		{
-			territories[i][j] = NULL;
-		}
-	}
-
+	// Territory storage
 	for (int i = 0; i < tiles; i++)
 	{
 		Vector2f territoryPosition;
 		AxialCoordinates coordinates = grid.next(territoryPosition);
 
-		territories[offset.x + coordinates.q][offset.y + coordinates.r] = new Territory(position + territoryPosition, territoryRadius, this, spawnConfig);
+		territories[coordinates] = new Territory(position + territoryPosition, territoryRadius, this, spawnConfig);
 	}
 
 	//randomize starting territory
@@ -112,7 +98,7 @@ Territory * World::getCurrentTerritory()
 
 Territory * World::getTerritory(AxialCoordinates coordinates)
 {
-	return territories[offset.x + coordinates.q][offset.y + coordinates.r];
+	return territories[coordinates];
 }
 
 void World::changeTerritory(Vector2f position)
@@ -172,10 +158,11 @@ void World::draw(RenderTarget& target, RenderStates states) const
 	for (int i = 0; i < tiles; i++)
 	{
 		AxialCoordinates coordinates = grid.next();
+		territories[coordinates];
 
-		if (Collision::isWithinWindow(territories[offset.x +coordinates.q][offset.y +coordinates.r]->getBoundingBox(), target.getView()))
+		if (Collision::isWithinWindow(territories[coordinates]-> getBoundingBox(), target.getView()))
 		{
-			target.draw(*(territories[offset.x +coordinates.q][offset.y +coordinates.r]));
+			target.draw(*territories[coordinates]);
 		}
 	}
 	if (Joystick::isButtonPressed(0,6)) //is this the back button?
@@ -201,11 +188,11 @@ void World::update(UpdateInfo info, Sounds * sounds)
 		{
 			AxialCoordinates coordinates = grid.next();
 
-			if (territories[offset.x +coordinates.q][offset.y +coordinates.r]->isActive())
+			if (territories[coordinates]->isActive())
 			{
-				territories[offset.x +coordinates.q][offset.y +coordinates.r]->integrateSpawnQueue();
-				territories[offset.x +coordinates.q][offset.y +coordinates.r]->update(info, sounds);
-				territories[offset.x +coordinates.q][offset.y +coordinates.r]->cleanup();
+				territories[coordinates]->integrateSpawnQueue();
+				territories[coordinates]->update(info, sounds);
+				territories[coordinates]->cleanup();
 			}
 		}
 	}

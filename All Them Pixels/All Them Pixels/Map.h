@@ -9,7 +9,7 @@ class Map : public Drawable
 private:
 	int layers;
 	Vector2f position;
-	HexagonGridStorage storage;
+	HexagonGridStorage<Hexagon *> storage;
 	VertexCollection * mapVertexCollection;
 	vector<AxialCoordinates> beenThere;
 	vector<AxialCoordinates> doneThat;

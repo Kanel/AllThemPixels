@@ -84,7 +84,7 @@ void VertexCollection::resize(int newSize)
 	vertices = newArray;
 }
 
-Vertex& VertexCollection::operator[](const int index)
+Vertex& VertexCollection::operator[](const int index) const
 {
 	assert(index >= 0 && index < numberOfVertices);
 

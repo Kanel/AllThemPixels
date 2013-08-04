@@ -36,7 +36,7 @@ public:
 
 	// index: The index of the collection to retrive.
 	// returns: The collection associated with the index.
-	VertexCollection * getCollection(int index);
+	VertexCollection * getCollection(int index) const;
 
 	virtual void draw(RenderTarget& target, RenderStates states) const;
 };

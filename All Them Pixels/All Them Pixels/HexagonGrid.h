@@ -6,6 +6,7 @@
 #include "Shapes.h"
 #include "HexagonGridStorage.h"
 #include "AxialCoordinates.h"
+#include "Hexagon.h"
 #include <math.h>
 #include <vector>
 
@@ -61,5 +62,5 @@ public:
 
 	vector<AxialCoordinates> getCornerRegionCoordinates(int corner);
 	vector<AxialCoordinates> getRingCoordinates(int layer);
-	HexagonGridStorage generateGrid(Vector2f position, int layers, VertexCollection * vertexSource);
+	HexagonGridStorage<Hexagon *> generateGrid(Vector2f position, int layers, VertexCollection * vertexSource);
 };

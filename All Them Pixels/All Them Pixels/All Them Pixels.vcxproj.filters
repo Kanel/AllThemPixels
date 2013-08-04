@@ -61,6 +61,12 @@
     <Filter Include="Source Files\Effect">
       <UniqueIdentifier>{abc15f6b-47df-4a94-be17-ee8412e0aa25}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Collections">
+      <UniqueIdentifier>{8e8f2813-411a-4853-9470-779731728cde}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Collections">
+      <UniqueIdentifier>{64cedcb8-b604-4b62-8d22-84be2df43537}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -91,12 +97,6 @@
       <Filter>Source Files\Geometry</Filter>
     </ClCompile>
     <ClCompile Include="Weapon.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="VertexCollection.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="VertexCluster.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ColorFade.cpp">
@@ -135,9 +135,6 @@
     <ClCompile Include="Sounds.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CircleBar.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="AI.cpp">
       <Filter>Source Files\AI</Filter>
     </ClCompile>
@@ -153,23 +150,26 @@
     <ClCompile Include="Effect.cpp">
       <Filter>Source Files\Effect</Filter>
     </ClCompile>
-    <ClCompile Include="ParticleSystem.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="HexagonHull.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Map.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Helper.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="HexagonGridStorage.cpp">
+    <ClCompile Include="VertexCluster.cpp">
+      <Filter>Source Files\Collections</Filter>
+    </ClCompile>
+    <ClCompile Include="VertexCollection.cpp">
+      <Filter>Source Files\Collections</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticleSystem.cpp">
+      <Filter>Source Files\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="HexagonHull.cpp">
       <Filter>Source Files\Shapes</Filter>
     </ClCompile>
-    <ClCompile Include="HexagonGridStorageRow.cpp">
-      <Filter>Source Files\Shapes</Filter>
+    <ClCompile Include="CircleBar.cpp">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Map.cpp">
+      <Filter>Source Files\UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -201,12 +201,6 @@
       <Filter>Header Files\Geometry</Filter>
     </ClInclude>
     <ClInclude Include="Weapon.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="VertexCollection.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="VertexCluster.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Config.h">
@@ -254,9 +248,6 @@
     <ClInclude Include="Sounds.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CircleBar.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="AI.h">
       <Filter>Header Files\AI</Filter>
     </ClInclude>
@@ -272,26 +263,35 @@
     <ClInclude Include="GlareEffect.h">
       <Filter>Header Files\Effect</Filter>
     </ClInclude>
-    <ClInclude Include="ParticleSystem.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="HexagonHull.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Map.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Helper.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="HexagonGridStorageRow.h">
-      <Filter>Header Files\Shapes</Filter>
-    </ClInclude>
-    <ClInclude Include="HexagonGridStorage.h">
-      <Filter>Header Files\Shapes</Filter>
-    </ClInclude>
     <ClInclude Include="AxialCoordinates.h">
       <Filter>Header Files\Shapes</Filter>
+    </ClInclude>
+    <ClInclude Include="VertexCollection.h">
+      <Filter>Header Files\Collections</Filter>
+    </ClInclude>
+    <ClInclude Include="VertexCluster.h">
+      <Filter>Header Files\Collections</Filter>
+    </ClInclude>
+    <ClInclude Include="HexagonGridStorage.h">
+      <Filter>Header Files\Collections</Filter>
+    </ClInclude>
+    <ClInclude Include="HexagonGridStorageRow.h">
+      <Filter>Header Files\Collections</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleSystem.h">
+      <Filter>Header Files\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="HexagonHull.h">
+      <Filter>Header Files\Shapes</Filter>
+    </ClInclude>
+    <ClInclude Include="CircleBar.h">
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Map.h">
+      <Filter>Header Files\UI</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

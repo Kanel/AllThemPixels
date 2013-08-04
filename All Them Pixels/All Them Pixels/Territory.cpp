@@ -1,6 +1,6 @@
 #include "Territory.h"
 
-void Territory::colorTiles(HexagonGridStorage &storage, Color base)
+void Territory::colorTiles(HexagonGridStorage<Hexagon *> &storage, Color base)
 {
 	int tiles = HexagonGrid::getNumberOfTiles(layers);
 	HexagonGrid grid(Hexagon::FlatTopped);

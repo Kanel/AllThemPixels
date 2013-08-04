@@ -1,29 +1,81 @@
 #pragma once
 
-#include "Hexagon.h"
 #include "Helper.h"
+#include <cassert>
 
-class HexagonGridStorageRow
+template<class T> class HexagonGridStorageRow
 {
 private:
 	int padding;
 	int size;
 	int offset;
 	bool loaded;
-	Hexagon ** hexagons;
+	T * items;
 
 private:
-	void copy(const HexagonGridStorageRow &that);
+	void copy(const HexagonGridStorageRow &that)
+	{
+		this->size = that.size;
+		this->offset = that.offset;
+		this->padding = that.padding;
+		this->items = new T[size];
+		this->loaded = that.loaded;
+
+		for (int i = 0; i < size; i++)
+		{
+			items[i] = that.items[i];
+		}
+	}
 
 public:
-	HexagonGridStorageRow(const HexagonGridStorageRow &that);
-	HexagonGridStorageRow(int size, int offset, int padding = 0);
-	~HexagonGridStorageRow();
+	HexagonGridStorageRow(const HexagonGridStorageRow &that)
+	{
+		copy(that);
+	}
 
-	bool isLoaded();
-	void load();
-	void unload();
+	HexagonGridStorageRow(int size, int offset, int padding = 0)
+	{
+		this->size = size;
+		this->offset = offset;
+		this->padding = padding;
+		this->items = new T[size];
+		this->loaded = true;
+	}
 
-	Hexagon *& operator[](const int index);
-	HexagonGridStorageRow & operator=(const HexagonGridStorageRow &that);
+	~HexagonGridStorageRow()
+	{
+		delete[] items;
+	}
+
+	bool isLoaded()
+	{
+		return loaded;
+	}
+
+	void load()
+	{
+		assert(false);
+	}
+
+	void unload()
+	{
+		assert(false);
+	}
+
+	T & operator[](const int index) const
+	{
+		assert(isInRange(0, size - 1, offset + index - padding) && loaded && "Invalid index!");
+
+		return items[offset + index - padding];
+	}
+
+	HexagonGridStorageRow & operator=(const HexagonGridStorageRow &that)
+	{
+		if (this != &that)
+		{
+			this->~HexagonGridStorageRow();
+			this->copy(that);
+		}
+		return *this;
+	}
 };

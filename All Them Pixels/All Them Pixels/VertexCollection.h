@@ -49,7 +49,7 @@ public:
 	// copied otherwise every slot will be copied.
 	void resize(int size);
 
-	Vertex& operator[](const int index);
+	Vertex& operator[](const int index) const;
 
 	virtual void draw(RenderTarget& target, RenderStates states) const;
 };

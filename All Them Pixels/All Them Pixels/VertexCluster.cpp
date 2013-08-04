@@ -35,7 +35,7 @@ int VertexCluster::create(int verticesPerShape, int size, int increment, Primiti
 	return index;
 }
 
-VertexCollection * VertexCluster::getCollection(int index)
+VertexCollection * VertexCluster::getCollection(int index) const
 {
 	assert(index >= 0 && index < collections.size());
 

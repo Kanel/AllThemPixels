@@ -5,6 +5,7 @@
 #include "Map.h"
 #include "VertexCluster.h"
 #include "Sounds.h"
+#include "HexagonGridStorage.h"
 #include <SFML/Graphics.hpp>
 #include <vector>
 
@@ -19,11 +20,9 @@ private:
 	float territoryRadius;
 	float territorySpacing;
 	int layers;
-	int matrixSize;
 	Player * player;
-	Vector2i offset;
 	AxialCoordinates currentTerritoryCoordinates;
-	Territory *** territories;
+	HexagonGridStorage<Territory *> territories;
 	Map * map;
 
 private:

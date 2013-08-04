@@ -99,8 +99,6 @@
     <ClCompile Include="Helper.cpp" />
     <ClCompile Include="Hexagon.cpp" />
     <ClCompile Include="HexagonGrid.cpp" />
-    <ClCompile Include="HexagonGridStorage.cpp" />
-    <ClCompile Include="HexagonGridStorageRow.cpp" />
     <ClCompile Include="HexagonHull.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Map.cpp" />
