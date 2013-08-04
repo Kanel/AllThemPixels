@@ -19,7 +19,6 @@ private:
 	float territoryRadius;
 	float territorySpacing;
 	int layers;
-	int territoryCount;
 	int matrixSize;
 	Player * player;
 	Vector2i offset;

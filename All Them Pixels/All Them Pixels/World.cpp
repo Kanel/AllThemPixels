@@ -90,8 +90,6 @@ World::World(Vector2f position, float territoryRadius, float territorySpacing, i
 		}
 	}
 
-	territoryCount = 0;
-
 	for (int i = 0; i < tiles; i++)
 	{
 		Vector2f territoryPosition;
@@ -175,9 +173,9 @@ void World::draw(RenderTarget& target, RenderStates states) const
 	{
 		AxialCoordinates coordinates = grid.next();
 
-		if (Collision::isWithinWindow(territories[coordinates.q][coordinates.r]->getBoundingBox(), target.getView()))
+		if (Collision::isWithinWindow(territories[offset.x +coordinates.q][offset.y +coordinates.r]->getBoundingBox(), target.getView()))
 		{
-			target.draw(*(territories[coordinates.q][coordinates.r]));
+			target.draw(*(territories[offset.x +coordinates.q][offset.y +coordinates.r]));
 		}
 	}
 	if (Joystick::isButtonPressed(0,6)) //is this the back button?
@@ -203,11 +201,11 @@ void World::update(UpdateInfo info, Sounds * sounds)
 		{
 			AxialCoordinates coordinates = grid.next();
 
-			if (territories[coordinates.q][coordinates.r]->isActive())
+			if (territories[offset.x +coordinates.q][offset.y +coordinates.r]->isActive())
 			{
-				territories[coordinates.q][coordinates.r]->integrateSpawnQueue();
-				territories[coordinates.q][coordinates.r]->update(info, sounds);
-				territories[coordinates.q][coordinates.r]->cleanup();
+				territories[offset.x +coordinates.q][offset.y +coordinates.r]->integrateSpawnQueue();
+				territories[offset.x +coordinates.q][offset.y +coordinates.r]->update(info, sounds);
+				territories[offset.x +coordinates.q][offset.y +coordinates.r]->cleanup();
 			}
 		}
 	}
