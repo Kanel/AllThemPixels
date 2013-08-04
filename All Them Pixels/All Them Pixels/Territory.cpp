@@ -1,18 +1,16 @@
 #include "Territory.h"
 
-void Territory::colorTiles(FloorTile *** tiles, Color base)
+void Territory::colorTiles(HexagonGridStorage &storage, Color base)
 {
-	for (int i = 0; i < floorTilesLength; i++)
-	{
-		for (int j = 0; j < floorTilesLength; j++)
-		{
-			if (tiles[i][j] != NULL)
-			{
-				int grayness = rand() % TERRITORY_FLOOR_TILES_GRAYNESS;
+	int tiles = HexagonGrid::getNumberOfTiles(layers);
+	HexagonGrid grid(Hexagon::FlatTopped);
 
-				tiles[i][j]->setColor(Color(base.r - grayness, base.g - grayness, base.b -grayness, base.a));
-			}
-		}
+	for (int i = 0; i < tiles; i++)
+	{
+		int grayness = rand() % TERRITORY_FLOOR_TILES_GRAYNESS;
+		AxialCoordinates coordinates = grid.next();
+				
+		storage[coordinates]->setColor(Color(base.r - grayness, base.g - grayness, base.b -grayness, base.a));
 	}
 }
 
@@ -22,7 +20,7 @@ void Territory::colorBorderTiles()
 	{
 		int redness = rand() % TERRITORY_BORDER_TILES_REDNESS;
 
-		floorTiles[offset.x + borderCoordinates[i].q][offset.y + borderCoordinates[i].r]->setColor(Color(UCHAR_MAX - redness, 0, 0));
+		floorTiles[borderCoordinates[i].q][borderCoordinates[i].r]->setColor(Color(UCHAR_MAX - redness, 0, 0));
 	}
 }
 
@@ -44,44 +42,36 @@ void Territory::colorSafeZoneTiles()
 void Territory::colorEnemyAuraTiles()
 {
 	Color color = TERRITORY_ENEMY_AURA_COLOR;
-	HexagonGrid grid(Hexagon::FlatTopped, hexagonRadius);
 	
 	for (auto enemy : enemies)
 	{
 		HexagonGrid grid(Hexagon::FlatTopped, hexagonRadius);
-		AxialCoordinates coordinates = grid.getAxialCoordinates(enemy->getPosition() - getPosition());
+		AxialCoordinates origin = grid.getAxialCoordinates(enemy->getPosition() - getPosition());
 		int layers = TERRITORY_ENEMY_AURA_SIZE;
-		int x = offset.x + coordinates.q;
-		int y = offset.y + coordinates.r;
+		int tiles = grid.getNumberOfTiles(layers);
 
-		for (int i = 0; i < grid.getNumberOfTiles(layers); i++)
+		grid.setOrigin(origin);
+
+		for (int i = 0; i < tiles; i++)
 		{
-			int x;
-			int y;
 			int k;
-			AxialCoordinates hexagon = grid.next(k);
-
-			x = offset.x + hexagon.q + coordinates.q;
-			y = offset.y + hexagon.r + coordinates.r;
-
-			if (0 <= x && x < floorTilesLength && 0 <= y && y < floorTilesLength)
+			AxialCoordinates coordinates = grid.next(k);
+			
+			if (floorTiles.contains(coordinates))
 			{
-				if (floorTiles[x][y] != NULL)
-				{
-					Color tileColor = floorTiles[x][y]->getColor();
-					int amount = 2 * (layers - k);
-					int r = tileColor.r + sign(color.r - tileColor.r) * amount;
-					int g = tileColor.g + sign(color.g - tileColor.g) * amount;
-					int b = tileColor.b + sign(color.b - tileColor.b) * amount;
-					int a = tileColor.a;
+				Color tileColor = floorTiles[coordinates]->getColor();
+				int amount = TERRITORY_ENEMY_AURA_INTENSITY * (layers - k);
+				int r = tileColor.r + sign(color.r - tileColor.r) * amount;
+				int g = tileColor.g + sign(color.g - tileColor.g) * amount;
+				int b = tileColor.b + sign(color.b - tileColor.b) * amount;
+				int a = tileColor.a;
 					
-					r = limit(r, 0, UCHAR_MAX);
-					g = limit(g, 0, UCHAR_MAX);
-					b = limit(b, 0, UCHAR_MAX);
+				r = limit(r, 0, UCHAR_MAX);
+				g = limit(g, 0, UCHAR_MAX);
+				b = limit(b, 0, UCHAR_MAX);
 
-					floorTiles[x][y]->pushColor(Color(r, g, b, a));
-				}
-			}
+				floorTiles[coordinates]->pushColor(Color(r, g, b, a));
+			}			
 		}		
 	}
 }
@@ -89,15 +79,12 @@ void Territory::colorEnemyAuraTiles()
 // Remove effects such as enemy aura from floor tiles.
 void Territory::cleanFloorTiles()
 {
-	for (int i = 0; i < floorTilesLength; i++)
+	int tiles = HexagonGrid::getNumberOfTiles(layers);
+	HexagonGrid grid(Hexagon::FlatTopped);
+
+	for (int i = 0; i < tiles; i++)
 	{
-		for (int j = 0; j < floorTilesLength; j++)
-		{
-			if (floorTiles[i][j] != NULL)
-			{
-				floorTiles[i][j]->resetColor();
-			}
-		}
+		floorTiles[grid.next()]->resetColor();
 	}
 }
 
@@ -112,38 +99,22 @@ void Territory::prepareSafeZoneTiles(int tileGridLayers)
 		{-tileGridLayers,	tileGridLayers },
 		{-tileGridLayers,	0 },
 	};
-	int layers = 10;	
-	HexagonGrid grid(Hexagon::FlatTopped, hexagonRadius);
+	int layers = TERRITORY_SAFE_SIZE;
+	int tiles = HexagonGrid::getNumberOfTiles(layers);
 
 	for(int direction = 0; direction < 6; direction++)
 	{
-		int x = offset.x + origins[direction][0];
-		int y = offset.y + origins[direction][1];
-		
-		AxialCoordinates hexagon(origins[direction][0], origins[direction][1]);
+		HexagonGrid grid(Hexagon::FlatTopped, hexagonRadius);
 
-		safeZonesTiles[direction].push_back(floorTiles[x][y]);
+		grid.setOrigin(origins[direction][0], origins[direction][1]);
 
-		for (int k = 1; k <= layers; k++)
+		for (int i = 0; i < tiles; i++)
 		{
-			hexagon = AxialCoordinates(origins[direction][0] + -k, origins[direction][1] + k);
+			AxialCoordinates coordinate = grid.next();
 
-			for (int i = 0; i < 6; i++)
+			if (floorTiles.contains(coordinate))
 			{
-				for (int j = 0; j < k; j++)
-				{
-					x = offset.x + hexagon.q;
-					y = offset.y + hexagon.r;
-
-					if (0 <= x && x < floorTilesLength && 0 <= y && y < floorTilesLength)
-					{
-						if (floorTiles[x][y] != NULL)
-						{
-							safeZonesTiles[direction].push_back(floorTiles[x][y]);
-						}
-					}
-					hexagon = grid.step(hexagon, (HexagonGrid::HexagonDirection)((HexagonGrid::DownRight + i) % 6));
-				}
+				safeZonesTiles[direction].push_back(floorTiles[coordinate]);
 			}
 		}
 	}
@@ -298,7 +269,7 @@ void Territory::updatePlayer(UpdateInfo info)
 	{
 		for (int j = 0; j < safeZonesTiles[i].size(); j++)
 		{
-			FloorTile * tile = safeZonesTiles[i][j];
+			Hexagon * tile = safeZonesTiles[i][j];
 
 			if (Collision::hitBoxesOverlap(tile->getBoundingBox(), player->getBoundingBox()))
 			{
@@ -329,7 +300,7 @@ void Territory::updateBorderTiles()
 {
 	for (int i = 0; i < borderCoordinates.size(); i++)
 	{
-		FloorTile * tile = floorTiles[offset.x + borderCoordinates[i].q][offset.y + borderCoordinates[i].r];
+		Hexagon * tile = floorTiles[borderCoordinates[i].q][borderCoordinates[i].r];
 
 		if (Collision::hitBoxesOverlap(tile->getBoundingBox(), player->getBoundingBox()))
 		{
@@ -386,41 +357,33 @@ void Territory::updateProbes(Color color, Vector2f center)
 
 	for (auto probe : probes)
 	{
+		int layers = TERRITORY_PROBE_SIZE;
+		int tiles = HexagonGrid::getNumberOfTiles(layers);
 		HexagonGrid grid(Hexagon::FlatTopped, hexagonRadius);
-		AxialCoordinates coordinates = grid.getAxialCoordinates(probe.position - position);
-		AxialCoordinates hexagon;
-		int layers = 10;
-		int x = offset.x + coordinates.q;
-		int y = offset.y + coordinates.r;
+		AxialCoordinates origin = grid.getAxialCoordinates(probe.position - position);
+		
+		grid.setOrigin(origin);
 
-		for (int i = 0; i < grid.getNumberOfTiles(layers); i++)
+		for (int i = 0; i < tiles; i++)
 		{
-			int x;
-			int y;
 			int k;
-			AxialCoordinates hexagon = grid.next(k);
+			AxialCoordinates coordinates = grid.next(k);
 
-			x = offset.x + hexagon.q + coordinates.q;
-			y = offset.y + hexagon.r + coordinates.r;
-
-			if (0 <= x && x < floorTilesLength && 0 <= y && y < floorTilesLength)
+			if (fadeTiles.contains(coordinates))
 			{
-				if (fadeTiles[x][y] != NULL)
-				{
-					Color tileColor = fadeTiles[x][y]->getColor();
-					int amount = 4 * (layers - k);
-					int r = tileColor.r + sign(color.r - tileColor.r) * amount;
-					int g = tileColor.g + sign(color.g - tileColor.g) * amount;
-					int b = tileColor.b + sign(color.b - tileColor.b) * amount;
-					int a = tileColor.a + sign(color.a - tileColor.a) * amount;
+				Color tileColor = fadeTiles[coordinates]->getColor();
+				int amount = TERRITORY_PROBE_INTENSITY * (layers - k);
+				int r = tileColor.r + sign(color.r - tileColor.r) * amount;
+				int g = tileColor.g + sign(color.g - tileColor.g) * amount;
+				int b = tileColor.b + sign(color.b - tileColor.b) * amount;
+				int a = tileColor.a + sign(color.a - tileColor.a) * amount;
 
-					r = limit(r, 0, 255);
-					g = limit(g, 0, 255);
-					b = limit(b, 0, 255);
-					a = limit(a, 0, 255);
+				r = limit(r, 0, UCHAR_MAX);
+				g = limit(g, 0, UCHAR_MAX);
+				b = limit(b, 0, UCHAR_MAX);
+				a = limit(a, 0, UCHAR_MAX);
 
-					fadeTiles[x][y]->setColor(Color(r, g, b, a));
-				}
+				fadeTiles[coordinates]->setColor(Color(r, g, b, a));
 			}
 		}		
 	}
@@ -432,9 +395,8 @@ Territory::Territory(Vector2f position, float radius, World * world, SpawnConfig
 	float hexagonWidth;
 	float hexagonHeight;
 	int numberOfLayersHorizontal;
-	int numberOfLayersVertical;
-	int layers;
-	int spawnRingSize = 47;
+	int numberOfLayersVertical;	
+	int spawnRingSize = TERRITORY_ENEMY_SPAWN_RING_SIZE;
 	HexagonGrid grid(Hexagon::FlatTopped, TERRITORY_TILE_SIZE);
 	WeaponConfiguration wc;
 
@@ -456,11 +418,6 @@ Territory::Territory(Vector2f position, float radius, World * world, SpawnConfig
 	numberOfLayersVertical = ((2 * radius) - hexagonHeight) / (2 * hexagonHeight);
 	layers = (numberOfLayersHorizontal < numberOfLayersVertical) ? numberOfLayersHorizontal : numberOfLayersVertical;
 
-	// Floor tile matrix grid
-	offset.x = layers;
-	offset.y = layers;
-	floorTilesLength = (layers * 2) + 1;
-
 	// Prepare bounding box.
 	boundingBox.width = (layers * hexagonWidth * 1.5f) + hexagonWidth;
 	boundingBox.height = ((layers * 2) + 1) * hexagonHeight;
@@ -474,10 +431,12 @@ Territory::Territory(Vector2f position, float radius, World * world, SpawnConfig
 	entityCluster.create(VertexCluster::RectangleSource);
 	fadeTileCluster.create(8, grid.getNumberOfTiles(layers), 1, PrimitiveType::TrianglesStrip);
 
-	// Prepare the tiles.
-	floorTiles = FloorTile::generateGrid(position, hexagonRadius, layers, tileCluster.getCollection(0));
-	fadeTiles = FloorTile::generateGrid(position, hexagonRadius, layers, fadeTileCluster.getCollection(0));
+	// Prepare the background tiles.
+	floorTiles = grid.generateGrid(position, layers, tileCluster.getCollection(0));
 	
+	// Prepare the win/loss tiles.
+	fadeTiles = grid.generateGrid(position, layers, fadeTileCluster.getCollection(0));
+
 	// Prepare border.
 	borderCoordinates = grid.getRingCoordinates(layers);
 
@@ -489,14 +448,17 @@ Territory::Territory(Vector2f position, float radius, World * world, SpawnConfig
 	spatialPartitionSafeRoomTiles();
 
 	// Color tiles.
-	colorTiles(floorTiles, Color(UCHAR_MAX, UCHAR_MAX, UCHAR_MAX, UCHAR_MAX));
-	colorTiles(fadeTiles, Color(UCHAR_MAX, UCHAR_MAX, UCHAR_MAX, 0));
+	colorTiles(floorTiles, TERRITORY_FLOOR_TILES_BASE_COLOR);
+	colorTiles(fadeTiles, TERRITORY_FADE_TILES_BASE_COLOR);
 	colorBorderTiles();
 	colorSafeZoneTiles();
 }
 
 Territory::~Territory()
 {
+	int tiles = HexagonGrid::getNumberOfTiles(layers);
+	HexagonGrid grid(Hexagon::FlatTopped);
+
 	integrateSpawnQueue();
 
 	for (auto projectile : enemyProjectiles)
@@ -519,18 +481,20 @@ Territory::~Territory()
 		delete effect;		
 	}
 
-	for (int i = 0; i < floorTilesLength; i++)
+	for (int i = 0; i < tiles; i++)
 	{
-		for (int j = 0; j < floorTilesLength; j++)
-		{
-			if (floorTiles[i][j] != NULL)
-			{
-				delete floorTiles[i][j];
-			}
-		}
-		delete[] floorTiles[i];
+		AxialCoordinates coordinates = grid.next();
+
+		delete floorTiles[coordinates.q][coordinates.r];
 	}
-	delete[] floorTiles;
+	grid.reset();
+
+	for (int i = 0; i < tiles; i++)
+	{
+		AxialCoordinates coordinates = grid.next();
+
+		delete floorTiles[coordinates.q][coordinates.r];
+	}	
 }
 
 queue<Entity *> *Territory::getSpawnQueue()
@@ -648,15 +612,9 @@ vector<Vector2f> Territory::getSpawnPoints()
 
 	for (auto coordinate : spawnGrid)
 	{
-		int x = offset.x + coordinate.q;
-		int y = offset.y + coordinate.r;
-
-		if (0 <= x && x < floorTilesLength && 0 <= y && y < floorTilesLength)
+		if (floorTiles.contains(coordinate))
 		{
-			if (floorTiles[x][y] != NULL)
-			{
-				spawnPoints.push_back(position + grid.getPosition(coordinate));
-			}
+			spawnPoints.push_back(position + grid.getPosition(coordinate));
 		}
 	}
 	return spawnPoints;

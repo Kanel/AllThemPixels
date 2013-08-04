@@ -4,7 +4,9 @@
 #include "SAT.h"
 #include "VertexCollection.h"
 #include <SFML/Graphics.hpp>
+#include <stack>
 
+using std::stack;
 using namespace sf;
 
 class Hexagon
@@ -26,7 +28,10 @@ private:
 	Rect<float> boundingBox;
 	ConvexHull convexHull;
 	VertexCollection * vertexSource;
-	Color originalColor;
+	stack<Color> colorStack;
+
+private:
+	void updateColor();
 
 public:	
 	Hexagon(Vector2f position, float radius, Color color, Style style, VertexCollection * vertexSource);
@@ -35,9 +40,14 @@ public:
 	Style getStyle();
 	Rect<float> getBoundingBox();
 	ConvexHull getConvexHull();
-	Vector2f * getPoints(int &count);
+	Vector2f * getPoints(int &count);	
+
 	Color getColor();
 	void setColor(Color color);
+
+	void pushColor(Color color);
+	void popColor(Color color);
+	void resetColor();
 
 	void applyTransform(Transform transform);
 };

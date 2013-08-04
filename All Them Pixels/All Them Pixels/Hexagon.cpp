@@ -1,14 +1,26 @@
 #include "Hexagon.h"
 
-//Hexagon::Hexagon() { }
+void Hexagon::updateColor()
+{
+	Color color = colorStack.top();
+
+	if ((*vertexSource)[vertexOffset].color != color)
+	{
+		for (int i = 0; i < vertexCount; i++)
+		{
+			(*vertexSource)[vertexOffset + i].color = color;
+		}
+	}
+}
 
 Hexagon::Hexagon(Vector2f position, float radius, Color color, Style style, VertexCollection * vertexSource) : convexHull(6)
 {
-	this->originalColor = color;
 	this->vertexSource = vertexSource;
 
 	vertexCount = 8;
 	vertexOffset = vertexSource->add();
+
+	colorStack.push(color);
 
 	if (style == FlatTopped)
 	{
@@ -111,14 +123,40 @@ Vector2f * Hexagon::getPoints(int &count)
 
 Color Hexagon::getColor()
 {
-	return (*vertexSource)[vertexOffset].color;
+	return colorStack.top();
 }
 
 void Hexagon::setColor(Color color)
 {
-	for (int i = 0; i < vertexCount; i++)
+	while (colorStack.size() > 0)
 	{
-		(*vertexSource)[vertexOffset + i].color = color;
+		colorStack.pop();
+	}
+	colorStack.push(color);
+	updateColor();
+}
+
+void Hexagon::pushColor(Color color)
+{
+	colorStack.push(color);
+	updateColor();
+}
+
+void Hexagon::popColor(Color color)
+{
+	colorStack.pop();
+	updateColor();
+}
+
+void Hexagon::resetColor()
+{
+	if (colorStack.size() > 1)
+	{
+		while (colorStack.size() > 1)
+		{
+			colorStack.pop();
+		}
+		updateColor();
 	}
 }
 

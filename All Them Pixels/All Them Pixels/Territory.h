@@ -15,7 +15,6 @@
 #include "HexagonGrid.h"
 #include "VertexCluster.h"
 #include "Config.h"
-#include "FloorTile.h"
 #include "EnemySpawner.h"
 #include "ParticleSystem.h"
 #include "Helper.h"
@@ -51,32 +50,31 @@ private:
 private:
 	bool active;
 	float radius;
-	int floorTilesLength;
 	float hexagonRadius;
+	int layers;
 	Vector2f position;
 	queue<Entity *> spawnQueue;
 	list<Projectile *> enemyProjectiles;
 	list<Projectile *> playerProjectiles;
 	list<Enemy *> enemies;
 	list<Effect *> effects;
-	Vector2i offset;
-	FloorTile *** floorTiles;
+	HexagonGridStorage floorTiles;
 	vector<AxialCoordinates> borderCoordinates;
 	World * world;
 	Rect<float> boundingBox;
-	vector<FloorTile *> safeZonesTiles[6];
-	unordered_map<Uint32, list<FloorTile *>> partitionedSafeZonesTiles[6];
+	vector<Hexagon *> safeZonesTiles[6];
+	unordered_map<Uint32, list<Hexagon *>> partitionedSafeZonesTiles[6];
 	vector<AxialCoordinates> spawnGrid;
 	VertexCluster tileCluster;
 	VertexCluster entityCluster;
 	VertexCluster fadeTileCluster;
 	Sounds * sounds;
 	vector<Probe> probes;
-	FloorTile *** fadeTiles;
+	HexagonGridStorage fadeTiles;
 	EnemySpawner enemySpawner;
 
 private:
-	void colorTiles(FloorTile *** tiles, Color base);
+	void colorTiles(HexagonGridStorage &storage, Color base);
 	void colorBorderTiles();
 	void colorSafeZoneTiles();
 	void colorEnemyAuraTiles();
@@ -91,6 +89,7 @@ private:
 	void updateBorderTiles();
 	void prepareProbes(Vector2f center);
 	void updateProbes(Color color, Vector2f center);
+	void populateHexagonGrid(HexagonGridStorage &storage, VertexCollection * vertexSource);
 
 public:	
 	Player * player;

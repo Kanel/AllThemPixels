@@ -114,9 +114,6 @@
     <ClCompile Include="Hexagon.cpp">
       <Filter>Source Files\Shapes</Filter>
     </ClCompile>
-    <ClCompile Include="FloorTile.cpp">
-      <Filter>Source Files\Shapes</Filter>
-    </ClCompile>
     <ClCompile Include="Collision.cpp">
       <Filter>Source Files\Geometry</Filter>
     </ClCompile>
@@ -167,6 +164,12 @@
     </ClCompile>
     <ClCompile Include="Helper.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="HexagonGridStorage.cpp">
+      <Filter>Source Files\Shapes</Filter>
+    </ClCompile>
+    <ClCompile Include="HexagonGridStorageRow.cpp">
+      <Filter>Source Files\Shapes</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -230,9 +233,6 @@
     <ClInclude Include="HexagonGrid.h">
       <Filter>Header Files\Shapes</Filter>
     </ClInclude>
-    <ClInclude Include="FloorTile.h">
-      <Filter>Header Files\Shapes</Filter>
-    </ClInclude>
     <ClInclude Include="EntityTypes.h">
       <Filter>Header Files\Entities</Filter>
     </ClInclude>
@@ -283,6 +283,15 @@
     </ClInclude>
     <ClInclude Include="Helper.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="HexagonGridStorageRow.h">
+      <Filter>Header Files\Shapes</Filter>
+    </ClInclude>
+    <ClInclude Include="HexagonGridStorage.h">
+      <Filter>Header Files\Shapes</Filter>
+    </ClInclude>
+    <ClInclude Include="AxialCoordinates.h">
+      <Filter>Header Files\Shapes</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

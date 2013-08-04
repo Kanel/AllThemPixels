@@ -49,6 +49,7 @@ vector<WeaponConfiguration> World::getWeaponConfigurations()
 
 World::World(Vector2f position, float territoryRadius, float territorySpacing, int layers)
 {
+	int tiles = HexagonGrid::getNumberOfTiles(layers);
 	HexagonGrid grid(Hexagon::PointyTopped, territoryRadius);
 	SpawnConfiguration spawnConfig;
 	PlayerConfiguration playerconfig;
@@ -58,14 +59,14 @@ World::World(Vector2f position, float territoryRadius, float territorySpacing, i
 	this->layers = layers;
 	this->player = NULL;
 
-	playerconfig.hp = 10000000;
-	playerconfig.speed = 3.5;
-	playerconfig.weaponConfig.cooldown = 100;
-	playerconfig.weaponConfig.damage = 100;
-	playerconfig.weaponConfig.piercing = 1;
-	playerconfig.weaponConfig.speed = 20;
-	playerconfig.weaponConfig.spread = 5;
-	playerconfig.weaponConfig.ttl = 55;
+	playerconfig.hp = PLAYER_DEFAULT_HP;
+	playerconfig.speed = PLAYER_DEFAULT_SPEED;
+	playerconfig.weaponConfig.cooldown = PLAYER_DEFAULT_WEAPON_COOLDOWN;
+	playerconfig.weaponConfig.damage = PLAYER_DEFAULT_WEAPON_DAMAGE;
+	playerconfig.weaponConfig.piercing = PLAYER_DEFAULT_WEAPON_PIERCING;
+	playerconfig.weaponConfig.speed = PLAYER_DEFAULT_WEAPON_SPEED;
+	playerconfig.weaponConfig.spread = PLAYER_DEFAULT_WEAPON_SPREAD;
+	playerconfig.weaponConfig.ttl = PLAYER_DEFAULT_WEAPON_TTL;
 
 	player = new Player(NULL, playerconfig, Vector2f(0, 0));
 	matrixSize = (layers * 2) + 1;
@@ -91,23 +92,12 @@ World::World(Vector2f position, float territoryRadius, float territorySpacing, i
 
 	territoryCount = 0;
 
-	// Center territory
-	territories[offset.x][offset.y] = new Territory(position, territoryRadius, this, spawnConfig);
-
-	// Layer territories
-	for (int k = 1; k <= layers; k++)
+	for (int i = 0; i < tiles; i++)
 	{
-		AxialCoordinates hexagon(-k, k);
+		Vector2f territoryPosition;
+		AxialCoordinates coordinates = grid.next(territoryPosition);
 
-		for (int i = 0; i < 6; i++)
-		{
-			for (int j = 0; j < k; j++)
-			{
-				territories[offset.x + hexagon.q][offset.y + hexagon.r] = new Territory(position + grid.getPosition(hexagon), territoryRadius, this, spawnConfig);
-
-				hexagon = grid.step(hexagon, (HexagonGrid::HexagonDirection)((HexagonGrid::DownRight + i) % 6));
-			}
-		}
+		territories[offset.x + coordinates.q][offset.y + coordinates.r] = new Territory(position + territoryPosition, territoryRadius, this, spawnConfig);
 	}
 
 	//randomize starting territory
@@ -178,17 +168,16 @@ Player * World::getPlayer()
 
 void World::draw(RenderTarget& target, RenderStates states) const
 {
-	for (int i = 0; i < matrixSize; i++)
+	int tiles = HexagonGrid::getNumberOfTiles(layers);
+	HexagonGrid grid(Hexagon::FlatTopped);
+
+	for (int i = 0; i < tiles; i++)
 	{
-		for (int j = 0; j < matrixSize; j++)
+		AxialCoordinates coordinates = grid.next();
+
+		if (Collision::isWithinWindow(territories[coordinates.q][coordinates.r]->getBoundingBox(), target.getView()))
 		{
-			if (territories[i][j] != NULL)
-			{
-				if (Collision::isWithinWindow(territories[i][j]->getBoundingBox(), target.getView()))
-				{
-					target.draw(*(territories[i][j]));
-				}
-			}
+			target.draw(*(territories[coordinates.q][coordinates.r]));
 		}
 	}
 	if (Joystick::isButtonPressed(0,6)) //is this the back button?
@@ -203,21 +192,22 @@ void World::update(UpdateInfo info, Sounds * sounds)
 	if (Joystick::isButtonPressed(0, GAMEPAD_BACK))
 	{
 		//paused = true;
-		map->setPosition(player->getPosition());// plus some offset?
-
+		map->setPosition(player->getPosition());// plus some offset? MAYBE!
 	}
 	else
 	{
-		for (int i = 0; i < matrixSize; i++)
+		int tiles = HexagonGrid::getNumberOfTiles(layers);
+		HexagonGrid grid(Hexagon::FlatTopped);
+
+		for (int i = 0; i < tiles; i++)
 		{
-			for (int j = 0; j < matrixSize; j++)
+			AxialCoordinates coordinates = grid.next();
+
+			if (territories[coordinates.q][coordinates.r]->isActive())
 			{
-				if (territories[i][j] != NULL && territories[i][j]->isActive())
-				{
-					territories[i][j]->integrateSpawnQueue();
-					territories[i][j]->update(info, sounds);
-					territories[i][j]->cleanup();
-				}
+				territories[coordinates.q][coordinates.r]->integrateSpawnQueue();
+				territories[coordinates.q][coordinates.r]->update(info, sounds);
+				territories[coordinates.q][coordinates.r]->cleanup();
 			}
 		}
 	}

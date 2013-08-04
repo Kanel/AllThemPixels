@@ -1,35 +1,30 @@
 #include "Map.h"
 
-Map::Map()
+Map::Map() : storage(0)
 {
-	hexagonLength = 1;
+	layers = 0;
 }
 
-Map::Map(Vector2f position, int layers, float hexagonRadius, Hexagon::Style style)
+Map::Map(Vector2f position, int layers, float hexagonRadius, Hexagon::Style style) : storage(0)
 {
 	HexagonGrid grid(Hexagon::FlatTopped, hexagonRadius);
 
-	mapVertexCollection = new VertexCollection(8, grid.getNumberOfTiles(layers), 1, PrimitiveType::TrianglesStrip);
-	hexagonLength = (layers * 2) + 1;
-	offset = Vector2i(layers, layers);
-	hexagons = grid.generateGrid(position, layers, mapVertexCollection);	
+	this->mapVertexCollection = new VertexCollection(8, grid.getNumberOfTiles(layers), 1, PrimitiveType::TrianglesStrip);
+	this->layers = layers;
+	this->storage = grid.generateGrid(position, layers, mapVertexCollection);	
 }
 
 Map::~Map()
 {
-	for (int i = 0; i < hexagonLength; i++)
-	{
-		for (int j = 0; j < hexagonLength; j++)
-		{
-			if (hexagons[i][j] != NULL)
-			{
-				delete hexagons[i][j];
-			}
-		}
-		delete[] hexagons[i];
-	}
-	delete[] hexagons;
+	int tiles = HexagonGrid::getNumberOfTiles(layers);
+	HexagonGrid grid(Hexagon::FlatTopped);
 
+	for (int i = 0; i < tiles; i++)
+	{
+		AxialCoordinates coordinates = grid.next();
+
+		delete storage[coordinates.q][coordinates.r];
+	}
 	delete mapVertexCollection;
 }
 
@@ -60,30 +55,31 @@ void Map::setPosition(Vector2f position)
 
 void Map::colorize()
 {
-
 	int i;
+
 	for (i = 0; i < beenThere.size(); i++)
 	{
-		hexagons[offset.x + beenThere[i].q][offset.y + beenThere[i].r]->setColor(Color::Blue);
+		storage[beenThere[i]]->setColor(Color::Blue);
 	}
+
 	for (i = 0; i < doneThat.size(); i++)
 	{
-		hexagons[offset.x + doneThat[i].q][offset.y + doneThat[i].r]->setColor(Color::Green);
+		storage[doneThat[i]]->setColor(Color::Green);
 	}
-	hexagons[offset.x + playerLocation.q][offset.y + playerLocation.r]->setColor(Color::Black);
+
+	storage[playerLocation]->setColor(Color::Black);
 }
 
 void Map::applyTransform(Transform transform)
 {
-	for (int i = 0; i < hexagonLength; i++)
+	int tiles = HexagonGrid::getNumberOfTiles(layers);
+	HexagonGrid grid(Hexagon::FlatTopped);
+
+	for (int i = 0; i < tiles; i++)
 	{
-		for (int j = 0; j < hexagonLength; j++)
-		{
-			if (hexagons[i][j] != NULL)
-			{
-				hexagons[i][j]->applyTransform(transform);
-			}
-		}
+		AxialCoordinates coordinates = grid.next();
+
+		storage[coordinates.q][coordinates.r]->applyTransform(transform);
 	}
 }
 

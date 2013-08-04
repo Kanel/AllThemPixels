@@ -7,14 +7,13 @@
 class Map : public Drawable
 {
 private:
-	int hexagonLength;
+	int layers;
 	Vector2f position;
-	Hexagon *** hexagons;
+	HexagonGridStorage storage;
 	VertexCollection * mapVertexCollection;
 	vector<AxialCoordinates> beenThere;
 	vector<AxialCoordinates> doneThat;
 	AxialCoordinates playerLocation;
-	Vector2i offset;
 
 public:
 	Map();

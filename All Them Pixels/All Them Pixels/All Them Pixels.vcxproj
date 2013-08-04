@@ -95,11 +95,12 @@
     <ClCompile Include="EnemySpawner.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="Flag.cpp" />
-    <ClCompile Include="FloorTile.cpp" />
     <ClCompile Include="GlareEffect.cpp" />
     <ClCompile Include="Helper.cpp" />
     <ClCompile Include="Hexagon.cpp" />
     <ClCompile Include="HexagonGrid.cpp" />
+    <ClCompile Include="HexagonGridStorage.cpp" />
+    <ClCompile Include="HexagonGridStorageRow.cpp" />
     <ClCompile Include="HexagonHull.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Map.cpp" />
@@ -122,6 +123,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AI.h" />
+    <ClInclude Include="AxialCoordinates.h" />
     <ClInclude Include="Cero.h" />
     <ClInclude Include="CircleBar.h" />
     <ClInclude Include="Collision.h" />
@@ -134,11 +136,12 @@
     <ClInclude Include="Entity.h" />
     <ClInclude Include="EntityTypes.h" />
     <ClInclude Include="Flag.h" />
-    <ClInclude Include="FloorTile.h" />
     <ClInclude Include="GlareEffect.h" />
     <ClInclude Include="Helper.h" />
     <ClInclude Include="Hexagon.h" />
     <ClInclude Include="HexagonGrid.h" />
+    <ClInclude Include="HexagonGridStorage.h" />
+    <ClInclude Include="HexagonGridStorageRow.h" />
     <ClInclude Include="HexagonHull.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="MonotoneChain.h" />

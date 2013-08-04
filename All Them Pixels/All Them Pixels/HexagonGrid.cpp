@@ -112,9 +112,22 @@ AxialCoordinates HexagonGrid::step(AxialCoordinates axialCoordinates, HexagonDir
 	return axialCoordinates + neighbors[direction]; 
 }
 
+void HexagonGrid::setOrigin(int q, int r)
+{
+	origin = AxialCoordinates(q, r);
+}
+
 void HexagonGrid::setOrigin(AxialCoordinates origin)
 {
 	this->origin = origin;
+}
+
+void HexagonGrid::reset()
+{
+	layer = 0;
+	segment = 6;
+	segmentPosition = 0;
+	nextCoordinate = AxialCoordinates();
 }
 
 AxialCoordinates HexagonGrid::next()
@@ -181,45 +194,19 @@ vector<AxialCoordinates> HexagonGrid::getRingCoordinates(int layer)
 	return coordinates;
 }
 
-Hexagon *** HexagonGrid::generateGrid(Vector2f position, int layers, VertexCollection * vertexSource)
+HexagonGridStorage HexagonGrid::generateGrid(Vector2f position, int layers, VertexCollection * vertexSource)
 {
 	int spacing = 0;
-	int matrixLength = (layers * 2) + 1;
-	Vector2i offset(layers, layers);
-	Hexagon *** matrix;
-	Vector2f hexagonPosition = position + getPosition(AxialCoordinates(0, 0));
-	
-	// Allocate matrix.
-	matrix = new Hexagon**[matrixLength];
+	int tiles = HexagonGrid::getNumberOfTiles(layers);
+	HexagonGrid grid(Hexagon::FlatTopped, size);
+	HexagonGridStorage storage(layers);
 
-	for (int i = 0; i < matrixLength; i++)
+	for (int i = 0; i < tiles; i++)
 	{
-		matrix[i] = new Hexagon*[matrixLength];
+		AxialCoordinates coordinates = grid.next();
+		Vector2f hexagonPosition = position + getPosition(coordinates);
 
-		for (int j = 0; j < matrixLength; j++)
-		{
-			matrix[i][j] = NULL;
-		}
-	}
-
-	// Populate matrix.
-	matrix[offset.x][offset.y] = new Hexagon(hexagonPosition, size - spacing, Color(255, 255, 255), style, vertexSource);
-
-	for (int k = 1; k <= layers; k++)
-	{
-		AxialCoordinates hexagon = AxialCoordinates(-k, k);
-
-		for (int i = 0; i < 6; i++)
-		{
-			for (int j = 0; j < k; j++)
-			{
-				hexagonPosition = position + getPosition(hexagon);
-				matrix[offset.x + hexagon.q][offset.y + hexagon.r] = new Hexagon(hexagonPosition, size - spacing, Color(255, 255, 255), style, vertexSource);
-				
-				hexagon = step(hexagon, (HexagonGrid::HexagonDirection)((HexagonGrid::DownRight + i) % 6));
-			}
-		}
-	}
-	
-	return matrix;
+		storage[coordinates.q][coordinates.r] = new Hexagon(hexagonPosition, size - spacing, Color(255, 255, 255), style, vertexSource);
+	}	
+	return storage;
 }

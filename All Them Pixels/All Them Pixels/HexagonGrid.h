@@ -4,36 +4,12 @@
 
 #include "Entity.h"
 #include "Shapes.h"
-#include "Hexagon.h"
+#include "HexagonGridStorage.h"
+#include "AxialCoordinates.h"
 #include <math.h>
 #include <vector>
 
 using std::vector;
-
-class AxialCoordinates
-{
-public:
-	int q;
-	int r;
-
-public:
-	AxialCoordinates() 
-	{
-		this->q = 0;
-		this->r = 0;
-	}
-
-	AxialCoordinates(int q, int r)
-	{
-		this->q = q;
-		this->r = r;
-	}
-
-	AxialCoordinates operator+(AxialCoordinates &other)
-	{
-		return AxialCoordinates(q + other.q, r + other.r);
-	}
-};
 
 class HexagonGrid
 {
@@ -64,17 +40,20 @@ public:
 	};
 
 public:
-	HexagonGrid(Hexagon::Style style, float size);
+	HexagonGrid(Hexagon::Style style, float size = 0);
 	//HexagonGrid(Hexagon::Style style, float size, AxialCoordinates origin);
 
-	int getNumberOfTiles(int layers);
-	int getNumberOfTilesInLayer(int layer);
+	static int getNumberOfTiles(int layers);
+	static int getNumberOfTilesInLayer(int layer);
 
 	Vector2f getPosition(AxialCoordinates axialCoordinates);
 	AxialCoordinates getAxialCoordinates(Vector2f position);
 	AxialCoordinates step(AxialCoordinates axialCoordinates, HexagonDirection direction);
 
+	void setOrigin(int q, int r);
 	void setOrigin(AxialCoordinates origin);
+
+	void reset();
 
 	AxialCoordinates next();
 	AxialCoordinates next(int &layer);
@@ -82,5 +61,5 @@ public:
 
 	vector<AxialCoordinates> getCornerRegionCoordinates(int corner);
 	vector<AxialCoordinates> getRingCoordinates(int layer);
-	Hexagon *** generateGrid(Vector2f position, int layers, VertexCollection * vertexSource);
+	HexagonGridStorage generateGrid(Vector2f position, int layers, VertexCollection * vertexSource);
 };
