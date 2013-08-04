@@ -1,11 +1,13 @@
 #pragma once
 
 #include "Config.h"
+#include <math.h>
 
 #define UIC_SCROLL_LEFT GAMEPAD_LB
 #define UIC_SCROLL_RIGHT GAMEPAD_RB
 #define UIC_INCREASE_SKILL GAMEPAD_START
 #define UIC_DECREASE_SKILL GAMEPAD_BACK
+#define JOYSTICK_MAX_STRENGTH sqrtf(powf(100, 2) + powf(100, 2))
 
 #include <SFML/Graphics.hpp>
 

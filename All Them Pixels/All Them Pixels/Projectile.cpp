@@ -87,5 +87,5 @@ void Projectile::update(UpdateInfo info)
 	
 	expended = (ttl < 1);
 
-	translate(speed);
+	translate(speed * (info.updateInterval / 1000.0f));
 }

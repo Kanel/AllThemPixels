@@ -22,21 +22,21 @@ vector<WeaponConfiguration> World::getWeaponConfigurations()
 	weaponA.cooldown = 500;
 	weaponA.damage = 20;
 	weaponA.piercing = 1;
-	weaponA.speed = 8;
+	weaponA.speed = 1000;
 	weaponA.spread = 4;
 	weaponA.ttl = 500;
 
-	weaponB.cooldown = 100;
-	weaponB.damage = 4;
+	weaponB.cooldown = 10;
+	weaponB.damage = 1;
 	weaponB.piercing = 1;
-	weaponB.speed = 8;
+	weaponB.speed = 950;
 	weaponB.spread = 4;
 	weaponB.ttl = 500;
 
 	weaponC.cooldown = 1000;
 	weaponC.damage = 5000;
 	weaponC.piercing = 1;
-	weaponC.speed = 16;
+	weaponC.speed = 1600;
 	weaponC.spread = 4;
 	weaponC.ttl = 500;
 
@@ -47,7 +47,7 @@ vector<WeaponConfiguration> World::getWeaponConfigurations()
 	return enemyWeapons;
 }
 
-World::World(Vector2f position, float territoryRadius, float territorySpacing, int layers)
+World::World(Vector2f position, float territoryRadius, float territorySpacing, int layers) : territories(layers)
 {
 	int tiles = HexagonGrid::getNumberOfTiles(layers);
 	HexagonGrid grid(Hexagon::PointyTopped, territoryRadius);
@@ -59,6 +59,7 @@ World::World(Vector2f position, float territoryRadius, float territorySpacing, i
 	this->layers = layers;
 	this->player = NULL;
 
+	// Load default player config.
 	playerconfig.hp = PLAYER_DEFAULT_HP;
 	playerconfig.speed = PLAYER_DEFAULT_SPEED;
 	playerconfig.weaponConfig.cooldown = PLAYER_DEFAULT_WEAPON_COOLDOWN;
@@ -70,14 +71,13 @@ World::World(Vector2f position, float territoryRadius, float territorySpacing, i
 
 	player = new Player(NULL, playerconfig, Vector2f(0, 0));
 
-	spawnConfig.spawnPoints = 10000;
-	spawnConfig.spawnRate = 500;
+	// Load default spawning behaviour.
+	spawnConfig.spawnPoints = WORLD_TERRITORY_SPAWN_POINTS;
+	spawnConfig.spawnRate = WORLD_TERRITORY_SPAWN_RATE;
 	spawnConfig.aiProperties = getAIProperties();
 	spawnConfig.enemyWeapons = getWeaponConfigurations();
 
 	// Territory storage
-	territories = HexagonGridStorage<Territory *>(layers);
-
 	for (int i = 0; i < tiles; i++)
 	{
 		Vector2f territoryPosition;
@@ -86,11 +86,8 @@ World::World(Vector2f position, float territoryRadius, float territorySpacing, i
 		territories[coordinates] = new Territory(position + territoryPosition, territoryRadius, this, spawnConfig);
 	}
 
-	//randomize starting territory
-	grid.getRingCoordinates(layers);
-
+	// Initilize minimap.
 	map = new Map(Vector2f(), layers, 50, Hexagon::Style::FlatTopped);
-
 }
 
 Territory * World::getCurrentTerritory()
@@ -107,17 +104,19 @@ void World::changeTerritory(Vector2f position)
 {
 	HexagonGrid grid(Hexagon::PointyTopped, territoryRadius);
 	AxialCoordinates nextCoordinates = grid.getAxialCoordinates(position);
-	Territory * current = getTerritory(currentTerritoryCoordinates);
+	Territory * current = getCurrentTerritory();
 	Territory * next = getTerritory(nextCoordinates);
 	Player * player = current->player;
 	
 	current->deactivate();
 	next->activate(player);
-
-	player->setPosition(position);//next->getPosition());
-
+	player->setPosition(position);
 	map->setPlayerLocation(nextCoordinates);
-	if (current->isCleared()) map->addClearedTerritory(currentTerritoryCoordinates);
+
+	if (current->isCleared())
+	{
+		map->addClearedTerritory(currentTerritoryCoordinates);
+	}
 
 	currentTerritoryCoordinates = nextCoordinates;
 }

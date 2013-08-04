@@ -52,7 +52,7 @@ protected:
 protected:
 	void applyTransform(Transform transform, Vertex vertices[], int count);
 	float getDirection(Joystick::Axis axisX, Joystick::Axis axisY);
-	Vector2f getJoystickVector(Joystick::Axis x, Joystick::Axis y);
+	float getStrength(Joystick::Axis x, Joystick::Axis y);
 	void updateAim();
 
 public:

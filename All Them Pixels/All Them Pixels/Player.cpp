@@ -39,14 +39,11 @@ float Player::getDirection(Joystick::Axis axisX, Joystick::Axis axisY)
 	return direction * (180 / M_PI);	
 }
 
-Vector2f Player::getJoystickVector(Joystick::Axis x, Joystick::Axis y)
+float Player::getStrength(Joystick::Axis x, Joystick::Axis y)
 {
-	Vector2f vector= UserInput::getJoystickVector(x, y);
+	Vector2f vector = UserInput::getJoystickVector(Joystick::Axis::X, Joystick::Axis::Y);
 
-	vector.x = (powf(vector.x, 2) > 500) ? vector.x / 15 : 0;
-	vector.y = (powf(vector.y, 2) > 500) ? vector.y / 15 : 0;
-
-	return vector;
+	return Vector2fMath::length(vector) / JOYSTICK_MAX_STRENGTH;
 }
 
 void Player::updateAim()
@@ -186,16 +183,18 @@ void Player::draw(RenderTarget& target, RenderStates states) const
 void Player::update(UpdateInfo info)
 {
 	int shots;
+	float strength = getStrength(Joystick::Axis::U, Joystick::Axis::R);
 	Vector2f spawn = aimBoxPosition;
-	Vector2f direction = Vector2fMath::unitVector(getJoystickVector(Joystick::Axis::U, Joystick::Axis::R));
-	
-	speed = getJoystickVector(Joystick::Axis::X, Joystick::Axis::Y) * (float)config.speed;
+	Vector2f leftJoystick = UserInput::getJoystickVector(Joystick::Axis::U, Joystick::Axis::R);
+	Vector2f direction = Vector2fMath::unitVector(leftJoystick);
+	float abc = (config.speed * strength * (info.updateInterval / 1000.0f));
+	speed = Vector2fMath::unitVector(UserInput::getJoystickVector(Joystick::Axis::X, Joystick::Axis::Y)) * (config.speed * strength * (info.updateInterval / 1000.0f));
 	aimVector = direction;
 
 	updateAim();
 	translate(speed);
 	
-	if (weapon.isReady(info.elapsedGameTime, info.updateInterval, shots) && !(direction == Vector2f()))
+	if (weapon.isReady(info.elapsedGameTime, info.updateInterval, shots) && Vector2fMath::length(leftJoystick) > GAMEPAD_JOYSTICK_THRESHOLD)
 	{
 		for (int i = 0; i < shots; i++)
 		{

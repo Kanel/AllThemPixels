@@ -4,8 +4,13 @@ using namespace sf;
 
 Sounds::Sounds()
 {
-	if(this->music.openFromFile(SOUNDS_BACKGROUND_MUSIC))
+	volumeMusic = SOUNDS_VOLUME_MUSIC;
+	volumeEffects = SOUNDS_VOLUME_EFFECTS;
+	volumeUI = SOUNDS_VOLUME_UI;
+
+	if(music.openFromFile(SOUNDS_BACKGROUND_MUSIC))
 	{
+		music.setVolume(volumeMusic);
 		music.setLoop(true);
 		music.play();
 	}
@@ -26,19 +31,26 @@ void Sounds::play(SoundTypes what, Vector2f where)
 	{
 		case SoundTypes::EnemyDeath:
 			sound->setBuffer(this->coinBuffer);
-			//sound->setPosition(where.x, where.y, 0);
+			sound->setVolume(volumeEffects);
+
 			break;
 
 		case SoundTypes::PlayerHit:
 			sound->setBuffer(this->hurtBuffer);
+			sound->setVolume(volumeEffects);
+
 			break;
 
 		case SoundTypes::SkillScroll:
 			sound->setBuffer(this->selectBuffer);
+			sound->setVolume(volumeUI);
+
 			break;
 
 		case SoundTypes::Shot:
 			sound->setBuffer(this->shootBuffer);
+			sound->setVolume(volumeEffects);
+
 			break;
 
 		default:
@@ -57,6 +69,4 @@ void Sounds::play(SoundTypes what, Vector2f where)
 		
 		delete sound;
 	}
-		
-	
 }

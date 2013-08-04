@@ -5,6 +5,9 @@
 #include <list>
 #include <direct.h>
 
+using std::list;
+using namespace sf;
+
 enum SoundTypes
 {
 	Shot = 1,
@@ -16,15 +19,18 @@ enum SoundTypes
 class Sounds
 {
 protected:
-	sf::Music music;
-	sf::SoundBuffer coinBuffer;
-	sf::SoundBuffer hurtBuffer;
-	sf::SoundBuffer selectBuffer;
-	sf::SoundBuffer shootBuffer;
-	std::list<sf::Sound *> soundQueue;
+	int volumeMusic;
+	int volumeEffects;
+	int volumeUI;
+	Music music;
+	SoundBuffer coinBuffer;
+	SoundBuffer hurtBuffer;
+	SoundBuffer selectBuffer;
+	SoundBuffer shootBuffer;
+	list<Sound *> soundQueue;
 
 public:
 	Sounds();
 
-	void play(SoundTypes what, sf::Vector2f = sf::Vector2f(0,0));
+	void play(SoundTypes what, Vector2f = Vector2f(0,0));
 };

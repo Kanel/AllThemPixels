@@ -157,7 +157,7 @@ void ParticleSystem::update(UpdateInfo info)
 		(*vertexSource)[particle.vertexOffset + 3].color = particle.color;
 		Vector2f abc = particle.speed * (info.updateInterval / 1000.0f);	
 		// Update particle position
-		particle.position += systemSpeed * 0.3f + particle.speed * (info.updateInterval / 1000.0f);
+		particle.position += (systemSpeed * 0.25f + particle.speed) * (info.updateInterval / 1000.0f);
 
 		// Update particle visual
 		(*vertexSource)[particle.vertexOffset + 0].position = Vector2f(particle.position.x + (particle.size / 2), particle.position.y + (particle.size / 2));
