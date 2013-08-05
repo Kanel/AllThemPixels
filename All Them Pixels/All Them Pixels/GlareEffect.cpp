@@ -121,8 +121,8 @@ GlareEffect::GlareEffect(Vector2f position) : GlareEffect::Entity(position)
 	circle.append(Vertex(Vector2f(innerLayer[0].x, innerLayer[0].y), inner));
 	circle.append(Vertex(Vector2f(outerLayer[0].x, outerLayer[0].y), outer));
 
-	delete outerLayer;
-	delete innerLayer;
+	delete[] outerLayer;
+	delete[] innerLayer;
 
 	aimVertices[0] = Vertex(Vector2f(position.x,position.y));
 	aimVertices[1] = Vertex(Vector2f(position.x,position.y));

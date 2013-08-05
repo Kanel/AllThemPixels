@@ -1,5 +1,31 @@
 #include "Collision.h"
 
+Rect<float> Collision::transformRectangle(Rect<float> rectangle, Vector2f speed)
+{
+	if (speed.x < 0)
+	{
+		rectangle.left += speed.x;
+		rectangle.width -= speed.x;
+	}
+	else
+	{
+		rectangle.width += speed.x;
+	}
+
+	if (speed.y < 0)
+	{
+		rectangle.top += speed.y;
+		rectangle.height -= speed.y;
+	}
+	else
+	{
+		rectangle.height += speed.y;
+	}
+	assert(rectangle.width >= 0 && rectangle.height >= 0);
+
+	return rectangle;
+}
+
 Rect<float> Collision::getHitBox(Vertex vertices[], int count)
 {
 	float minX = vertices[0].position.x;
@@ -42,13 +68,29 @@ ConvexHull Collision::getConvexHull(Vertex vertices[], int count)
 	return MonotoneChain::getConvexHull(positions);
 }
 
-bool Collision::hitBoxesOverlap(Rect<float> hitbox1, Rect<float> hitbox2)
+bool Collision::hitBoxesOverlap(Rect<float> a, Rect<float> b)
 {
-	if (hitbox1.top > hitbox2.top + hitbox2.height) return false;
-	if (hitbox1.top + hitbox1.height < hitbox2.top) return false;
-	if (hitbox1.left + hitbox1.width < hitbox2.left) return false;
-	if (hitbox1.left > hitbox2.left + hitbox2.width) return false;
+	if (a.top > b.top + b.height) return false;
+	if (a.top + a.height < b.top) return false;
+	if (a.left + a.width < b.left) return false;
+	if (a.left > b.left + b.width) return false;
+
 	return true;
+}
+
+bool Collision::hitBoxesOverlap(Rect<float> a, Vector2f speedA, Rect<float> b, Vector2f speedB)
+{
+	a = transformRectangle(a, speedA);
+	b = transformRectangle(b, speedB);
+
+	return hitBoxesOverlap(a, b);
+}
+
+bool Collision::hitBoxesOverlap(Rect<float> a, Rect<float> b, Vector2f speedB)
+{
+	b = transformRectangle(b, speedB);
+
+	return hitBoxesOverlap(a, b);
 }
 
 bool Collision::isClose(Entity * entity1, Entity * entity2)

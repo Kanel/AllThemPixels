@@ -49,6 +49,7 @@ private:
 
 private:
 	bool active;
+	bool loaded;
 	float radius;
 	float hexagonRadius;
 	int layers;

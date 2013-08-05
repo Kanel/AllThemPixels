@@ -32,14 +32,14 @@ PlayerCustomizationUI::PlayerCustomizationUI(Vector2f position) : wheel(3, 100)
 	Rect<float> boundsSkillPoints;
 
 	// Load default values for skills.
-	config.hp = PLAYER_BASE_HP;
-	config.speed = PLAYER_BASE_SPEED;
-	config.weaponConfig.cooldown = PLAYER_BASE_WEAPON_COOLDOWN;
-	config.weaponConfig.damage = PLAYER_BASE_WEAPON_COOLDOWN;
-	config.weaponConfig.piercing = PLAYER_BASE_WEAPON_PIERCING;
-	config.weaponConfig.speed = PLAYER_BASE_WEAPON_SPEED;
-	config.weaponConfig.spread = PLAYER_BASE_WEAPON_SPREAD;
-	config.weaponConfig.ttl = PLAYER_BASE_WEAPON_TTL;
+	config.hp = PLAYER_DEFAULT_HP;
+	config.speed = PLAYER_DEFAULT_SPEED;
+	config.weaponConfig.cooldown = PLAYER_DEFAULT_WEAPON_COOLDOWN;
+	config.weaponConfig.damage = PLAYER_DEFAULT_WEAPON_DAMAGE;
+	config.weaponConfig.piercing = PLAYER_DEFAULT_WEAPON_PIERCING;
+	config.weaponConfig.speed = PLAYER_DEFAULT_WEAPON_SPEED;
+	config.weaponConfig.spread = PLAYER_DEFAULT_WEAPON_SPREAD;
+	config.weaponConfig.ttl = PLAYER_DEFAULT_WEAPON_TTL;
 
 	// UI dimensions
 	size = Vector2f(UI_PLAYER_CUSTOMIZATION_WIDTH, UI_PLAYER_CUSTOMIZATION_HEIGHT);

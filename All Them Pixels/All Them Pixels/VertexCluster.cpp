@@ -10,13 +10,18 @@ VertexCluster::~VertexCluster()
 
 int VertexCluster::create(CollectionTypes type)
 {
+	return create(type, 1000, 1000);
+}
+
+int VertexCluster::create(CollectionTypes type, int size, int increment)
+{
 	switch (type)
 	{
 	case VertexCluster::HexagonSource:
-		return create(8, 1000, 1000, PrimitiveType::TrianglesStrip);
+		return create(8, size, increment, PrimitiveType::TrianglesStrip);
 
 	case VertexCluster::RectangleSource:
-		return create(4, 1000, 1000, PrimitiveType::Quads);
+		return create(4, size, increment, PrimitiveType::Quads);
 
 	default:
 		assert(false); // Is this better or worse than throwing an exception?

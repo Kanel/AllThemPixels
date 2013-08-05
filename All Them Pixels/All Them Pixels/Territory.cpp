@@ -271,11 +271,11 @@ void Territory::updatePlayer(UpdateInfo info)
 		{
 			Hexagon * tile = safeZonesTiles[i][j];
 
-			if (Collision::hitBoxesOverlap(tile->getBoundingBox(), player->getBoundingBox()))
+			if (Collision::hitBoxesOverlap(tile->getBoundingBox(), Vector2f(), player->getBoundingBox(), player->getSpeed()))
 			{
 				std::list<Vector2f> penetration;
 
-				if (SAT::collides(player->getConvexHull(), tile->getConvexHull(), penetration))
+				if (SAT::collides(player->getConvexHull(), tile->getConvexHull(), player->getSpeed(), penetration))
 				{
 					player->setIsInSafeZone(true);
 					player->setSafeZoneIndex(i);
@@ -302,7 +302,7 @@ void Territory::updateBorderTiles()
 	{
 		Hexagon * tile = floorTiles[borderCoordinates[i].q][borderCoordinates[i].r];
 
-		if (Collision::hitBoxesOverlap(tile->getBoundingBox(), player->getBoundingBox()))
+		if (true || Collision::hitBoxesOverlap(tile->getBoundingBox(), player->getBoundingBox(), player->getSpeed()))
 		{
 			std::list<Vector2f> penetration;
 
@@ -321,8 +321,6 @@ void Territory::updateBorderTiles()
 				else
 				{
 					player->translate(SAT::getShortestPenetration(penetration));
-
-					break;
 				}
 			}
 		}
@@ -406,6 +404,7 @@ Territory::Territory(Vector2f position, float radius, World * world, SpawnConfig
 	this->radius = radius;
 	this->world = world;
 	this->sounds = NULL;
+	this->loaded = false;
 
 	active = false;	
 	player = NULL;
@@ -425,33 +424,21 @@ Territory::Territory(Vector2f position, float radius, World * world, SpawnConfig
 	boundingBox.top = position.y - (boundingBox.height / 2);
 
 	// Prepare vertex collections.
-	tileCluster.create(8, grid.getNumberOfTiles(layers), 1, PrimitiveType::TrianglesStrip);
-	entityCluster.create(VertexCluster::HexagonSource);
-	entityCluster.create(VertexCluster::HexagonSource);
-	entityCluster.create(VertexCluster::RectangleSource);
-	fadeTileCluster.create(8, grid.getNumberOfTiles(layers), 1, PrimitiveType::TrianglesStrip);
+	tileCluster.create(8, 0, grid.getNumberOfTiles(layers), PrimitiveType::TrianglesStrip);
+	entityCluster.create(VertexCluster::HexagonSource, 0, 100);
+	entityCluster.create(VertexCluster::HexagonSource, 0, 100);
+	entityCluster.create(VertexCluster::RectangleSource, 0, 100);
+	fadeTileCluster.create(8, 0, grid.getNumberOfTiles(layers), PrimitiveType::TrianglesStrip);
+
 
 	// Prepare the background tiles.
-	floorTiles = grid.generateGrid(position, layers, tileCluster.getCollection(0));
-	
-	// Prepare the win/loss tiles.
-	fadeTiles = grid.generateGrid(position, layers, fadeTileCluster.getCollection(0));
+	//floorTiles = grid.generateGrid(position, layers, tileCluster.getCollection(0));
 
 	// Prepare border.
 	borderCoordinates = grid.getRingCoordinates(layers);
 
 	// Preapare the spawn grid.
 	spawnGrid = grid.getRingCoordinates(spawnRingSize);
-
-	// Prepare safe zones.
-	prepareSafeZoneTiles(layers);
-	spatialPartitionSafeRoomTiles();
-
-	// Color tiles.
-	colorTiles(floorTiles, TERRITORY_FLOOR_TILES_BASE_COLOR);
-	colorTiles(fadeTiles, TERRITORY_FADE_TILES_BASE_COLOR);
-	colorBorderTiles();
-	colorSafeZoneTiles();
 }
 
 Territory::~Territory()
@@ -483,18 +470,17 @@ Territory::~Territory()
 
 	for (int i = 0; i < tiles; i++)
 	{
-		AxialCoordinates coordinates = grid.next();
-
-		delete floorTiles[coordinates.q][coordinates.r];
+		delete floorTiles[grid.next()];
 	}
 	grid.reset();
 
-	for (int i = 0; i < tiles; i++)
+	if (probes.size() > 0)
 	{
-		AxialCoordinates coordinates = grid.next();
-
-		delete floorTiles[coordinates.q][coordinates.r];
-	}	
+		for (int i = 0; i < tiles; i++)
+		{
+			delete fadeTiles[grid.next()];
+		}
+	}
 }
 
 queue<Entity *> *Territory::getSpawnQueue()
@@ -579,7 +565,7 @@ void Territory::integrateSpawnQueue()
 
 		if(Flag::isFlagSet(entity->getType(), EnemyProjectileEntity))
 		{
-			if (!this->sounds) 
+			if (this->sounds != NULL) 
 			{
 				this->sounds->play(SoundTypes::Shot, entity->getPosition());
 			}
@@ -622,9 +608,22 @@ vector<Vector2f> Territory::getSpawnPoints()
 
 void Territory::activate(Player * player)
 {
+	HexagonGrid grid(Hexagon::FlatTopped, TERRITORY_TILE_SIZE);
+
 	this->active = true;
 	this->player = player;
 	this->player->spawnQueue = &spawnQueue;
+	this->loaded = true;
+	this->floorTiles = grid.generateGrid(position, layers, tileCluster.getCollection(0));
+
+	// Prepare safe zones.
+	prepareSafeZoneTiles(layers);
+	spatialPartitionSafeRoomTiles();
+
+	// Color tiles.
+	colorTiles(floorTiles, TERRITORY_FLOOR_TILES_BASE_COLOR);	
+	colorBorderTiles();
+	colorSafeZoneTiles();
 }
 
 void Territory::deactivate()
@@ -648,6 +647,11 @@ void Territory::fade(Color color, Vector2f center)
 {
 	if (probes.size() == 0)
 	{
+		HexagonGrid grid(Hexagon::FlatTopped, TERRITORY_TILE_SIZE);
+
+		fadeTiles = grid.generateGrid(position, layers, fadeTileCluster.getCollection(0));
+		
+		colorTiles(fadeTiles, TERRITORY_FADE_TILES_BASE_COLOR);
 		prepareProbes(center);
 	}
 	else

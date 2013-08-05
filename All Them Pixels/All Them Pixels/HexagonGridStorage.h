@@ -16,13 +16,15 @@ private:
 private:
 	void copy(const HexagonGridStorage &that)
 	{
+		int rowCount = that.layers * 2 + 1;
+
 		this->layers = that.layers;
 		this->offset = that.layers;
 		this->loaded = that.loaded;
 		this->size = that.size;
 		this->rows = new HexagonGridStorageRow<T>*[size];
 
-		for (int i = 0; i < layers * 2 + 1; i++)
+		for (int i = 0; i < rowCount; i++)
 		{
 			rows[i] = new HexagonGridStorageRow<T>(*that.rows[i]);
 		}

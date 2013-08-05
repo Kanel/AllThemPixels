@@ -26,6 +26,12 @@ public:
 	// returns: The index of the created collection.
 	int create(CollectionTypes type);
 
+	// Creates a default VertexCollection of the cpecified type.
+	// size: The number of slots for shapes the collection can store.
+	// increment: The number of slots the container will grow by once it's full.
+	// returns: The index of the created collection.
+	int create(CollectionTypes type, int size, int increment);
+
 	// Creates a VertexCollection with the specified settings.
 	// verticesPerShape:
 	// size: The number of slots for shapes the collection can store.
