@@ -608,22 +608,11 @@ vector<Vector2f> Territory::getSpawnPoints()
 
 void Territory::activate(Player * player)
 {
-	HexagonGrid grid(Hexagon::FlatTopped, TERRITORY_TILE_SIZE);
+	assert(loaded);
 
 	this->active = true;
 	this->player = player;
 	this->player->spawnQueue = &spawnQueue;
-	this->loaded = true;
-	this->floorTiles = grid.generateGrid(position, layers, tileCluster.getCollection(0));
-
-	// Prepare safe zones.
-	prepareSafeZoneTiles(layers);
-	spatialPartitionSafeRoomTiles();
-
-	// Color tiles.
-	colorTiles(floorTiles, TERRITORY_FLOOR_TILES_BASE_COLOR);	
-	colorBorderTiles();
-	colorSafeZoneTiles();
 }
 
 void Territory::deactivate()
@@ -658,6 +647,42 @@ void Territory::fade(Color color, Vector2f center)
 	{
 		updateProbes(color, center);
 	}
+}
+
+void Territory::load()
+{
+	HexagonGrid grid(Hexagon::FlatTopped, TERRITORY_TILE_SIZE);
+
+	loaded = true;
+
+	// Generate background tile grid.
+	floorTiles = grid.generateGrid(position, layers, tileCluster.getCollection(0));
+
+	// Prepare safe zones.
+	prepareSafeZoneTiles(layers);
+	spatialPartitionSafeRoomTiles();
+
+	// Color tiles.
+	colorTiles(floorTiles, TERRITORY_FLOOR_TILES_BASE_COLOR);	
+	colorBorderTiles();
+	colorSafeZoneTiles();
+}
+
+void Territory::unLoad()
+{
+	int tiles = HexagonGrid::getNumberOfTiles(layers);
+	HexagonGrid grid(Hexagon::FlatTopped, TERRITORY_TILE_SIZE);
+
+	for (int i = 0; i < tiles; i++)
+	{
+		delete floorTiles[grid.next()];
+	}
+	tileCluster.getCollection(0)->clear();
+}
+
+bool Territory::isLoaded()
+{
+	return loaded;
 }
 
 Rect<float> Territory::getBoundingBox()

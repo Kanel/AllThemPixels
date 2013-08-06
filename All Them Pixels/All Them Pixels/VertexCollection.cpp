@@ -84,6 +84,20 @@ void VertexCollection::resize(int newSize)
 	vertices = newArray;
 }
 
+void VertexCollection::clear()
+{
+	delete vertices;
+
+	while (freeSlots.size() > 0)
+	{
+		freeSlots.pop();
+	}	
+	size = 0;
+	nextIndex = 0;
+	numberOfVertices = 0;
+	vertices = new Vertex[numberOfVertices];
+}
+
 Vertex& VertexCollection::operator[](const int index) const
 {
 	assert(index >= 0 && index < numberOfVertices);

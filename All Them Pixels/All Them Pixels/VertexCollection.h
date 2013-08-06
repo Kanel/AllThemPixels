@@ -49,6 +49,9 @@ public:
 	// copied otherwise every slot will be copied.
 	void resize(int size);
 
+	// Will clear the collection of all items and resize it to a size of 0;
+	void clear();
+
 	Vertex& operator[](const int index) const;
 
 	virtual void draw(RenderTarget& target, RenderStates states) const;

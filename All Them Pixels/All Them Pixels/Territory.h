@@ -115,6 +115,10 @@ public:
 	bool isCleared();
 	void fade(Color color, Vector2f center);
 
+	void load();
+	void unLoad();
+	bool isLoaded();
+
 	Rect<float> getBoundingBox();
 
 	void cleanup();

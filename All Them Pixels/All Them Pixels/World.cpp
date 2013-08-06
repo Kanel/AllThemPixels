@@ -109,6 +109,8 @@ void World::changeTerritory(Vector2f position)
 	Player * player = current->player;
 	
 	current->deactivate();
+	current->unLoad();
+	next->load();
 	next->activate(player);
 	player->setPosition(position);
 	map->setPlayerLocation(nextCoordinates);
@@ -129,6 +131,7 @@ void World::activate(AxialCoordinates coordinates)
 
 	map->setPlayerLocation(currentTerritoryCoordinates);
 
+	territory->load();
 	territory->activate(player);
 
 	player->setPosition(territory->getPosition());
@@ -163,7 +166,10 @@ void World::draw(RenderTarget& target, RenderStates states) const
 
 		if (Collision::isWithinWindow(territories[coordinates]-> getBoundingBox(), target.getView()))
 		{
-			target.draw(*territories[coordinates]);
+			if (territories[coordinates]->isLoaded())
+			{
+				target.draw(*territories[coordinates]);
+			}
 		}
 	}
 	if (Joystick::isButtonPressed(0,6)) //is this the back button?
