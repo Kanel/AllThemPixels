@@ -46,6 +46,11 @@ private:
 		Vector2f position;
 		Vector2f direction;
 	};
+	struct TileColoring
+	{
+		Hexagon * tile;
+		Color previous;
+	};
 
 private:
 	bool active;
@@ -73,6 +78,7 @@ private:
 	vector<Probe> probes;
 	HexagonGridStorage<Hexagon *> fadeTiles;
 	EnemySpawner enemySpawner;
+	stack<TileColoring> tileColorings;
 
 private:
 	void colorTiles(HexagonGridStorage<Hexagon *> &storage, Color base);

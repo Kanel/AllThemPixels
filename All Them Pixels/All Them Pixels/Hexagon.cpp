@@ -1,26 +1,14 @@
 #include "Hexagon.h"
 
-void Hexagon::updateColor()
+Hexagon::Hexagon(Vector2f position, float radius, Color color, Style style, VertexCollection * vertexSource)
 {
-	Color color = colorStack.top();
-
-	if ((*vertexSource)[vertexOffset].color != color)
-	{
-		for (int i = 0; i < vertexCount; i++)
-		{
-			(*vertexSource)[vertexOffset + i].color = color;
-		}
-	}
-}
-
-Hexagon::Hexagon(Vector2f position, float radius, Color color, Style style, VertexCollection * vertexSource) : convexHull(6)
-{
+	//this->position = position;
+	this->radius = radius;
 	this->vertexSource = vertexSource;
 
-	vertexCount = 8;
 	vertexOffset = vertexSource->add();
 
-	colorStack.push(color);
+	//colorStack.push(color);
 
 	if (style == FlatTopped)
 	{
@@ -39,18 +27,6 @@ Hexagon::Hexagon(Vector2f position, float radius, Color color, Style style, Vert
 		(*vertexSource)[vertexOffset + 5] = Vertex(Vector2f(position.x + quarterWidth, position.y - halfHeight), color);
 		(*vertexSource)[vertexOffset + 6] = Vertex(Vector2f(position.x + halfWidth, position.y), color);
 		(*vertexSource)[vertexOffset + 7] = Vertex(Vector2f(position.x + halfWidth, position.y), color);
-		
-		boundingBox.left = position.x - halfWidth;
-		boundingBox.top = position.y - halfHeight;
-		boundingBox.width = width;
-		boundingBox.height = height;
-
-		convexHull[0] = (*vertexSource)[vertexOffset + 1].position;
-		convexHull[1] = (*vertexSource)[vertexOffset + 3].position;
-		convexHull[2] = (*vertexSource)[vertexOffset + 5].position;
-		convexHull[3] = (*vertexSource)[vertexOffset + 6].position;
-		convexHull[4] = (*vertexSource)[vertexOffset + 4].position;
-		convexHull[5] = (*vertexSource)[vertexOffset + 2].position;
 	}
 	else
 	{
@@ -69,18 +45,6 @@ Hexagon::Hexagon(Vector2f position, float radius, Color color, Style style, Vert
 		(*vertexSource)[vertexOffset + 5] = Vertex(Vector2f(position.x + halfWidth, position.y + quarterHeight), color);
 		(*vertexSource)[vertexOffset + 6] = Vertex(Vector2f(position.x, position.y + halfHeight), color);
 		(*vertexSource)[vertexOffset + 7] = Vertex(Vector2f(position.x, position.y + halfHeight), color);
-	
-		boundingBox.left = position.x - halfWidth;
-		boundingBox.top = position.y - halfHeight;
-		boundingBox.width = width;
-		boundingBox.height = height;
-
-		convexHull[0] = (*vertexSource)[vertexOffset + 2].position;
-		convexHull[1] = (*vertexSource)[vertexOffset + 1].position;
-		convexHull[2] = (*vertexSource)[vertexOffset + 3].position;
-		convexHull[3] = (*vertexSource)[vertexOffset + 5].position;
-		convexHull[4] = (*vertexSource)[vertexOffset + 6].position;
-		convexHull[5] = (*vertexSource)[vertexOffset + 4].position;
 	}
 }
 
@@ -96,11 +60,31 @@ Hexagon::Style Hexagon::getStyle()
 
 Rect<float> Hexagon::getBoundingBox()
 {
-	return boundingBox;
+	return Collision::getHitBox(&(*vertexSource)[vertexOffset], 6);
 }
 
 ConvexHull Hexagon::getConvexHull()
 {
+	ConvexHull convexHull(6);
+
+	if (style == FlatTopped)
+	{
+		convexHull[0] = (*vertexSource)[vertexOffset + 1].position;
+		convexHull[1] = (*vertexSource)[vertexOffset + 3].position;
+		convexHull[2] = (*vertexSource)[vertexOffset + 5].position;
+		convexHull[3] = (*vertexSource)[vertexOffset + 6].position;
+		convexHull[4] = (*vertexSource)[vertexOffset + 4].position;
+		convexHull[5] = (*vertexSource)[vertexOffset + 2].position;
+	}
+	else
+	{
+		convexHull[0] = (*vertexSource)[vertexOffset + 2].position;
+		convexHull[1] = (*vertexSource)[vertexOffset + 1].position;
+		convexHull[2] = (*vertexSource)[vertexOffset + 3].position;
+		convexHull[3] = (*vertexSource)[vertexOffset + 5].position;
+		convexHull[4] = (*vertexSource)[vertexOffset + 6].position;
+		convexHull[5] = (*vertexSource)[vertexOffset + 4].position;
+	}
 	return convexHull;
 }
 
@@ -123,67 +107,24 @@ Vector2f * Hexagon::getPoints(int &count)
 
 Color Hexagon::getColor()
 {
-	return colorStack.top();
+	return (*vertexSource)[vertexOffset].color;
 }
 
 void Hexagon::setColor(Color color)
 {
-	while (colorStack.size() > 0)
+	if ((*vertexSource)[vertexOffset].color != color)
 	{
-		colorStack.pop();
-	}
-	colorStack.push(color);
-	updateColor();
-}
-
-void Hexagon::pushColor(Color color)
-{
-	colorStack.push(color);
-	updateColor();
-}
-
-void Hexagon::popColor(Color color)
-{
-	colorStack.pop();
-	updateColor();
-}
-
-void Hexagon::resetColor()
-{
-	if (colorStack.size() > 1)
-	{
-		while (colorStack.size() > 1)
+		for (int i = 0; i < 8; i++)
 		{
-			colorStack.pop();
+			(*vertexSource)[vertexOffset + i].color = color;
 		}
-		updateColor();
 	}
 }
 
 void Hexagon::applyTransform(Transform transform)
 {
-	for (int i = 0; i < vertexCount; i++)
+	for (int i = 0; i < 8; i++)
 	{
 		(*vertexSource)[vertexOffset + i].position = transform.transformPoint((*vertexSource)[vertexOffset + i].position);
 	}
-
-	if (style == FlatTopped)
-	{
-		convexHull[0] = (*vertexSource)[vertexOffset + 1].position;
-		convexHull[1] = (*vertexSource)[vertexOffset + 3].position;
-		convexHull[2] = (*vertexSource)[vertexOffset + 5].position;
-		convexHull[3] = (*vertexSource)[vertexOffset + 6].position;
-		convexHull[4] = (*vertexSource)[vertexOffset + 4].position;
-		convexHull[5] = (*vertexSource)[vertexOffset + 2].position;
-	}
-	else
-	{
-		convexHull[0] = (*vertexSource)[vertexOffset + 2].position;
-		convexHull[1] = (*vertexSource)[vertexOffset + 1].position;
-		convexHull[2] = (*vertexSource)[vertexOffset + 3].position;
-		convexHull[3] = (*vertexSource)[vertexOffset + 5].position;
-		convexHull[4] = (*vertexSource)[vertexOffset + 6].position;
-		convexHull[5] = (*vertexSource)[vertexOffset + 4].position;
-	}
-	boundingBox = Collision::getHitBox(&(*vertexSource)[vertexOffset], 8);
 }

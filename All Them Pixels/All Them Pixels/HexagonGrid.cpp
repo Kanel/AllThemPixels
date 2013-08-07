@@ -197,7 +197,7 @@ vector<AxialCoordinates> HexagonGrid::getRingCoordinates(int layer)
 HexagonGridStorage<Hexagon *> HexagonGrid::generateGrid(Vector2f position, int layers, VertexCollection * vertexSource)
 {
 	int spacing = 0;
-	int tiles = HexagonGrid::getNumberOfTiles(layers);
+	float tiles = HexagonGrid::getNumberOfTiles(layers);
 	HexagonGrid grid(Hexagon::FlatTopped, size);
 	HexagonGridStorage<Hexagon *> storage(layers);
 

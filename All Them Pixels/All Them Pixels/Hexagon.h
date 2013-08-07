@@ -19,16 +19,18 @@ public:
 	};
 
 public:// should not be public
-	int vertexCount;
+	//int vertexCount;
 	int vertexOffset;
 
 private:
+	float radius;
 	Style style;
+	//Vector2f position;
 	//Vertex corners[7];
-	Rect<float> boundingBox;
-	ConvexHull convexHull;
+	//Rect<float> boundingBox;
+	//ConvexHull convexHull;
 	VertexCollection * vertexSource;
-	stack<Color> colorStack;
+	//stack<Color> colorStack;
 
 private:
 	void updateColor();
@@ -44,10 +46,6 @@ public:
 
 	Color getColor();
 	void setColor(Color color);
-
-	void pushColor(Color color);
-	void popColor(Color color);
-	void resetColor();
 
 	void applyTransform(Transform transform);
 };

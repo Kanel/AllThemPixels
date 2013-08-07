@@ -59,6 +59,7 @@ void Territory::colorEnemyAuraTiles()
 			
 			if (floorTiles.contains(coordinates))
 			{
+				TileColoring coloring;
 				Color tileColor = floorTiles[coordinates]->getColor();
 				int amount = TERRITORY_ENEMY_AURA_INTENSITY * (layers - k);
 				int r = tileColor.r + sign(color.r - tileColor.r) * amount;
@@ -70,7 +71,11 @@ void Territory::colorEnemyAuraTiles()
 				g = limit(g, 0, UCHAR_MAX);
 				b = limit(b, 0, UCHAR_MAX);
 
-				floorTiles[coordinates]->pushColor(Color(r, g, b, a));
+				coloring.tile = floorTiles[coordinates];
+				coloring.previous = coloring.tile->getColor();
+
+				floorTiles[coordinates]->setColor(Color(r, g, b, a));
+				tileColorings.push(coloring);
 			}			
 		}		
 	}
@@ -79,12 +84,15 @@ void Territory::colorEnemyAuraTiles()
 // Remove effects such as enemy aura from floor tiles.
 void Territory::cleanFloorTiles()
 {
-	int tiles = HexagonGrid::getNumberOfTiles(layers);
-	HexagonGrid grid(Hexagon::FlatTopped);
+	int tiles = tileColorings.size();
 
-	for (int i = 0; i < tiles; i++)
+	while (tileColorings.size() > 0)
 	{
-		floorTiles[grid.next()]->resetColor();
+		TileColoring coloring = tileColorings.top();
+
+		coloring.tile->setColor(coloring.previous);
+
+		tileColorings.pop();
 	}
 }
 
@@ -302,7 +310,7 @@ void Territory::updateBorderTiles()
 	{
 		Hexagon * tile = floorTiles[borderCoordinates[i].q][borderCoordinates[i].r];
 
-		if (true || Collision::hitBoxesOverlap(tile->getBoundingBox(), player->getBoundingBox(), player->getSpeed()))
+		if (Collision::hitBoxesOverlap(tile->getBoundingBox(), player->getBoundingBox(), player->getSpeed()))
 		{
 			std::list<Vector2f> penetration;
 
