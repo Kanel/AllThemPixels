@@ -40,17 +40,32 @@ protected:
 	int safeZoneIndex;
 	bool isInSafeZone;
 	Vector2f aimBoxPosition;
-	Vertex shape[4];
-	Vertex aimBoxShape[4];
+	//Vertex shape[4];
+	//Vertex aimBoxShape[4];
 	Weapon weapon;
 	PlayerConfiguration config;
 	Vector2f speed;
 	PlayerSkillPoints playerSkillPoints;
 	CircleBar healthBar;
 	VertexCollection projectileVertexSource;
+	int leftIndex;
+	int rightIndex;
+	int bottomIndex;
+	int coreIndex;
+	int playerVertexCount;
+	int leftVertexCount;
+	int rightVertexCount;
+	int bottomVertexCount;
+	int coreVertexCount;
+	Vertex playerShape[57];
+	Vertex * playerShapeCore;
+	Vertex * playerShapeBottom;
+	Vertex * playerShapeLeft;
+	Vertex * playerShapeRight;
 
 protected:
 	void applyTransform(Transform transform, Vertex vertices[], int count);
+	void applyColor(Color color, Vertex vertices[], int count);
 	float getDirection(Joystick::Axis axisX, Joystick::Axis axisY);
 	float getStrength(Joystick::Axis x, Joystick::Axis y);
 	void updateAim();

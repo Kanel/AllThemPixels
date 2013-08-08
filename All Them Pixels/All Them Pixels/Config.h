@@ -25,7 +25,7 @@
 #define GAME_FADE_TIME 2000 // Milliseconds
 
 // Player
-#define PLAYER_SIZE 20
+#define PLAYER_SIZE 30
 #define PLAYER_AIM_BOX_SIZE 4
 #define PLAYER_COLOR Color(0, 0, 0)
 #define PLAYER_DEFAULT_HP 1000000
