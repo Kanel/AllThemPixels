@@ -104,23 +104,27 @@ void World::changeTerritory(Vector2f position)
 {
 	HexagonGrid grid(Hexagon::PointyTopped, territoryRadius);
 	AxialCoordinates nextCoordinates = grid.getAxialCoordinates(position);
-	Territory * current = getCurrentTerritory();
-	Territory * next = getTerritory(nextCoordinates);
-	Player * player = current->player;
-	
-	current->deactivate();
-	current->unLoad();
-	next->load();
-	next->activate(player);
-	player->setPosition(position);
-	map->setPlayerLocation(nextCoordinates);
 
-	if (current->isCleared())
+	if (territories.contains(nextCoordinates))
 	{
-		map->addClearedTerritory(currentTerritoryCoordinates);
-	}
+		Territory * current = getCurrentTerritory();
+		Territory * next = getTerritory(nextCoordinates);
+		Player * player = current->player;
+	
+		current->deactivate();
+		current->unLoad();
+		next->load();
+		next->activate(player);
+		player->setPosition(position);
+		map->setPlayerLocation(nextCoordinates);
 
-	currentTerritoryCoordinates = nextCoordinates;
+		if (current->isCleared())
+		{
+			map->addClearedTerritory(currentTerritoryCoordinates);
+		}
+
+		currentTerritoryCoordinates = nextCoordinates;
+	}
 }
 
 void World::activate(AxialCoordinates coordinates)

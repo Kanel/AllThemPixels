@@ -54,17 +54,20 @@ float Player::getStrength(Joystick::Axis x, Joystick::Axis y)
 	return Vector2fMath::length(vector) / JOYSTICK_MAX_STRENGTH;
 }
 
-void Player::updateAim()
+void Player::updateRotation()
 {
+	Vector2f leftJoystick = UserInput::getJoystickVector(Joystick::Axis::U, Joystick::Axis::R);
 	float direction = getDirection(Joystick::Axis::R, Joystick::Axis::U);
 	Transform transform;
+
+	if (Vector2fMath::length(leftJoystick) >= GAMEPAD_JOYSTICK_THRESHOLD)
+	{	
+		transform.rotate(direction - aimDirection, position);
+		applyTransform(transform, playerShape, playerVertexCount);
 	
-	transform.rotate(direction - aimDirection, position);
-	//applyTransform(transform, aimBoxShape, 4);
-	applyTransform(transform, playerShape, playerVertexCount);
-	
-	aimBoxPosition = transform.transformPoint(aimBoxPosition);
-	aimDirection = direction;
+		aimBoxPosition = transform.transformPoint(aimBoxPosition);
+		aimDirection = direction;
+	}
 }
 
 Player::Player(queue<Entity *> *spawnQueue, PlayerConfiguration config, Vector2f position) : Destructible(config.hp, position), projectileVertexSource(8, 50, 50, PrimitiveType::TrianglesStrip), weapon(config.weaponConfig, &projectileVertexSource), healthBar(36, 40, 2, 2, hp, hp)
@@ -83,11 +86,6 @@ Player::Player(queue<Entity *> *spawnQueue, PlayerConfiguration config, Vector2f
 	playerSkillPoints.common = 0;
 	playerSkillPoints.commonUsed = 0;
 
-	/*shape[0] = Vertex(Vector2f(position.x - size, position.y - size), color);
-	shape[1] = Vertex(Vector2f(position.x + size, position.y - size), color);
-	shape[2] = Vertex(Vector2f(position.x + size, position.y + size), color);
-	shape[3] = Vertex(Vector2f(position.x - size, position.y + size), color);*/
-
 	leftIndex = 12;
 	rightIndex = 26;
 	bottomIndex = 40;
@@ -102,11 +100,6 @@ Player::Player(queue<Entity *> *spawnQueue, PlayerConfiguration config, Vector2f
 	aimBoxPosition = position;
 	aimBoxPosition.y -= 35;
 	
-	/*[0] = Vertex(Vector2f(aimBoxPosition.x - aimboxSize, aimBoxPosition.y - aimboxSize), color);
-	aimBoxShape[1] = Vertex(Vector2f(aimBoxPosition.x + aimboxSize, aimBoxPosition.y - aimboxSize), color);
-	aimBoxShape[2] = Vertex(Vector2f(aimBoxPosition.x + aimboxSize, aimBoxPosition.y + aimboxSize), color);
-	aimBoxShape[3] = Vertex(Vector2f(aimBoxPosition.x - aimboxSize, aimBoxPosition.y + aimboxSize), color);
-	*/
 	playerShapeCore = &playerShape[coreIndex];
 	playerShapeBottom = &playerShape[bottomIndex];
 	playerShapeLeft = &playerShape[leftIndex];
@@ -270,7 +263,6 @@ void Player::draw(RenderTarget& target, RenderStates states) const
 	target.draw(playerShapeBottom, bottomVertexCount, PrimitiveType::TrianglesFan);
 	target.draw(playerShapeLeft, leftVertexCount, PrimitiveType::TrianglesFan);
 	target.draw(playerShapeRight, rightVertexCount, PrimitiveType::TrianglesFan);
-	//target.draw(aimBoxShape, aimboxShapeCount, PrimitiveType::Quads);
 	target.draw(healthBar);
 	target.draw(projectileVertexSource);
 }
@@ -286,7 +278,7 @@ void Player::update(UpdateInfo info)
 	speed = Vector2fMath::unitVector(UserInput::getJoystickVector(Joystick::Axis::X, Joystick::Axis::Y)) * (config.speed * strength * (info.updateInterval / 1000.0f));
 	aimVector = direction;
 
-	updateAim();
+	updateRotation();
 	translate(speed);
 	
 	if (weapon.isReady(info.elapsedGameTime, info.updateInterval, shots) && Vector2fMath::length(leftJoystick) > GAMEPAD_JOYSTICK_THRESHOLD)

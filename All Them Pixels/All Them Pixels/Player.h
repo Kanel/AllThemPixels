@@ -40,8 +40,6 @@ protected:
 	int safeZoneIndex;
 	bool isInSafeZone;
 	Vector2f aimBoxPosition;
-	//Vertex shape[4];
-	//Vertex aimBoxShape[4];
 	Weapon weapon;
 	PlayerConfiguration config;
 	Vector2f speed;
@@ -68,7 +66,7 @@ protected:
 	void applyColor(Color color, Vertex vertices[], int count);
 	float getDirection(Joystick::Axis axisX, Joystick::Axis axisY);
 	float getStrength(Joystick::Axis x, Joystick::Axis y);
-	void updateAim();
+	void updateRotation();
 
 public:
 	Player(queue<Entity *> *spawnQueue, PlayerConfiguration config, Vector2f position);
