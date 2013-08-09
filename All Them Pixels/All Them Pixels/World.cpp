@@ -87,7 +87,7 @@ World::World(Vector2f position, float territoryRadius, float territorySpacing, i
 	}
 
 	// Initilize minimap.
-	map = new Map(Vector2f(), layers, 50, Hexagon::Style::FlatTopped);
+	map = new Map(Vector2f(), layers, MAP_HEXAGON_RADIUS, Hexagon::Style::PointyTopped);
 }
 
 Territory * World::getCurrentTerritory()

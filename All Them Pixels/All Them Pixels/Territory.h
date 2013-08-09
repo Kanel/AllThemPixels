@@ -48,7 +48,7 @@ private:
 	};
 	struct TileColoring
 	{
-		Hexagon * tile;
+		AxialCoordinates coordinate;
 		Color previous;
 	};
 

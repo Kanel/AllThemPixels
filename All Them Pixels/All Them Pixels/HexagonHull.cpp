@@ -13,7 +13,7 @@ HexagonHull::HexagonHull(Vector2f position, int hexagonCount, float hexagonRadiu
 
 		grid.next(partPosition);
 
-		hexagons[i] = new Hexagon(position + partPosition, hexagonRadius - 0.5f, Color::Blue, style, vertexSource);
+		hexagons[i] = new Hexagon(position + partPosition, hexagonRadius - 0.5f, Color(75, 125, 255), style, vertexSource);
 	}
 }
 

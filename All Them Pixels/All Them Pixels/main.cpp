@@ -48,13 +48,13 @@ int main(int argc, char ** argv)
 			}
 			if (event.type == Event::JoystickButtonReleased)
 			{
-				if (event.joystickButton.button == GAMEPAD_BACK)
+				if (event.joystickButton.button == GAMEPAD_START)
 				{
 					paused = !paused;
 				}
 			}
 		}
-		std::cout << 1;
+
 		if (!paused)
 		{
 			info.elapsedGameTime += updateInterval;

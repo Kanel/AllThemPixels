@@ -71,8 +71,8 @@ void Territory::colorEnemyAuraTiles()
 				g = limit(g, 0, UCHAR_MAX);
 				b = limit(b, 0, UCHAR_MAX);
 
-				coloring.tile = floorTiles[coordinates];
-				coloring.previous = coloring.tile->getColor();
+				coloring.coordinate = coordinates;
+				coloring.previous = floorTiles[coloring.coordinate]->getColor();
 
 				floorTiles[coordinates]->setColor(Color(r, g, b, a));
 				tileColorings.push(coloring);
@@ -90,7 +90,7 @@ void Territory::cleanFloorTiles()
 	{
 		TileColoring coloring = tileColorings.top();
 
-		coloring.tile->setColor(coloring.previous);
+		floorTiles[coloring.coordinate]->setColor(coloring.previous);
 
 		tileColorings.pop();
 	}
@@ -115,6 +115,7 @@ void Territory::prepareSafeZoneTiles(int tileGridLayers)
 		HexagonGrid grid(Hexagon::FlatTopped, hexagonRadius);
 
 		grid.setOrigin(origins[direction][0], origins[direction][1]);
+		safeZonesTiles[direction].clear();
 
 		for (int i = 0; i < tiles; i++)
 		{
@@ -132,10 +133,11 @@ void Territory::prepareSafeZoneTiles(int tileGridLayers)
 void Territory::spatialPartitionSafeRoomTiles()
 {
 	Rect<float> box = getBoundingBox();
-	unordered_map<Uint32, list<Hexagon *>> map[6];
 
 	for (int i = 0; i < 6; i++)
 	{
+		partitionedSafeZonesTiles[i].clear();
+
 		for (auto hexagon : safeZonesTiles[i])
 		{
 			Rect<float> boundingBox = hexagon->getBoundingBox();
