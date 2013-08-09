@@ -10,6 +10,10 @@ Projectile::Projectile(Vector2f position, Vector2f speed, float damage, int pier
 	this->piercing = piercing;
 
 	piercedTargetsIndex = 0;
+	float morphlength = log(Vector2fMath::length(speed)) / log(5.0f);
+	float morphwidth = log(damage) / log(5.0f);
+	shape.morph(morphlength, morphwidth);
+	rotate(Vector2fMath::getAngle(speed),position);
 }
 
 Vector2f Projectile::getSpeed()

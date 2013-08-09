@@ -17,6 +17,7 @@ struct AIProperties
 	int aimavoidance;
 	float playerspace;
 	bool righthanded;
+	int sinusmovement;
 };
 
 class Enemy : public Destructible

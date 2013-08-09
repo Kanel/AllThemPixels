@@ -47,5 +47,7 @@ public:
 	Color getColor();
 	void setColor(Color color);
 
+	void morph(float length, float width);
+
 	void applyTransform(Transform transform);
 };

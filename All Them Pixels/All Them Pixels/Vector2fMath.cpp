@@ -68,3 +68,34 @@ Vector2f Vector2fMath::turn90right(Vector2f vector)
 {
 	return Vector2f(-vector.y, vector.x);
 }
+
+float Vector2fMath::getAngle(Vector2f vector)
+{
+	float x = vector.x;//UserInput::getJoystickPosition(axisX); 
+	float y = vector.y;//-UserInput::getJoystickPosition(axisY); 
+	float distance = sqrtf(powf(x, 2) + powf(y, 2));	
+	float direction;
+
+	if (x == y && y == 0)
+	{
+		direction = 0;
+	}
+	else if (x >= 0 && y >= 0)
+	{
+		direction = acos(x / distance);
+	}
+	else if (x <= 0 && y >= 0)
+	{
+		direction = M_PI - acos((-x) / distance); 
+	}
+	else if (x >= 0 && y <= 0)
+	{
+		direction = M_PI + acos((-x) / distance);
+	}
+	else
+	{
+		direction = (M_PI * 2) - acos(x / distance);
+	}
+
+	return direction * (180 / M_PI);	
+}

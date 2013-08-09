@@ -121,6 +121,21 @@ void Hexagon::setColor(Color color)
 	}
 }
 
+void Hexagon::morph(float length, float width)
+{
+
+		(*vertexSource)[vertexOffset + 4].position.x += length;
+		(*vertexSource)[vertexOffset + 5].position.x += length;
+		(*vertexSource)[vertexOffset + 6].position.x += length;
+		(*vertexSource)[vertexOffset + 7].position.x += length;
+		
+		(*vertexSource)[vertexOffset + 2].position.y += width/2;
+		(*vertexSource)[vertexOffset + 3].position.y -= width/2;
+		(*vertexSource)[vertexOffset + 4].position.y += width/2;
+		(*vertexSource)[vertexOffset + 5].position.y -= width/2;
+
+}
+
 void Hexagon::applyTransform(Transform transform)
 {
 	for (int i = 0; i < 8; i++)

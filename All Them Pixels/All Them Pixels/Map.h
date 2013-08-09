@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Config.h"
 #include "Hexagon.h"
 #include "HexagonGrid.h"
 #include "VertexCollection.h"

@@ -1,5 +1,5 @@
 #pragma once
-
+#define _USE_MATH_DEFINES
 #include <SFML/Graphics.hpp>
 #include <math.h>
 #include <limits>
@@ -22,4 +22,5 @@ public:
 
 	static Vector2f turn90left(Vector2f vector);
 	static Vector2f turn90right(Vector2f vector);
+	static float getAngle(Vector2f vector);
 };

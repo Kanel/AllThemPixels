@@ -16,37 +16,6 @@ void Player::applyColor(Color color, Vertex vertices[], int count)
 	}
 }
 
-float Player::getDirection(Joystick::Axis axisX, Joystick::Axis axisY)
-{
-	float x = UserInput::getJoystickPosition(axisX); 
-	float y = -UserInput::getJoystickPosition(axisY); 
-	float distance = sqrtf(powf(x, 2) + powf(y, 2));	
-	float direction;
-
-	if (x == y && y == 0)
-	{
-		direction = 0;
-	}
-	else if (x >= 0 && y >= 0)
-	{
-		direction = acos(x / distance);
-	}
-	else if (x <= 0 && y >= 0)
-	{
-		direction = M_PI - acos((-x) / distance); 
-	}
-	else if (x >= 0 && y <= 0)
-	{
-		direction = M_PI + acos((-x) / distance);
-	}
-	else
-	{
-		direction = (M_PI * 2) - acos(x / distance);
-	}
-
-	return direction * (180 / M_PI);	
-}
-
 float Player::getStrength(Joystick::Axis x, Joystick::Axis y)
 {
 	Vector2f vector = UserInput::getJoystickVector(Joystick::Axis::X, Joystick::Axis::Y);
@@ -57,7 +26,7 @@ float Player::getStrength(Joystick::Axis x, Joystick::Axis y)
 void Player::updateRotation()
 {
 	Vector2f leftJoystick = UserInput::getJoystickVector(Joystick::Axis::U, Joystick::Axis::R);
-	float direction = getDirection(Joystick::Axis::R, Joystick::Axis::U);
+	float direction = Vector2fMath::getAngle(Vector2f(UserInput::getJoystickPosition(Joystick::Axis::R), -UserInput::getJoystickPosition(Joystick::Axis::U)));
 	Transform transform;
 
 	if (Vector2fMath::length(leftJoystick) >= GAMEPAD_JOYSTICK_THRESHOLD)

@@ -15,6 +15,7 @@ AIProperties AI::generate(int difficulty)
 	aiProperties.playerspace = (float)(rand() % 200) / 100.0;
 	aiProperties.righthanded = (rand() % 2 == 0);
 	aiProperties.speed = 1+(float)(rand() % ((1+difficulty) * 100));
+	aiProperties.sinusmovement = (rand() % 3 == 1 ? 100.0f : 0);
 
 	return aiProperties;
 }
@@ -52,7 +53,8 @@ void AI::update(queue<Entity *> *spawnQueue, Enemy * target, Player * player, Up
 	}
 
 	// Move the controlled enemy.
-	target->translate(direction * speed * (info.updateInterval / 1000.0f));
+	target->translate(direction * speed * (info.updateInterval / 1000.0f) * 
+		(properties.sinusmovement > 0 ? 2.0f * (float)abs(sin(info.elapsedGameTime/ properties.sinusmovement)) : 1));
 
 	// Fire the weapon as many times as allowed.
 	if (target->weapon.isReady(info.elapsedGameTime, info.updateInterval, shots))

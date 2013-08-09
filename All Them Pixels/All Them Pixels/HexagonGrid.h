@@ -62,5 +62,5 @@ public:
 
 	vector<AxialCoordinates> getCornerRegionCoordinates(int corner);
 	vector<AxialCoordinates> getRingCoordinates(int layer);
-	HexagonGridStorage<Hexagon *> generateGrid(Vector2f position, int layers, VertexCollection * vertexSource);
+	HexagonGridStorage<Hexagon *> generateGrid(Vector2f position, int layers, VertexCollection * vertexSource, int spacing = 0);
 };
