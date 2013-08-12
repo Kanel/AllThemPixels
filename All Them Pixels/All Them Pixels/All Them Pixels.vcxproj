@@ -94,7 +94,9 @@
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="EnemySpawner.cpp" />
     <ClCompile Include="Entity.cpp" />
+    <ClCompile Include="Expendable.cpp" />
     <ClCompile Include="Flag.cpp" />
+    <ClCompile Include="GameEngine.cpp" />
     <ClCompile Include="GlareEffect.cpp" />
     <ClCompile Include="Helper.cpp" />
     <ClCompile Include="Hexagon.cpp" />
@@ -102,10 +104,12 @@
     <ClCompile Include="HexagonHull.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Map.cpp" />
+    <ClCompile Include="MenuState.cpp" />
     <ClCompile Include="MontoneChain.cpp" />
     <ClCompile Include="ParticleSystem.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayerCustomizationUI.cpp" />
+    <ClCompile Include="PlayingState.cpp" />
     <ClCompile Include="Projectile.cpp" />
     <ClCompile Include="SAT.cpp" />
     <ClCompile Include="Shapes.cpp" />
@@ -133,7 +137,10 @@
     <ClInclude Include="EnemySpawner.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="EntityTypes.h" />
+    <ClInclude Include="Expendable.h" />
     <ClInclude Include="Flag.h" />
+    <ClInclude Include="GameEngine.h" />
+    <ClInclude Include="GameState.h" />
     <ClInclude Include="GlareEffect.h" />
     <ClInclude Include="Helper.h" />
     <ClInclude Include="Hexagon.h" />
@@ -142,10 +149,12 @@
     <ClInclude Include="HexagonGridStorageRow.h" />
     <ClInclude Include="HexagonHull.h" />
     <ClInclude Include="Map.h" />
+    <ClInclude Include="MenuState.h" />
     <ClInclude Include="MonotoneChain.h" />
     <ClInclude Include="ParticleSystem.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerCustomizationUI.h" />
+    <ClInclude Include="PlayingState.h" />
     <ClInclude Include="Projectile.h" />
     <ClInclude Include="SAT.h" />
     <ClInclude Include="Shapes.h" />

@@ -40,7 +40,7 @@ public:
 	bool isActive();
 	bool isCleared();
 
-	Player * getPlayer();
+	Player * getPlayer() const;
 
 	virtual void draw(RenderTarget& target, RenderStates states) const;
 

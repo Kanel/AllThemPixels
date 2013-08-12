@@ -153,7 +153,7 @@ bool World::isCleared()
 	return territory->isCleared();
 }
 
-Player * World::getPlayer()
+Player * World::getPlayer() const
 {
 	return player;
 }
