@@ -37,13 +37,17 @@ void PlayingState::handleEvents(GameEngine * engine, vector<Event> events)
 			if (events[i].joystickButton.button == GAMEPAD_START)
 			{
 				paused = !paused;
-			}
-		}
-		if (events[i].type == Event::KeyPressed)
-		{
-			if (Keyboard::isKeyPressed(Keyboard::Escape))
-			{
-				engine->pushState(new MenuState());
+
+				if (paused)
+				{
+					pauseState = new PauseState();
+
+					engine->pushState(pauseState);
+				}
+				else
+				{
+					pauseState->expend();
+				}
 			}
 		}
 	}

@@ -192,7 +192,7 @@
     <ClCompile Include="PlayingState.cpp">
       <Filter>Source Files\State Engine\States</Filter>
     </ClCompile>
-    <ClCompile Include="MenuState.cpp">
+    <ClCompile Include="PauseState.cpp">
       <Filter>Source Files\State Engine\States</Filter>
     </ClCompile>
   </ItemGroup>
@@ -329,8 +329,16 @@
     <ClInclude Include="GameState.h">
       <Filter>Header Files\State Engine\States</Filter>
     </ClInclude>
-    <ClInclude Include="MenuState.h">
+    <ClInclude Include="PauseState.h">
       <Filter>Header Files\State Engine\States</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="All Them Pixels.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

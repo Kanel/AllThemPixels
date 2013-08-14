@@ -104,7 +104,7 @@
     <ClCompile Include="HexagonHull.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Map.cpp" />
-    <ClCompile Include="MenuState.cpp" />
+    <ClCompile Include="PauseState.cpp" />
     <ClCompile Include="MontoneChain.cpp" />
     <ClCompile Include="ParticleSystem.cpp" />
     <ClCompile Include="Player.cpp" />
@@ -149,13 +149,14 @@
     <ClInclude Include="HexagonGridStorageRow.h" />
     <ClInclude Include="HexagonHull.h" />
     <ClInclude Include="Map.h" />
-    <ClInclude Include="MenuState.h" />
+    <ClInclude Include="PauseState.h" />
     <ClInclude Include="MonotoneChain.h" />
     <ClInclude Include="ParticleSystem.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerCustomizationUI.h" />
     <ClInclude Include="PlayingState.h" />
     <ClInclude Include="Projectile.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="SAT.h" />
     <ClInclude Include="Shapes.h" />
     <ClInclude Include="SkillPoints.h" />
@@ -169,6 +170,9 @@
     <ClInclude Include="VertexCollection.h" />
     <ClInclude Include="Weapon.h" />
     <ClInclude Include="World.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="All Them Pixels.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)/Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

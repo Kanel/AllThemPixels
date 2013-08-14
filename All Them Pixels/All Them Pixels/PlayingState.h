@@ -3,7 +3,7 @@
 #include "World.h"
 #include "GameState.h"
 #include "PlayerCustomizationUI.h"
-#include "MenuState.h"
+#include "PauseState.h"
 #include <SFML\Graphics.hpp>
 
 using namespace sf;
@@ -16,6 +16,7 @@ protected:
 	Listener listener;
 	World world;
 	PlayerCustomizationUI playerCustomizationUI;
+	PauseState * pauseState;
 
 public:
 	PlayingState();
