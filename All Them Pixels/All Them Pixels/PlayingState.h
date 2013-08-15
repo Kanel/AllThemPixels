@@ -17,13 +17,14 @@ protected:
 	World world;
 	PlayerCustomizationUI playerCustomizationUI;
 	PauseState * pauseState;
+	int pauseStatesUsed;
 
 public:
 	PlayingState();
 	~PlayingState();
 
-	virtual void pause();
-	virtual void resume();
+	virtual void pause(GameEngine * engine);
+	virtual void resume(GameEngine * engine);
 
 	virtual bool blocking();
 

@@ -13,14 +13,15 @@ protected:
 	VertexCollection * collection;
 
 protected:
-	void step(AxialCoordinates coordinate, Vector2f origin, HexagonGrid::HexagonDirection direction, int steps, HexagonGrid &grid);
+	void step(AxialCoordinates coordinate, Vector2f origin, HexagonGrid::HexagonDirection direction, int steps, float size, HexagonGrid &grid);
+	void generateBackground(Vector2f windowSize);
 
 public:
 	PauseState();
 	~PauseState();
 
-	virtual void pause();
-	virtual void resume();
+	virtual void pause(GameEngine * engine);
+	virtual void resume(GameEngine * engine);
 
 	virtual bool blocking();
 

@@ -1,45 +1,48 @@
 #include "PauseState.h"
 
-void PauseState::step(AxialCoordinates coordinate, Vector2f origin, HexagonGrid::HexagonDirection direction, int steps, HexagonGrid &grid)
+void PauseState::step(AxialCoordinates coordinate, Vector2f origin, HexagonGrid::HexagonDirection direction, int steps, float size, HexagonGrid &grid)
 {
 	for (int i = 0; i < steps; i++)
 	{
-		hexagons.push_back(new Hexagon(origin + grid.getPosition(coordinate), PAUSE_HEXAGON_RADIUS, PAUSE_HEXAGON_COLOR, Hexagon::PointyTopped, collection));
+		hexagons.push_back(new Hexagon(origin + grid.getPosition(coordinate), size, PAUSE_HEXAGON_COLOR, Hexagon::PointyTopped, collection));
 
 		coordinate = grid.step(coordinate, direction);
 	}
 }
 
-PauseState::PauseState()
+void PauseState::generateBackground(Vector2f windowSize)
 {
-	Vector2f origin(PAUSE_HEXAGON_SIZE, PAUSE_HEXAGON_SIZE);
-	HexagonGrid grid(Hexagon::PointyTopped, PAUSE_HEXAGON_SIZE);
-	AxialCoordinates coordinate;
-
-	collection = new VertexCollection(8, 0, 1, PrimitiveType::TrianglesStrip);
-
-	paused = false;
+	float hexagonSize = (PAUSE_HEXAGON_RADIUS_RATIO * windowSize.y > 80) ? 80 : PAUSE_HEXAGON_RADIUS_RATIO * windowSize.y;
+	Vector2f origin(hexagonSize, hexagonSize);
+	HexagonGrid grid(Hexagon::PointyTopped, hexagonSize + PAUSE_HEXAGON_PADDING);
+	AxialCoordinates coordinate;	
 
 	// Generate grid.
-	step(coordinate, origin, HexagonGrid::DownRight, 3, grid);
+	step(coordinate, origin, HexagonGrid::DownRight, 3, hexagonSize, grid);
 
 	coordinate = grid.step(coordinate, HexagonGrid::Down);
 
-	step(coordinate, origin, HexagonGrid::DownRight, 5, grid);
+	step(coordinate, origin, HexagonGrid::DownRight, 5, hexagonSize, grid);
 
 	coordinate = grid.step(coordinate, HexagonGrid::Down);
 
-	step(coordinate, origin, HexagonGrid::DownRight, 3, grid);
+	step(coordinate, origin, HexagonGrid::DownRight, 3, hexagonSize, grid);
 
 	coordinate = grid.step(coordinate, HexagonGrid::Down);
 
-	step(coordinate, origin, HexagonGrid::DownRight, 3, grid);
+	step(coordinate, origin, HexagonGrid::DownRight, 3, hexagonSize, grid);
 
 	coordinate = grid.step(coordinate, HexagonGrid::Down);
 	coordinate = grid.step(coordinate, HexagonGrid::UpLeft);
 	coordinate = grid.step(coordinate, HexagonGrid::UpLeft);
 
-	step(coordinate, origin, HexagonGrid::DownRight, 3, grid);
+	step(coordinate, origin, HexagonGrid::DownRight, 3, hexagonSize, grid);
+}
+
+PauseState::PauseState()
+{
+	paused = false;
+	collection = new VertexCollection(8, 0, 1, PrimitiveType::TrianglesStrip);
 }
 
 PauseState::~PauseState()
@@ -51,12 +54,12 @@ PauseState::~PauseState()
 	delete collection;
 }
 
-void PauseState::pause()
+void PauseState::pause(GameEngine * engine)
 {
 	paused = true;
 }
 
-void PauseState::resume()
+void PauseState::resume(GameEngine * engine)
 {
 	paused = false;
 }
@@ -82,7 +85,15 @@ void PauseState::handleEvents(GameEngine * engine, vector<Event> events)
 
 void PauseState::update(GameEngine * engine, UpdateInfo info)
 {
-
+	if (hexagons.size() != 0)
+	{
+		for (int i = 0; i < hexagons.size(); i++)
+		{
+			delete hexagons[i];
+		}
+		hexagons.clear();
+	}	
+	generateBackground(engine->window->getView().getSize());
 }
 
 void PauseState::draw(RenderTarget& target, RenderStates states) const
@@ -115,6 +126,6 @@ void PauseState::draw(RenderTarget& target, RenderStates states) const
 	statess.transform.translate(upperLeftCorner);
 
 	target.draw(vertices, 4, PrimitiveType::Quads);
-	target.draw(text);
 	target.draw(*collection, statess);
+	target.draw(text);
 }

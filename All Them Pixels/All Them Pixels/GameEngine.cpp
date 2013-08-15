@@ -1,5 +1,13 @@
 #include "GameEngine.h"
 
+void GameEngine::resize(int width, int height)
+{
+	View view = window->getView();
+			
+	view.setSize(width, height);
+	window->setView(view);
+}
+
 GameEngine::GameEngine(int width, int height)
 {
 	//Uint32 windowStyle = Style::Resize;	
@@ -8,6 +16,7 @@ GameEngine::GameEngine(int width, int height)
 	Image icon;
    
 	window = new RenderWindow(videoMode, GAME_TITLE, 7, settings);
+	paused = false;
 	info.elapsedGameTime = 0;
 	info.updateInterval = 0;
 
@@ -17,7 +26,7 @@ GameEngine::GameEngine(int width, int height)
 	}
 	else
 	{
-		bool whta = true;
+		// Errors?
 	}
 }
 
@@ -31,6 +40,37 @@ bool GameEngine::isActive()
 	return !expended() && window->isOpen();
 }
 
+bool GameEngine::isPaused()
+{
+	return paused;
+}
+
+void GameEngine::pause()
+{
+	if (!paused)
+	{
+		paused = true;
+
+		for (int i = 0; i < states.size(); i++)
+		{
+			states[i]->pause(this);
+		}
+	}
+}
+
+void GameEngine::resume()
+{
+	if (paused)
+	{
+		paused = false;
+
+		for (int i = 0; i < states.size(); i++)
+		{
+			states[i]->resume(this);
+		}
+	}
+}
+
 void GameEngine::changeState(GameState * state)
 {
 	for (int i = 0; i < states.size(); i++)
@@ -38,7 +78,6 @@ void GameEngine::changeState(GameState * state)
 		delete states[i];
 	}
 	states.clear();
-
 	pushState(state);
 }
 
@@ -63,9 +102,23 @@ void GameEngine::handleEvents()
 	{
 		events.push_back(event);
 
-		if (event.type == Event::Closed)
+		switch (event.type)
 		{
-			expend();
+			case Event::Closed:
+				expend();
+				break;
+
+			case Event::Resized:
+				resize(event.size.width, event.size.height);
+				break;
+
+			case Event::LostFocus:
+				pause();
+				break;
+
+			case Event::GainedFocus:
+				resume();
+				break;
 		}
 	}
 	for (int i = 0; i < states.size(); i++)
@@ -90,21 +143,34 @@ void GameEngine::update(int elapsedMilliseconds)
 			delete states[i];
 		}
 	}
-
 	states = activeStates;
 
 	// Update all active states.
-	info.elapsedGameTime += elapsedMilliseconds;
-	info.updateInterval = elapsedMilliseconds;
-
-	for (int i = 0; i < states.size(); i++)
+	if (!paused)
+	{		
+		info.elapsedGameTime += elapsedMilliseconds;
+		info.updateInterval = elapsedMilliseconds;
+	}
+	else
 	{
-		states[i]->update(this, info);
+		info.updateInterval = elapsedMilliseconds;
+	}
 
+	int start;
+
+	for (int i = states.size() - 1; 0 <= i; i--)
+	{
 		if (states[i]->blocking())
 		{
+			start = i;
+
 			break;
 		}
+	}
+
+	for (int i = start; i < states.size(); i++)
+	{
+		states[i]->update(this, info);
 	}
 }
 

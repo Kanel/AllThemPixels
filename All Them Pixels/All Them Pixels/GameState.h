@@ -16,8 +16,8 @@ protected:
 	bool paused;
 
 public:
-	virtual void pause() = 0;
-	virtual void resume() = 0;
+	virtual void pause(GameEngine * engine) = 0;
+	virtual void resume(GameEngine * engine) = 0;
 
 	virtual bool blocking() = 0;
 

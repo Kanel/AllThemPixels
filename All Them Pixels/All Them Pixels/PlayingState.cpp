@@ -4,23 +4,37 @@ PlayingState::PlayingState() : world(Vector2f(), WORLD_TERRITORY_RADIUS, WORLD_T
 {
 	fadeTimeElapsed = 0;
 	paused = false;
+	pauseStatesUsed = 0;
 
 	world.activate(AxialCoordinates(0, WORLD_LAYERS));
 }
 
 PlayingState::~PlayingState()
 {
-
+	if (pauseStatesUsed != 0)
+	{
+		pauseState->expend();
+	}
 }
 
-void PlayingState::pause()
+void PlayingState::pause(GameEngine * engine)
 {
 	paused = true;
+	pauseState = new PauseState();
+	pauseStatesUsed++;
+
+	engine->pushState(pauseState);
 }
 
-void PlayingState::resume()
+void PlayingState::resume(GameEngine * engine)
 {
 	paused = false;
+	pauseStatesUsed--;
+
+	if (pauseStatesUsed == 0)
+	{
+		pauseState->expend();
+	}
 }
 
 bool PlayingState::blocking()
@@ -41,12 +55,18 @@ void PlayingState::handleEvents(GameEngine * engine, vector<Event> events)
 				if (paused)
 				{
 					pauseState = new PauseState();
+					pauseStatesUsed++;
 
 					engine->pushState(pauseState);
 				}
 				else
 				{
-					pauseState->expend();
+					pauseStatesUsed--;
+
+					if (pauseStatesUsed == 0)
+					{
+						pauseState->expend();
+					}
 				}
 			}
 		}
