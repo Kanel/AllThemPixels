@@ -5,10 +5,20 @@ GameEngine::GameEngine(int width, int height)
 	//Uint32 windowStyle = Style::Resize;	
 	ContextSettings settings(0, 0, 8, 2, 0);
 	VideoMode videoMode(width, height);
+	Image icon;
    
 	window = new RenderWindow(videoMode, GAME_TITLE, 7, settings);
 	info.elapsedGameTime = 0;
 	info.updateInterval = 0;
+
+	if (icon.loadFromFile("Icon 32x32.png"))
+	{
+		window->setIcon(32, 32, icon.getPixelsPtr());
+	}
+	else
+	{
+		bool whta = true;
+	}
 }
 
 GameEngine::~GameEngine()

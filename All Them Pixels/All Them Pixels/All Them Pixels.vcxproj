@@ -174,6 +174,9 @@
   <ItemGroup>
     <ResourceCompile Include="All Them Pixels.rc" />
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\Release\Icon.ico" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)/Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
