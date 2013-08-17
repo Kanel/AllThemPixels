@@ -12,9 +12,17 @@
 // Pause State
 #define PAUSE_BACKGROUND Color(0, 0, 0, 200)
 #define PAUSE_TEXT "Paused"
+#define PAUSE_RESUME_TEXT "Paused"
+#define PAUSE_MUSIC_TEXT "Music Volume"
+#define PAUSE_EFFECTS_TEXT "Effects Volume"
+#define PAUSE_UI_TEXT "UI Volume"
+#define PAUSE_RESUME_TEXT "Resume"
+#define PAUSE_QUIT_TEXT "Quit"
 #define PAUSE_FONT_PATH UI_FONT_PATH
 #define PAUSE_FONT_SIZE 36
+#define PAUSE_FONT_SIZE_SMALL 16
 #define PAUSE_FONT_COLOR Color(255, 255, 255, 200)
+#define PAUSE_FONT_HOVE_COLOR Color(0, 0, 0, 200)
 #define PAUSE_HEXAGON_RADIUS_RATIO 0.0889f
 #define PAUSE_HEXAGON_PADDING 2.5f
 #define PAUSE_HEXAGON_COLOR Color(0, 0, 0, 150)
@@ -25,9 +33,9 @@
 #define SOUNDS_PLAYER_HIT "hurt1.wav"
 #define SOUNDS_SELECTED "select1.wav"
 #define SOUNDS_FIREING "shoot1.wav"
-#define SOUNDS_VOLUME_MUSIC 1
-#define SOUNDS_VOLUME_EFFECTS 2
-#define SOUNDS_VOLUME_UI 2
+#define SOUNDS_VOLUME_MUSIC 10
+#define SOUNDS_VOLUME_EFFECTS 100
+#define SOUNDS_VOLUME_UI 60
 
 // Game
 #define GAME_UPDATE_INTERVAL 10

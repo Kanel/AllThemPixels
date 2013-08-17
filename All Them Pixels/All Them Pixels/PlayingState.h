@@ -12,12 +12,10 @@ class PlayingState : public GameState
 {
 protected:
 	int fadeTimeElapsed;
-	Sounds sounds;
 	Listener listener;
 	World world;
 	PlayerCustomizationUI playerCustomizationUI;
-	PauseState * pauseState;
-	int pauseStatesUsed;
+	bool pausedBeforeLoosOfFocus;
 
 public:
 	PlayingState();
@@ -25,6 +23,7 @@ public:
 
 	virtual void pause(GameEngine * engine);
 	virtual void resume(GameEngine * engine);
+	virtual bool paused();
 
 	virtual bool blocking();
 

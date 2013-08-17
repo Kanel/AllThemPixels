@@ -47,7 +47,9 @@ public:
 	static int getNumberOfTiles(int layers);
 	static int getNumberOfTilesInLayer(int layer);
 
+	Vector2f getPosition(int q, int r);
 	Vector2f getPosition(AxialCoordinates axialCoordinates);
+	AxialCoordinates getAxialCoordinates(Vector2i position);
 	AxialCoordinates getAxialCoordinates(Vector2f position);
 	AxialCoordinates step(AxialCoordinates axialCoordinates, HexagonDirection direction);
 

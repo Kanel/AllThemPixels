@@ -117,6 +117,7 @@
     <ClCompile Include="Sounds.cpp" />
     <ClCompile Include="Territory.cpp" />
     <ClCompile Include="UserInput.cpp" />
+    <ClCompile Include="ValueBar.cpp" />
     <ClCompile Include="Vector2fMath.cpp" />
     <ClCompile Include="VertexCluster.cpp" />
     <ClCompile Include="VertexCollection.cpp" />
@@ -155,6 +156,7 @@
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerCustomizationUI.h" />
     <ClInclude Include="PlayingState.h" />
+    <ClInclude Include="Position.h" />
     <ClInclude Include="Projectile.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="SAT.h" />
@@ -165,6 +167,7 @@
     <ClInclude Include="Territory.h" />
     <ClInclude Include="UpdateInfo.h" />
     <ClInclude Include="UserInput.h" />
+    <ClInclude Include="ValueBar.h" />
     <ClInclude Include="Vector2fMath.h" />
     <ClInclude Include="VertexCluster.h" />
     <ClInclude Include="VertexCollection.h" />

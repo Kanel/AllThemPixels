@@ -19,7 +19,7 @@ GameEngine::GameEngine(int width, int height)
 	paused = false;
 	info.elapsedGameTime = 0;
 	info.updateInterval = 0;
-
+	
 	if (icon.loadFromFile("Icon 32x32.png"))
 	{
 		window->setIcon(32, 32, icon.getPixelsPtr());
@@ -110,14 +110,6 @@ void GameEngine::handleEvents()
 
 			case Event::Resized:
 				resize(event.size.width, event.size.height);
-				break;
-
-			case Event::LostFocus:
-				pause();
-				break;
-
-			case Event::GainedFocus:
-				resume();
 				break;
 		}
 	}

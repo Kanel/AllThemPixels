@@ -68,6 +68,11 @@ int HexagonGrid::getNumberOfTilesInLayer(int layer)
 	return (layer > 0) ? layer * 6 : 1;
 }
 
+Vector2f HexagonGrid::getPosition(int q, int r)
+{
+	return getPosition(AxialCoordinates(q, r));
+}
+
 Vector2f HexagonGrid::getPosition(AxialCoordinates axialCoordinates)
 {
 	float x;
@@ -84,6 +89,11 @@ Vector2f HexagonGrid::getPosition(AxialCoordinates axialCoordinates)
 		y = size * (3.0f / 2.0f) * axialCoordinates.r;
 	}
 	return Vector2f(x, y);
+}
+
+AxialCoordinates HexagonGrid::getAxialCoordinates(Vector2i position)
+{
+	return getAxialCoordinates(Vector2f(position.x, position.y));
 }
 
 AxialCoordinates HexagonGrid::getAxialCoordinates(Vector2f position)

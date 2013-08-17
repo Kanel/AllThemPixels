@@ -28,6 +28,7 @@ public:
 	void colorize();
 
 	virtual void draw(RenderTarget& target, RenderStates states) const;
+
 private:
 	void applyTransform(Transform transform);
 

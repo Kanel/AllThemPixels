@@ -26,6 +26,21 @@ Rect<float> Collision::transformRectangle(Rect<float> rectangle, Vector2f speed)
 	return rectangle;
 }
 
+bool Collision::sameSide(Vector2f p1, Vector2f p2, Vector2f a, Vector2f b)
+{
+	float cp1 = Vector2fMath::cross(b-a, p1-a);
+    float cp2 = Vector2fMath::cross(b-a, p2-a);
+
+    if (cp1 * cp2 >= 0)
+	{
+		return true;
+	}
+    else 
+	{
+		return false;
+	}
+}
+
 Rect<float> Collision::getHitBox(Vertex vertices[], int count)
 {
 	float minX = vertices[0].position.x;
@@ -117,6 +132,11 @@ bool Collision::containsPoint(Rect<float> boundingBox, Vector2f point)
 {
 	return boundingBox.left <= point.x && point.x <= boundingBox.left + boundingBox.width &&
 		   boundingBox.top <= point.y  && point.y <= boundingBox.top + boundingBox.height;
+}
+
+bool Collision::containsPoint(Vector2f a, Vector2f b, Vector2f c, Vector2f point)
+{
+	return sameSide(point, a, b, c) && sameSide(point, b, a, c) && sameSide(point, c, a, b);
 }
 
 /* maybe

@@ -19,8 +19,13 @@ public:
 		this->r = r;
 	}
 
-	AxialCoordinates operator+(AxialCoordinates &other)
+	AxialCoordinates operator+(AxialCoordinates &that)
 	{
-		return AxialCoordinates(q + other.q, r + other.r);
+		return AxialCoordinates(q + that.q, r + that.r);
+	}
+
+	bool operator==(AxialCoordinates &that)
+	{
+		return q == that.q && r == that.r;
 	}
 };

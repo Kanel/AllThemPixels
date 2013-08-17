@@ -3,6 +3,7 @@
 #include "Config.h"
 #include "GameState.h"
 #include "UpdateInfo.h"
+#include "Sounds.h"
 #include <SFML\Graphics.hpp>
 #include <vector>
 
@@ -23,6 +24,7 @@ private:
 
 public:
 	RenderWindow * window;
+	Sounds sounds;
 
 public:
 	GameEngine(int width, int height);

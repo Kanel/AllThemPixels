@@ -3,38 +3,33 @@
 PlayingState::PlayingState() : world(Vector2f(), WORLD_TERRITORY_RADIUS, WORLD_TERRITORY_SPACING, WORLD_LAYERS)
 {
 	fadeTimeElapsed = 0;
-	paused = false;
-	pauseStatesUsed = 0;
+	_paused = false;
 
 	world.activate(AxialCoordinates(0, WORLD_LAYERS));
 }
 
 PlayingState::~PlayingState()
 {
-	if (pauseStatesUsed != 0)
-	{
-		pauseState->expend();
-	}
 }
 
 void PlayingState::pause(GameEngine * engine)
 {
-	paused = true;
-	pauseState = new PauseState();
-	pauseStatesUsed++;
+	if (!paused())
+	{
+		_paused = true;		
 
-	engine->pushState(pauseState);
+		engine->pushState(new PauseState(this));
+	}
 }
 
 void PlayingState::resume(GameEngine * engine)
 {
-	paused = false;
-	pauseStatesUsed--;
+	_paused = false;
+}
 
-	if (pauseStatesUsed == 0)
-	{
-		pauseState->expend();
-	}
+bool PlayingState::paused()
+{
+	return _paused;
 }
 
 bool PlayingState::blocking()
@@ -45,45 +40,45 @@ bool PlayingState::blocking()
 void PlayingState::handleEvents(GameEngine * engine, vector<Event> events)
 {
 	for (int i = 0; i < events.size(); i++)
-	{
-		if (events[i].type == Event::JoystickButtonReleased)
+	{			
+		switch (events[i].type)
 		{
-			if (events[i].joystickButton.button == GAMEPAD_START)
-			{
-				paused = !paused;
-
-				if (paused)
+			case Event::JoystickButtonPressed:
+				if (events[i].joystickButton.button == GAMEPAD_START)
 				{
-					pauseState = new PauseState();
-					pauseStatesUsed++;
-
-					engine->pushState(pauseState);
+					pause(engine);
 				}
-				else
+				break;
+
+			case Event::LostFocus:
+				pausedBeforeLoosOfFocus = _paused;
+				pause(engine);
+				break;
+
+			case Event::GainedFocus:
+				if (!pausedBeforeLoosOfFocus)
 				{
-					pauseStatesUsed--;
-
-					if (pauseStatesUsed == 0)
-					{
-						pauseState->expend();
-					}
-				}
-			}
+					resume(engine);
+				}				
+				break;
 		}
-	}
+}
 }
 
 void PlayingState::update(GameEngine * engine, UpdateInfo info)
 {
-	if (!paused)
+	if (!_paused)
 	{
 		if (!world.isCleared() && world.isActive())
 		{
-			world.update(info, &sounds);
-			playerCustomizationUI.update(info, world.getPlayer(), &sounds);
+			Vector2f playerPosition = world.getPlayer()->getPosition();
+
+			world.update(info, &engine->sounds);
+			playerCustomizationUI.update(info, world.getPlayer(), &engine->sounds);
 
 			engine->window->setView(world.getView(engine->window->getView()));
 			playerCustomizationUI.align(engine->window->getView());
+			listener.setPosition(playerPosition.x, playerPosition.y, 0);
 		}
 		else if (fadeTimeElapsed <= GAME_FADE_TIME)
 		{

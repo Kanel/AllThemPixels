@@ -13,11 +13,12 @@ class GameEngine;
 class GameState : public Expendable, public Drawable
 {
 protected:
-	bool paused;
+	bool _paused;
 
 public:
 	virtual void pause(GameEngine * engine) = 0;
 	virtual void resume(GameEngine * engine) = 0;
+	virtual bool paused() = 0;
 
 	virtual bool blocking() = 0;
 
