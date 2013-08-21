@@ -28,13 +28,33 @@ float ValueBar::getValue()
 	return value;
 }
 
-void ValueBar::update(Vector2f position)
+ConvexHull ValueBar::getConvexHull()
 {
-	if (Collision::containsPoint(background[0].position, background[1].position, background[2].position, position) ||
-		Collision::containsPoint(background[2].position, background[3].position, background[0].position, position))
+	ConvexHull hull(4);
+
+	hull[0] = background[0].position;
+	hull[1] = background[1].position;
+	hull[2] = background[2].position;
+	hull[3] = background[3].position;
+
+	return hull;
+}
+
+bool ValueBar::containsPoint(Vector2f point)
+{
+	if (Collision::containsPoint(background[0].position, background[1].position, background[2].position, point) ||
+		Collision::containsPoint(background[2].position, background[3].position, background[0].position, point))
+	{
+		return true;
+	}
+}
+
+void ValueBar::update(Vector2f point)
+{
+	if (containsPoint(point))
 	{
 		Vector2f bar = end - start;
-		Vector2f progress = position - start;
+		Vector2f progress = point - start;
 	
 		value = min + (max - min) * (Vector2fMath::length(progress) / Vector2fMath::length(bar));
 	}

@@ -25,7 +25,10 @@ public:
 	void setPoints(Vector2f start, Vector2f end);
 	float getValue();
 
-	void update(Vector2f position);
+	ConvexHull getConvexHull();
+	bool containsPoint(Vector2f point);
+
+	void update(Vector2f point);
 	
 	virtual void draw(RenderTarget& target, RenderStates states) const;
 

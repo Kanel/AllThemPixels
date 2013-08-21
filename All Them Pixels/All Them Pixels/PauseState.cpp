@@ -201,6 +201,20 @@ void PauseState::handleEvents(GameEngine * engine, vector<Event> events)
 
 					expend();
 				}
+
+				if (valueBars[0]->containsPoint(Vector2f(mousePosition.x, mousePosition.y)))
+				{
+					valueBars[0]->update(Vector2f(mousePosition.x, mousePosition.y));
+				}
+				if (valueBars[1]->containsPoint(Vector2f(mousePosition.x, mousePosition.y)))
+				{
+					valueBars[1]->update(Vector2f(mousePosition.x, mousePosition.y));
+				}
+				if (valueBars[2]->containsPoint(Vector2f(mousePosition.x, mousePosition.y)))
+				{
+					valueBars[2]->update(Vector2f(mousePosition.x, mousePosition.y));
+				}
+
 				break;
 		}
 			
@@ -291,11 +305,8 @@ void PauseState::update(GameEngine * engine, UpdateInfo info)
 
 		// Update bars
 		valueBars[0]->setPoints(origin + grid.getPosition(0, 1), origin + grid.getPosition(0, 3));
-		valueBars[0]->update(Vector2f(mousePosition.x, mousePosition.y));
 		valueBars[1]->setPoints(origin + grid.getPosition(1, 1), origin + grid.getPosition(1, 3));
-		valueBars[1]->update(Vector2f(mousePosition.x, mousePosition.y));
 		valueBars[2]->setPoints(origin + grid.getPosition(2, 1), origin + grid.getPosition(2, 3));
-		valueBars[2]->update(Vector2f(mousePosition.x, mousePosition.y));
 
 		sounds->setMusicVolume(valueBars[0]->getValue());
 		sounds->setEffectsVolume(valueBars[1]->getValue());
