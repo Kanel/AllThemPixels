@@ -21,6 +21,7 @@ private:
 	RenderWindow * window;
 	Sounds sounds;
 	Uint32 windowStyle;
+	VideoMode desktop;
 
 private:
 	void resize(int width, int height);

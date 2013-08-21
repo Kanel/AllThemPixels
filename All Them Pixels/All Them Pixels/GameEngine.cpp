@@ -106,9 +106,24 @@ void GameEngine::popState()
 
 void GameEngine::toggleFullscreen()
 {
-	windowStyle = (windowStyle == Style::Fullscreen ? Style::Resize | Style::Close : Style::Fullscreen);
+	VideoMode mode;
 
-	window->create(VideoMode::getDesktopMode(), GAME_TITLE, windowStyle);
+	if (windowStyle == Style::Fullscreen)
+	{
+		mode = desktop;
+		windowStyle = Style::Resize | Style::Close;
+	}
+	else
+	{
+		Vector2u view = window->getSize();
+
+		desktop.width = view.x;
+		desktop.height = view.y;
+		mode = VideoMode::getDesktopMode();
+		windowStyle = Style::Fullscreen;
+	}
+
+	window->create(mode, GAME_TITLE, windowStyle);
 }
 
 void GameEngine::handleEvents()
