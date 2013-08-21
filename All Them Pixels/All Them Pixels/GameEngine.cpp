@@ -107,6 +107,7 @@ void GameEngine::popState()
 void GameEngine::toggleFullscreen()
 {
 	VideoMode mode;
+	ContextSettings settings(0, 0, GAME_OPENGL_VERSION_ANTI_ALIASING, GAME_OPENGL_VERSION_MAJOR, GAME_OPENGL_VERSION_MINOR);
 
 	if (windowStyle == Style::Fullscreen)
 	{
@@ -123,7 +124,7 @@ void GameEngine::toggleFullscreen()
 		windowStyle = Style::Fullscreen;
 	}
 
-	window->create(mode, GAME_TITLE, windowStyle);
+	window->create(mode, GAME_TITLE, windowStyle, settings);
 }
 
 void GameEngine::handleEvents()
