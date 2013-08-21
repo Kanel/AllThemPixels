@@ -187,10 +187,11 @@ void PauseState::handleEvents(GameEngine * engine, vector<Event> events)
 				break;
 
 			case Event::MouseButtonReleased:
-				Vector2f size = engine->window->getView().getSize();
+				RenderWindow * window = engine->getWindow();
+				Vector2f size = window->getView().getSize();
 				float hexagonSize = (PAUSE_HEXAGON_RADIUS_RATIO * size.y > 80) ? 80 : PAUSE_HEXAGON_RADIUS_RATIO * size.y;
 				Vector2f origin(hexagonSize + PAUSE_HEXAGON_PADDING, hexagonSize + PAUSE_HEXAGON_PADDING);
-				Vector2i mousePosition = Mouse::getPosition(*engine->window);
+				Vector2i mousePosition = Mouse::getPosition(*window);
 				HexagonGrid grid(Hexagon::PointyTopped, hexagonSize + PAUSE_HEXAGON_PADDING);
 				AxialCoordinates mouseCoordinate = grid.getAxialCoordinates(Vector2f(mousePosition.x, mousePosition.y) - origin);
 
@@ -210,14 +211,16 @@ void PauseState::update(GameEngine * engine, UpdateInfo info)
 {
 	if (!paused())
 	{
-		Vector2f center = engine->window->getView().getCenter();
-		Vector2f size = engine->window->getView().getSize();
+		RenderWindow * window = engine->getWindow();
+		Vector2f center = window->getView().getCenter();
+		Vector2f size = window->getView().getSize();
 		float hexagonSize = (PAUSE_HEXAGON_RADIUS_RATIO * size.y > 80) ? 80 : PAUSE_HEXAGON_RADIUS_RATIO * size.y;
 		Vector2f origin(hexagonSize + PAUSE_HEXAGON_PADDING, hexagonSize + PAUSE_HEXAGON_PADDING);
-		Vector2i mousePosition = Mouse::getPosition(*engine->window);
+		Vector2i mousePosition = Mouse::getPosition(*window);
 		HexagonGrid grid(Hexagon::PointyTopped, hexagonSize + PAUSE_HEXAGON_PADDING);
 		Transform movement;
 		AxialCoordinates mouseCoordinate = grid.getAxialCoordinates(Vector2f(mousePosition.x, mousePosition.y) - origin);
+		Sounds * sounds = engine->getSounds();
 
 		movement.translate(position - center);
 
@@ -233,7 +236,7 @@ void PauseState::update(GameEngine * engine, UpdateInfo info)
 		}
 
 		// Create new hexagons
-		generateBackground(engine->window->getView().getSize());
+		generateBackground(engine->getWindow()->getView().getSize());
 
 		// Update positions
 		positionText(center, HorizontalPosition::Middle, VerticalPosition::Center, text[0]);
@@ -294,9 +297,9 @@ void PauseState::update(GameEngine * engine, UpdateInfo info)
 		valueBars[2]->setPoints(origin + grid.getPosition(2, 1), origin + grid.getPosition(2, 3));
 		valueBars[2]->update(Vector2f(mousePosition.x, mousePosition.y));
 
-		engine->sounds.setMusicVolume(valueBars[0]->getValue());
-		engine->sounds.setEffectsVolume(valueBars[1]->getValue());
-		engine->sounds.setUIVolume(valueBars[2]->getValue());
+		sounds->setMusicVolume(valueBars[0]->getValue());
+		sounds->setEffectsVolume(valueBars[1]->getValue());
+		sounds->setUIVolume(valueBars[2]->getValue());
 
 		// Save current view position.
 		position = center;
@@ -318,6 +321,7 @@ void PauseState::draw(RenderTarget& target, RenderStates states) const
 	Vector2f upperLeftCorner = center - size * 0.5f;
 	Rect<float> boundingBox = text[0].getLocalBounds();
 	Vector2f rectangle(boundingBox.width + 24, boundingBox.height + 24);
+	RenderStates statess;
 
 	vertices[0] = Vertex(Vector2f(center.x - size.x / 2, center.y + size.y / 2), PAUSE_BACKGROUND);
 	vertices[1] = Vertex(Vector2f(center.x + size.x / 2, center.y + size.y / 2), PAUSE_BACKGROUND);
@@ -329,8 +333,6 @@ void PauseState::draw(RenderTarget& target, RenderStates states) const
 	box[2] = Vertex(Vector2f(center.x + rectangle.x / 2, center.y - rectangle.y / 2), PAUSE_HEXAGON_COLOR);
 	box[3] = Vertex(Vector2f(center.x - rectangle.x / 2, center.y - rectangle.y / 2), PAUSE_HEXAGON_COLOR);
 	
-	RenderStates statess;
-
 	statess.transform.translate(upperLeftCorner);
 
 	target.draw(vertices, 4, PrimitiveType::Quads);

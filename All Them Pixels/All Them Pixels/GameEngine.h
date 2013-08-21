@@ -18,13 +18,12 @@ private:
 	bool paused;
 	vector<GameState *> states;
 	UpdateInfo info;
+	RenderWindow * window;
+	Sounds sounds;
+	Uint32 windowStyle;
 
 private:
 	void resize(int width, int height);
-
-public:
-	RenderWindow * window;
-	Sounds sounds;
 
 public:
 	GameEngine(int width, int height);
@@ -36,9 +35,14 @@ public:
 	void pause();
 	void resume();
 
+	RenderWindow * getWindow();
+	Sounds * getSounds();
+
 	void changeState(GameState * state);
 	void pushState(GameState * state);
 	void popState();
+
+	void toggleFullscreen();
 
 	void handleEvents();
 	void update(int elapsedMilliseconds);

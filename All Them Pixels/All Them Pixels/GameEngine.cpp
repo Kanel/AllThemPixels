@@ -11,11 +11,12 @@ void GameEngine::resize(int width, int height)
 GameEngine::GameEngine(int width, int height)
 {
 	//Uint32 windowStyle = Style::Resize;	
-	ContextSettings settings(0, 0, 8, 2, 0);
+	ContextSettings settings(0, 0, GAME_OPENGL_VERSION_ANTI_ALIASING, GAME_OPENGL_VERSION_MAJOR, GAME_OPENGL_VERSION_MINOR);
 	VideoMode videoMode(width, height);
 	Image icon;
-   
-	window = new RenderWindow(videoMode, GAME_TITLE, 7, settings);
+
+	windowStyle = Style::Default;   
+	window = new RenderWindow(videoMode, GAME_TITLE, windowStyle, settings);
 	paused = false;
 	info.elapsedGameTime = 0;
 	info.updateInterval = 0;
@@ -71,6 +72,16 @@ void GameEngine::resume()
 	}
 }
 
+RenderWindow * GameEngine::getWindow()
+{
+	return window;
+}
+
+Sounds * GameEngine::getSounds()
+{
+	return &sounds;
+}
+
 void GameEngine::changeState(GameState * state)
 {
 	for (int i = 0; i < states.size(); i++)
@@ -91,6 +102,13 @@ void GameEngine::popState()
 	delete states[states.size() - 1];
 
 	states.resize(states.size() - 1);
+}
+
+void GameEngine::toggleFullscreen()
+{
+	windowStyle = (windowStyle == Style::Fullscreen ? Style::Resize | Style::Close : Style::Fullscreen);
+
+	window->create(VideoMode::getDesktopMode(), GAME_TITLE, windowStyle);
 }
 
 void GameEngine::handleEvents()

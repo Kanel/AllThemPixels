@@ -44,9 +44,15 @@ void PlayingState::handleEvents(GameEngine * engine, vector<Event> events)
 		switch (events[i].type)
 		{
 			case Event::JoystickButtonPressed:
-				if (events[i].joystickButton.button == GAMEPAD_START)
+				switch (events[i].joystickButton.button)
 				{
-					pause(engine);
+					case GAMEPAD_START:
+						pause(engine);
+						break;
+
+					case GAMEPAD_Y:
+						engine->toggleFullscreen();
+						break;
 				}
 				break;
 
@@ -62,7 +68,7 @@ void PlayingState::handleEvents(GameEngine * engine, vector<Event> events)
 				}				
 				break;
 		}
-}
+	}
 }
 
 void PlayingState::update(GameEngine * engine, UpdateInfo info)
@@ -72,12 +78,14 @@ void PlayingState::update(GameEngine * engine, UpdateInfo info)
 		if (!world.isCleared() && world.isActive())
 		{
 			Vector2f playerPosition = world.getPlayer()->getPosition();
+			RenderWindow * window = engine->getWindow();
+			Sounds * sounds = engine->getSounds();
 
-			world.update(info, &engine->sounds);
-			playerCustomizationUI.update(info, world.getPlayer(), &engine->sounds);
+			world.update(info, sounds);
+			playerCustomizationUI.update(info, world.getPlayer(), sounds);
 
-			engine->window->setView(world.getView(engine->window->getView()));
-			playerCustomizationUI.align(engine->window->getView());
+			window->setView(world.getView(window->getView()));
+			playerCustomizationUI.align(window->getView());
 			listener.setPosition(playerPosition.x, playerPosition.y, 0);
 		}
 		else if (fadeTimeElapsed <= GAME_FADE_TIME)
@@ -87,7 +95,7 @@ void PlayingState::update(GameEngine * engine, UpdateInfo info)
 
 			territory->fade(fadeColor, world.getPlayer()->getPosition());
 
-			fadeTimeElapsed  += info.updateInterval;
+			fadeTimeElapsed += info.updateInterval;
 		}
 		else
 		{

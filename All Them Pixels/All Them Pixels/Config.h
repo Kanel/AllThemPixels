@@ -40,6 +40,9 @@
 // Game
 #define GAME_UPDATE_INTERVAL 10
 #define GAME_TITLE "All them Pixels!"
+#define GAME_OPENGL_VERSION_ANTI_ALIASING 8
+#define GAME_OPENGL_VERSION_MAJOR 2
+#define GAME_OPENGL_VERSION_MINOR 0
 #define GAME_FADE_TIME 2000 // Milliseconds
 
 // Player
@@ -59,7 +62,7 @@
 #define GAMEPAD_A 0
 #define GAMEPAD_B 1
 #define GAMEPAD_X 2
-#define GAMEPAD_y 3
+#define GAMEPAD_Y 3
 #define GAMEPAD_LB 4
 #define GAMEPAD_RB 5
 #define GAMEPAD_BACK 6
