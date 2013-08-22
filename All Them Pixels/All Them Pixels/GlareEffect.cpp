@@ -157,7 +157,7 @@ void GlareEffect::draw(RenderTarget& target, RenderStates states) const
 
 }
 
-void GlareEffect::update(UpdateInfo info)
+void GlareEffect::update(UpdateInfo info, Controls * controls)
 {
 
 }

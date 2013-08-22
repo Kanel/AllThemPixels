@@ -4,6 +4,9 @@
 #include "GameState.h"
 #include "UpdateInfo.h"
 #include "Sounds.h"
+#include "Controls.h"
+#include "KeyboardControls.h"
+#include "GamepadControls.h"
 #include <SFML\Graphics.hpp>
 #include <vector>
 
@@ -22,6 +25,7 @@ private:
 	Sounds sounds;
 	Uint32 windowStyle;
 	VideoMode desktop;
+	Controls * controls;
 
 private:
 	void resize(int width, int height);
@@ -38,6 +42,7 @@ public:
 
 	RenderWindow * getWindow();
 	Sounds * getSounds();
+	Controls * getControls();
 
 	void changeState(GameState * state);
 	void pushState(GameState * state);

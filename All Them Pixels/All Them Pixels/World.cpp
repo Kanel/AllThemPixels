@@ -183,7 +183,7 @@ void World::draw(RenderTarget& target, RenderStates states) const
 	}
 }
 
-void World::update(UpdateInfo info, Sounds * sounds)
+void World::update(UpdateInfo info, Controls * controls, Sounds * sounds)
 {
 	if (Joystick::isButtonPressed(0, GAMEPAD_BACK))
 	{
@@ -202,7 +202,7 @@ void World::update(UpdateInfo info, Sounds * sounds)
 			if (territories[coordinates]->isActive())
 			{
 				territories[coordinates]->integrateSpawnQueue();
-				territories[coordinates]->update(info, sounds);
+				territories[coordinates]->update(info, controls, sounds);
 				territories[coordinates]->cleanup();
 			}
 		}

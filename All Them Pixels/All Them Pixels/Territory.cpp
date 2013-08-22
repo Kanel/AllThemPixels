@@ -160,11 +160,11 @@ void Territory::spatialPartitionSafeRoomTiles()
 }
 
 // Updates player projectiles and checks if they are colliding with any enemies.
-void Territory::updatePlayerProjectiles(UpdateInfo info)
+void Territory::updatePlayerProjectiles(UpdateInfo info, Controls * controls)
 {
 	for (auto projectile : playerProjectiles)
 	{
-		projectile->update(info);
+		projectile->update(info, controls);
 
 		if (!projectile->isExpended())
 		{
@@ -192,11 +192,11 @@ void Territory::updatePlayerProjectiles(UpdateInfo info)
 }
 
 // Updates enemy projectiles and checks collisions against the player and safe zones.
-void Territory::updateEnemyProjectiles(UpdateInfo info)
+void Territory::updateEnemyProjectiles(UpdateInfo info, Controls * controls)
 {
 	for (auto projectile : enemyProjectiles)
 	{
-		projectile->update(info);
+		projectile->update(info, controls);
 
 		if (Collision::isClose(player, projectile))
 		{
@@ -270,9 +270,9 @@ void Territory::updateEnemies(UpdateInfo info)
 }
 
 // Updates the player and checks if the player is in a safe zone.
-void Territory::updatePlayer(UpdateInfo info)
+void Territory::updatePlayer(UpdateInfo info, Controls * controls)
 {
-	player->update(info);
+	player->update(info, controls);
 	player->setIsInSafeZone(false);
 
 	for (int i = 0; i < 6 && !player->getIsInSafeZone(); i++)
@@ -775,21 +775,21 @@ void Territory::draw(RenderTarget& target, RenderStates states) const
 	}
 }
 
-void Territory::update(UpdateInfo info, Sounds * sounds)
+void Territory::update(UpdateInfo info, Controls * controls, Sounds * sounds)
 {
 	this->sounds = sounds;
 
 	// Update all player projectiles
-	updatePlayerProjectiles(info);
+	updatePlayerProjectiles(info, controls);
 
 	// Update all enemies.
 	updateEnemies(info);
 
 	// Check if the player is hit by enemy projectiles.
-	updateEnemyProjectiles(info);
+	updateEnemyProjectiles(info, controls);
 
 	// Update player and safe zone checks.
-	updatePlayer(info);
+	updatePlayer(info, controls);
 
 	// Update all effects.
 	updateEffects(info);

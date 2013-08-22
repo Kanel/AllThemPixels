@@ -81,8 +81,8 @@ void PlayingState::update(GameEngine * engine, UpdateInfo info)
 			RenderWindow * window = engine->getWindow();
 			Sounds * sounds = engine->getSounds();
 
-			world.update(info, sounds);
-			playerCustomizationUI.update(info, world.getPlayer(), sounds);
+			world.update(info, engine->getControls(), sounds);
+			playerCustomizationUI.update(info, world.getPlayer(), engine->getControls(), sounds);
 
 			window->setView(world.getView(window->getView()));
 			playerCustomizationUI.align(window->getView());

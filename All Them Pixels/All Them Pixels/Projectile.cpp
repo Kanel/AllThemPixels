@@ -85,7 +85,7 @@ ConvexHull Projectile::getConvexHull()
 	return shape.getConvexHull();
 }
 
-void Projectile::update(UpdateInfo info)
+void Projectile::update(UpdateInfo info, Controls * controls)
 {
 	ttl--;
 	

@@ -5,6 +5,7 @@
 #include "EntityTypes.h"
 #include "Shapes.h"
 #include "UpdateInfo.h"
+#include "Controls.h"
 #include <SFML/Graphics.hpp>
 
 using std::list;
@@ -35,5 +36,5 @@ public:
 	virtual Rect<float> getBoundingBox() = 0;
 	virtual ConvexHull getConvexHull() = 0;
 
-	virtual void update(UpdateInfo info) = 0;
+	virtual void update(UpdateInfo info, Controls * controls) = 0;
 };

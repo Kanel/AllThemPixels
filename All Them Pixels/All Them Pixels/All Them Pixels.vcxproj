@@ -97,11 +97,13 @@
     <ClCompile Include="Expendable.cpp" />
     <ClCompile Include="Flag.cpp" />
     <ClCompile Include="GameEngine.cpp" />
+    <ClCompile Include="GamepadControls.cpp" />
     <ClCompile Include="GlareEffect.cpp" />
     <ClCompile Include="Helper.cpp" />
     <ClCompile Include="Hexagon.cpp" />
     <ClCompile Include="HexagonGrid.cpp" />
     <ClCompile Include="HexagonHull.cpp" />
+    <ClCompile Include="KeyboardControls.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="PauseState.cpp" />
@@ -116,7 +118,6 @@
     <ClCompile Include="SkillWheel.cpp" />
     <ClCompile Include="Sounds.cpp" />
     <ClCompile Include="Territory.cpp" />
-    <ClCompile Include="UserInput.cpp" />
     <ClCompile Include="ValueBar.cpp" />
     <ClCompile Include="Vector2fMath.cpp" />
     <ClCompile Include="VertexCluster.cpp" />
@@ -132,6 +133,7 @@
     <ClInclude Include="Collision.h" />
     <ClInclude Include="ColorFade.h" />
     <ClInclude Include="Config.h" />
+    <ClInclude Include="Controls.h" />
     <ClInclude Include="Destructible.h" />
     <ClInclude Include="Effect.h" />
     <ClInclude Include="Enemy.h" />
@@ -141,6 +143,7 @@
     <ClInclude Include="Expendable.h" />
     <ClInclude Include="Flag.h" />
     <ClInclude Include="GameEngine.h" />
+    <ClInclude Include="GamepadControls.h" />
     <ClInclude Include="GameState.h" />
     <ClInclude Include="GlareEffect.h" />
     <ClInclude Include="Helper.h" />
@@ -149,6 +152,7 @@
     <ClInclude Include="HexagonGridStorage.h" />
     <ClInclude Include="HexagonGridStorageRow.h" />
     <ClInclude Include="HexagonHull.h" />
+    <ClInclude Include="KeyboardControls.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="PauseState.h" />
     <ClInclude Include="MonotoneChain.h" />
@@ -166,7 +170,6 @@
     <ClInclude Include="Sounds.h" />
     <ClInclude Include="Territory.h" />
     <ClInclude Include="UpdateInfo.h" />
-    <ClInclude Include="UserInput.h" />
     <ClInclude Include="ValueBar.h" />
     <ClInclude Include="Vector2fMath.h" />
     <ClInclude Include="VertexCluster.h" />

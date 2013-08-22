@@ -48,7 +48,7 @@ ConvexHull Enemy::getConvexHull()
 	return hull->getConvexHull();
 }
 
-void Enemy::update(UpdateInfo info)
+void Enemy::update(UpdateInfo info, Controls * controls)
 {
 	
 }

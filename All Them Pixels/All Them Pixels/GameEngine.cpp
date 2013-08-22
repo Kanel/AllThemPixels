@@ -9,8 +9,7 @@ void GameEngine::resize(int width, int height)
 }
 
 GameEngine::GameEngine(int width, int height)
-{
-	//Uint32 windowStyle = Style::Resize;	
+{	
 	ContextSettings settings(0, 0, GAME_OPENGL_VERSION_ANTI_ALIASING, GAME_OPENGL_VERSION_MAJOR, GAME_OPENGL_VERSION_MINOR);
 	VideoMode videoMode(width, height);
 	Image icon;
@@ -20,7 +19,11 @@ GameEngine::GameEngine(int width, int height)
 	paused = false;
 	info.elapsedGameTime = 0;
 	info.updateInterval = 0;
-	
+
+	// Initial controls.
+	controls = new KeyboardControls();
+
+	// Load application icon.
 	if (icon.loadFromFile("Icon 32x32.png"))
 	{
 		window->setIcon(32, 32, icon.getPixelsPtr());
@@ -80,6 +83,11 @@ RenderWindow * GameEngine::getWindow()
 Sounds * GameEngine::getSounds()
 {
 	return &sounds;
+}
+
+Controls * GameEngine::getControls()
+{
+	return controls;
 }
 
 void GameEngine::changeState(GameState * state)
@@ -144,6 +152,19 @@ void GameEngine::handleEvents()
 
 			case Event::Resized:
 				resize(event.size.width, event.size.height);
+				break;
+
+			case Event::JoystickButtonPressed:
+				if (event.joystickButton.button == GAMEPAD_A)
+				{
+					delete controls;
+					controls = new GamepadControls(event.joystickButton.joystickId);
+				}
+				break;
+
+			case Event::JoystickDisconnected:
+				delete controls;
+				controls = new KeyboardControls();
 				break;
 		}
 	}

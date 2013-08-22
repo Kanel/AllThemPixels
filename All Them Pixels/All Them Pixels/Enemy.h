@@ -43,5 +43,5 @@ public:
 	Rect<float> getBoundingBox() override;
 	ConvexHull getConvexHull() override;
 
-	void update(UpdateInfo info) override;
+	void update(UpdateInfo info, Controls * controls) override;
 };

@@ -33,9 +33,9 @@
 #define SOUNDS_PLAYER_HIT "hurt1.wav"
 #define SOUNDS_SELECTED "select1.wav"
 #define SOUNDS_FIREING "shoot1.wav"
-#define SOUNDS_VOLUME_MUSIC 10
-#define SOUNDS_VOLUME_EFFECTS 100
-#define SOUNDS_VOLUME_UI 60
+#define SOUNDS_VOLUME_MUSIC 0
+#define SOUNDS_VOLUME_EFFECTS 0
+#define SOUNDS_VOLUME_UI 0
 
 // Game
 #define GAME_UPDATE_INTERVAL 10

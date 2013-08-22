@@ -97,7 +97,7 @@ PlayerConfiguration PlayerCustomizationUI::getConfiguration()
 	return config;
 }
 	
-PlayerCustomizationUI::Result PlayerCustomizationUI::update(UpdateInfo info, Player * player, Sounds * sounds)
+PlayerCustomizationUI::Result PlayerCustomizationUI::update(UpdateInfo info, Player * player, Controls * controls, Sounds * sounds)
 {
 	Result result = NoChange;	
 
@@ -105,7 +105,7 @@ PlayerCustomizationUI::Result PlayerCustomizationUI::update(UpdateInfo info, Pla
 
 	// Determine if the skill wheel should be rotated to the left and if so the what 
 	// skill.
-	if (UserInput::isButtonPressed(UIC_SCROLL_LEFT))
+	if (controls->isPressed(Controls::PreviousSkill))
 	{
 		increasePressed = true;
 	}
@@ -120,7 +120,7 @@ PlayerCustomizationUI::Result PlayerCustomizationUI::update(UpdateInfo info, Pla
 
 	// Determine if the skill wheel should be rotated to the right and if so the what 
 	// skill.
-	if (UserInput::isButtonPressed(UIC_SCROLL_RIGHT))
+	if (controls->isPressed(Controls::NextSkill))
 	{
 		decreasePressed = true;
 	}
@@ -146,22 +146,17 @@ PlayerCustomizationUI::Result PlayerCustomizationUI::update(UpdateInfo info, Pla
 	{
 		char buffer[100];
 		int value = 0;
-		float triggervalue = UserInput::getJoystickPosition(Joystick::Axis::Z);
+		float triggervalue;
 		PlayerSkillPoints * playerSkillPoints = player->getPlayerSkillPoints();
 
 		// Determine if selected skill should be increased or decreased and
 		// get the amount of change.
-		if (powf(triggervalue, 2) > 100)
-		{
-			value = triggervalue / 15;
-			result = Changed;
-		}
-		else if (UserInput::isButtonPressed(UIC_INCREASE_SKILL))
+		if (controls->isPressed(Controls::IncreaseSkill))
 		{
 			value = UI_PLAYER_CUSTOMIZATION_MODIFY_VALUE;
 			result = Changed;
 		}
-		else if (UserInput::isButtonPressed(UIC_DECREASE_SKILL))
+		else if (controls->isPressed(Controls::DecreaseSkill))
 		{
 			value = -UI_PLAYER_CUSTOMIZATION_MODIFY_VALUE;	
 			result = Changed;

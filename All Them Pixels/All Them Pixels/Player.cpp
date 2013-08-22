@@ -16,20 +16,20 @@ void Player::applyColor(Color color, Vertex vertices[], int count)
 	}
 }
 
-float Player::getStrength(Joystick::Axis x, Joystick::Axis y)
+float Player::getStrength(Controls * controls)
 {
-	Vector2f vector = UserInput::getJoystickVector(Joystick::Axis::X, Joystick::Axis::Y);
+	Vector2f vector = controls->getVector(Controls::MovementHorizontal, Controls::MovementVertical);
 
-	return Vector2fMath::length(vector) / JOYSTICK_MAX_STRENGTH;
+	return Vector2fMath::length(vector) / VECTOR_MAX_STRENGTH;
 }
 
-void Player::updateRotation()
+void Player::updateRotation(Controls * controls)
 {
-	Vector2f leftJoystick = UserInput::getJoystickVector(Joystick::Axis::U, Joystick::Axis::R);
-	float direction = Vector2fMath::getAngle(Vector2f(UserInput::getJoystickPosition(Joystick::Axis::R), -UserInput::getJoystickPosition(Joystick::Axis::U)));
+	Vector2f aimVector = controls->getVector(Controls::AimHorizontal, Controls::AimVertical);
+	float direction = Vector2fMath::getAngle(aimVector);
 	Transform transform;
 
-	if (Vector2fMath::length(leftJoystick) >= GAMEPAD_JOYSTICK_THRESHOLD)
+	if (Vector2fMath::length(aimVector) >= GAMEPAD_JOYSTICK_THRESHOLD)
 	{	
 		transform.rotate(direction - aimDirection, position);
 		applyTransform(transform, playerShape, playerVertexCount);
@@ -65,7 +65,7 @@ Player::Player(queue<Entity *> *spawnQueue, PlayerConfiguration config, Vector2f
 	bottomVertexCount = 15;
 	coreVertexCount = 12;
 
-	aimDirection = 180;
+	aimDirection = 270;
 	aimBoxPosition = position;
 	aimBoxPosition.y -= 35;
 	
@@ -236,21 +236,27 @@ void Player::draw(RenderTarget& target, RenderStates states) const
 	target.draw(projectileVertexSource);
 }
 
-void Player::update(UpdateInfo info)
+void Player::update(UpdateInfo info, Controls * controls)
 {
 	int shots;
-	float strength = getStrength(Joystick::Axis::U, Joystick::Axis::R);
+	float strength = getStrength(controls);
 	Vector2f spawn = aimBoxPosition;
-	Vector2f leftJoystick = UserInput::getJoystickVector(Joystick::Axis::U, Joystick::Axis::R);
-	Vector2f direction = Vector2fMath::unitVector(leftJoystick);
+	Vector2f aim = controls->getVector(Controls::AimHorizontal, Controls::AimVertical);
+	Vector2f direction = Vector2fMath::unitVector(aim);
 	float abc = (config.speed * strength * (info.updateInterval / 1000.0f));
-	speed = Vector2fMath::unitVector(UserInput::getJoystickVector(Joystick::Axis::X, Joystick::Axis::Y)) * (config.speed * strength * (info.updateInterval / 1000.0f));
+	speed = Vector2fMath::unitVector(controls->getVector(Controls::MovementHorizontal, Controls::MovementVertical)) * (config.speed * strength * (info.updateInterval / 1000.0f));
 	aimVector = direction;
 
-	updateRotation();
+	if (Vector2fMath::length(direction) != 0)
+	{
+		Vector2f vec = controls->getVector(Controls::MovementHorizontal, Controls::MovementVertical);
+		bool spath = true;
+	}
+
+	updateRotation(controls);
 	translate(speed);
 	
-	if (weapon.isReady(info.elapsedGameTime, info.updateInterval, shots) && Vector2fMath::length(leftJoystick) > GAMEPAD_JOYSTICK_THRESHOLD)
+	if (weapon.isReady(info.elapsedGameTime, info.updateInterval, shots) && Vector2fMath::length(aim) > GAMEPAD_JOYSTICK_THRESHOLD)
 	{
 		for (int i = 0; i < shots; i++)
 		{

@@ -44,6 +44,6 @@ public:
 
 	virtual void draw(RenderTarget& target, RenderStates states) const;
 
-	void update(UpdateInfo info, Sounds * sounds);
+	void update(UpdateInfo info, Controls * controls, Sounds * sounds);
 	View getView(View reference);
 };

@@ -58,5 +58,5 @@ public:
 	void applyTransform(Transform transform) override;
 
 	virtual void draw(RenderTarget& target, RenderStates states) const;
-	void update(UpdateInfo info) override;
+	void update(UpdateInfo info, Controls * controls) override;
 };

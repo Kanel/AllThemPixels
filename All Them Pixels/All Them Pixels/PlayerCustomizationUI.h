@@ -3,7 +3,6 @@
 #include "Player.h"
 #include "UpdateInfo.h"
 #include "SkillWheel.h"
-#include "UserInput.h"
 #include "Sounds.h"
 #include <stdio.h>
 #include <SFML/Graphics.hpp>
@@ -55,7 +54,7 @@ public:
 	PlayerCustomizationUI(Vector2f position = Vector2f());
 
 	PlayerConfiguration getConfiguration();
-	Result update(UpdateInfo info, Player * player, Sounds * sounds);
+	Result update(UpdateInfo info, Player * player, Controls * controls, Sounds * sounds);
 
 	virtual void align(View view);	
 	virtual void draw(RenderTarget& target, RenderStates states) const;

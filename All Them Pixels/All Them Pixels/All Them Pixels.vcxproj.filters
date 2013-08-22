@@ -129,9 +129,6 @@
     <ClCompile Include="Collision.cpp">
       <Filter>Source Files\Geometry</Filter>
     </ClCompile>
-    <ClCompile Include="UserInput.cpp">
-      <Filter>Source Files\IO</Filter>
-    </ClCompile>
     <ClCompile Include="Shapes.cpp">
       <Filter>Source Files\Shapes</Filter>
     </ClCompile>
@@ -198,6 +195,12 @@
     <ClCompile Include="ValueBar.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="KeyboardControls.cpp">
+      <Filter>Source Files\IO</Filter>
+    </ClCompile>
+    <ClCompile Include="GamepadControls.cpp">
+      <Filter>Source Files\IO</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="UpdateInfo.h">
@@ -238,9 +241,6 @@
     </ClInclude>
     <ClInclude Include="SkillPoints.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="UserInput.h">
-      <Filter>Header Files\IO</Filter>
     </ClInclude>
     <ClInclude Include="PlayerCustomizationUI.h">
       <Filter>Header Files\UI</Filter>
@@ -343,6 +343,15 @@
     </ClInclude>
     <ClInclude Include="ValueBar.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Controls.h">
+      <Filter>Header Files\IO</Filter>
+    </ClInclude>
+    <ClInclude Include="KeyboardControls.h">
+      <Filter>Header Files\IO</Filter>
+    </ClInclude>
+    <ClInclude Include="GamepadControls.h">
+      <Filter>Header Files\IO</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

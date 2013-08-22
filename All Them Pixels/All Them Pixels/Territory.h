@@ -6,7 +6,6 @@
 #include "Shapes.h"
 #include "Player.h"
 #include "Enemy.h"
-#include "UserInput.h"
 #include "AI.h"
 #include "Weapon.h"
 #include "Collision.h"
@@ -88,10 +87,10 @@ private:
 	void cleanFloorTiles();
 	void prepareSafeZoneTiles(int tileGridLayers);	
 	void spatialPartitionSafeRoomTiles();
-	void updatePlayerProjectiles(UpdateInfo info);
-	void updateEnemyProjectiles(UpdateInfo info);
+	void updatePlayerProjectiles(UpdateInfo info, Controls * controls);
+	void updateEnemyProjectiles(UpdateInfo info, Controls * controls);
 	void updateEnemies(UpdateInfo info);
-	void updatePlayer(UpdateInfo info);
+	void updatePlayer(UpdateInfo info, Controls * controls);
 	void updateEffects(UpdateInfo info);
 	void updateBorderTiles();
 	void prepareProbes(Vector2f center);
@@ -130,5 +129,5 @@ public:
 	void cleanup();
 	virtual void draw(RenderTarget& target, RenderStates states) const;
 
-	void update(UpdateInfo info, Sounds * sounds);
+	void update(UpdateInfo info, Controls * controls, Sounds * sounds);
 };

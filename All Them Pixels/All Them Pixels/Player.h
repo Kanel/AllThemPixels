@@ -2,12 +2,12 @@
 
 #include "Destructible.h"
 #include "Projectile.h"
-#include "UserInput.h"
 #include "Weapon.h"
 #include "Collision.h"
 #include "SkillPoints.h"
 #include "Sounds.h"
 #include "CircleBar.h"
+#include "Controls.h"
 #include <queue>
 
 using std::queue;
@@ -63,8 +63,8 @@ protected:
 	void applyTransform(Transform transform, Vertex vertices[], int count);
 	void applyColor(Color color, Vertex vertices[], int count);
 	float getDirection(Joystick::Axis axisX, Joystick::Axis axisY);
-	float getStrength(Joystick::Axis x, Joystick::Axis y);
-	void updateRotation();
+	float getStrength(Controls * controls);
+	void updateRotation(Controls * controls);
 
 public:
 	Player(queue<Entity *> *spawnQueue, PlayerConfiguration config, Vector2f position);
@@ -91,5 +91,5 @@ public:
 	void fade();
 
 	virtual void draw(RenderTarget& target, RenderStates states) const;
-	void update(UpdateInfo info) override;
+	void update(UpdateInfo info, Controls * controls) override;
 };
