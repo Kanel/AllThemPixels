@@ -82,7 +82,11 @@ void PlayingState::update(GameEngine * engine, UpdateInfo info)
 			Sounds * sounds = engine->getSounds();
 
 			world.update(info, engine->getControls(), sounds);
-			playerCustomizationUI.update(info, world.getPlayer(), engine->getControls(), sounds);
+
+			if (playerCustomizationUI.update(info, world.getPlayer(), engine->getControls(), sounds) == PlayerCustomizationUI::Changed)
+			{
+				world.getPlayer()->setConfiguration(playerCustomizationUI.getConfiguration());
+			}
 
 			window->setView(world.getView(window->getView()));
 			playerCustomizationUI.align(window->getView());
