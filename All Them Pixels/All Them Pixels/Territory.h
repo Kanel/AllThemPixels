@@ -21,10 +21,12 @@
 #include <list>
 #include <queue>
 #include <unordered_map>
+#include <thread>
 
 using std::list;
 using std::queue;
 using std::unordered_map;
+using std::thread;
 using namespace sf;
 
 // Is this a sign of something?
@@ -49,6 +51,11 @@ private:
 	{
 		AxialCoordinates coordinate;
 		Color previous;
+	};
+	struct FloorData
+	{
+		stack<TileColoring> &tileColorings;
+		HexagonGridStorage<Hexagon *> &floorTiles;
 	};
 
 private:
@@ -88,11 +95,14 @@ private:
 	void prepareSafeZoneTiles(int tileGridLayers);	
 	void spatialPartitionSafeRoomTiles();
 	void updatePlayerProjectiles(UpdateInfo info, Controls * controls);
+	void collidePlayerProjectiles(UpdateInfo info, Controls * controls);
 	void updateEnemyProjectiles(UpdateInfo info, Controls * controls);
+	void collideEnemyProjectiles(UpdateInfo info, Controls * controls);
+	void collideEnemyProjectilesSafe(UpdateInfo info, Controls * controls);
 	void updateEnemies(UpdateInfo info);
 	void updatePlayer(UpdateInfo info, Controls * controls);
 	void updateEffects(UpdateInfo info);
-	void updateBorderTiles();
+	void collideBorderTiles();
 	void prepareProbes(Vector2f center);
 	void updateProbes(Color color, Vector2f center);
 	void populateHexagonGrid(HexagonGridStorage<Hexagon *> &storage, VertexCollection * vertexSource);

@@ -77,7 +77,7 @@ void Map::colorize()
 	storage[playerLocation]->setColor(MAP_PLAYER_COLOR);
 }
 
-void Map::applyTransform(Transform transform)
+void Map::applyTransform(Transform &transform)
 {
 	int tiles = HexagonGrid::getNumberOfTiles(layers);
 	HexagonGrid grid(Hexagon::FlatTopped);

@@ -55,7 +55,7 @@ public:
 
 	Rect<float> getBoundingBox() override;
 
-	void applyTransform(Transform transform) override;
+	void applyTransform(Transform &transform) override;
 
 	virtual void draw(RenderTarget& target, RenderStates states) const;
 	void update(UpdateInfo info, Controls * controls) override;

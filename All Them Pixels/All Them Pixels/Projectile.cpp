@@ -68,7 +68,7 @@ bool Projectile::isEtheral()
 	return false;
 }
 
-void Projectile::applyTransform(Transform transform)
+void Projectile::applyTransform(Transform &transform)
 {
 	Entity::applyTransform(transform);
 

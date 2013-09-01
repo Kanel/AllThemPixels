@@ -58,6 +58,7 @@ protected:
 	Vertex * playerShapeBottom;
 	Vertex * playerShapeLeft;
 	Vertex * playerShapeRight;
+	Rect<float> boundingBox;
 
 protected:
 	void applyTransform(Transform transform, Vertex vertices[], int count);
@@ -77,7 +78,7 @@ public:
 
 	Vector2f getSpeed();
 
-	void applyTransform(Transform transform) override;
+	void applyTransform(Transform &transform) override;
 
 	void setHP(int hp) override;
 

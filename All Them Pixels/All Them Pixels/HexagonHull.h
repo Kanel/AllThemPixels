@@ -17,7 +17,7 @@ public:
 	Vector2f getPosition();
 	void setPosition(Vector2f position);
 
-	void applyTransform(Transform transform);
+	void applyTransform(Transform &transform);
 
 	Rect<float> getBoundingBox();
 	ConvexHull getConvexHull();

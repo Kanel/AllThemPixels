@@ -6,6 +6,8 @@ void Player::applyTransform(Transform transform, Vertex vertices[], int count)
 	{
 		vertices[i].position = transform.transformPoint(vertices[i].position);
 	}
+
+	boundingBox = Collision::getHitBox(playerShape, playerVertexCount);
 }
 
 void Player::applyColor(Color color, Vertex vertices[], int count)
@@ -167,7 +169,7 @@ Vector2f Player::getSpeed()
 	return speed;
 }
 
-void Player::applyTransform(Transform transform)
+void Player::applyTransform(Transform &transform)
 {
 	Destructible::applyTransform(transform);
 
@@ -188,7 +190,7 @@ void Player::setHP(int hp)
 
 Rect<float> Player::getBoundingBox()
 {
-	return Collision::getHitBox(playerShape, playerVertexCount);
+	return boundingBox;
 }
 
 ConvexHull Player::getConvexHull()

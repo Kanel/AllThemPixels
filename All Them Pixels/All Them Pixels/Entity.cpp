@@ -24,7 +24,7 @@ void Entity::setPosition(Vector2f position)
 	translate(diffrence);
 }
 
-void Entity::applyTransform(Transform transform)
+void Entity::applyTransform(Transform &transform)
 {
 	position = transform.transformPoint(position);
 }

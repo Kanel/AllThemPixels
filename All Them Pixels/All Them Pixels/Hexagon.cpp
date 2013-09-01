@@ -112,12 +112,18 @@ Color Hexagon::getColor()
 
 void Hexagon::setColor(Color color)
 {
+	Vertex * vertices = &(*vertexSource)[vertexOffset];
+
 	if ((*vertexSource)[vertexOffset].color != color)
 	{
-		for (int i = 0; i < 8; i++)
-		{
-			(*vertexSource)[vertexOffset + i].color = color;
-		}
+		vertices[0].color = color;
+		vertices[1].color = color;
+		vertices[2].color = color;
+		vertices[3].color = color;
+		vertices[4].color = color;
+		vertices[5].color = color;
+		vertices[6].color = color;
+		vertices[7].color = color;
 	}
 }
 
@@ -136,10 +142,16 @@ void Hexagon::morph(float length, float width)
 
 }
 
-void Hexagon::applyTransform(Transform transform)
+void Hexagon::applyTransform(Transform &transform)
 {
-	for (int i = 0; i < 8; i++)
-	{
-		(*vertexSource)[vertexOffset + i].position = transform.transformPoint((*vertexSource)[vertexOffset + i].position);
-	}
+	Vertex * vertices = &(*vertexSource)[vertexOffset];
+
+	vertices[0].position = transform.transformPoint(vertices[0].position);
+	vertices[1].position = vertices[0].position;
+	vertices[2].position = transform.transformPoint(vertices[2].position);
+	vertices[3].position = transform.transformPoint(vertices[3].position);
+	vertices[4].position = transform.transformPoint(vertices[4].position);
+	vertices[5].position = transform.transformPoint(vertices[5].position);
+	vertices[6].position = transform.transformPoint(vertices[6].position);
+	vertices[7].position = vertices[6].position;
 }

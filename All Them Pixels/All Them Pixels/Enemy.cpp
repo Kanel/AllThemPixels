@@ -31,7 +31,7 @@ SkillPoints Enemy::getSkillPoints()
 	return points;
 }
 
-void Enemy::applyTransform(Transform transform)
+void Enemy::applyTransform(Transform &transform)
 {
 	Destructible::applyTransform(transform);
 

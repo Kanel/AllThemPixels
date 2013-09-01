@@ -28,7 +28,7 @@ public:
 	virtual bool isExpended() = 0;
 	virtual bool isEtheral() = 0;
 
-	virtual void applyTransform(Transform transform);
+	virtual void applyTransform(Transform &transform);
 	virtual void translate(Vector2f offset);
 	virtual void rotate(float angle, Vector2f center);
 	virtual void scale(Vector2f factors, Vector2f center);

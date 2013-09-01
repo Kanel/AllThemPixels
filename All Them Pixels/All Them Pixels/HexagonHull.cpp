@@ -43,7 +43,7 @@ void HexagonHull::setPosition(Vector2f position)
 	applyTransform(transform);
 }
 
-void HexagonHull::applyTransform(Transform transform)
+void HexagonHull::applyTransform(Transform &transform)
 {
 	for (int i = 0; i < hexagonCount; i++)
 	{

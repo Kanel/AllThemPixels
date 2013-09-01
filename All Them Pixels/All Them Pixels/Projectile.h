@@ -33,7 +33,7 @@ public:
 	bool isExpended() override;
 	bool isEtheral() override;
 
-	void applyTransform(Transform transform) override;
+	void applyTransform(Transform &transform) override;
 
 	Rect<float> getBoundingBox() override;
 	ConvexHull getConvexHull() override;

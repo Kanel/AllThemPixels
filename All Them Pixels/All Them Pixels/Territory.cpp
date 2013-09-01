@@ -159,13 +159,20 @@ void Territory::spatialPartitionSafeRoomTiles()
 	}
 }
 
-// Updates player projectiles and checks if they are colliding with any enemies.
+// Updates player projectiles.
 void Territory::updatePlayerProjectiles(UpdateInfo info, Controls * controls)
 {
 	for (auto projectile : playerProjectiles)
 	{
 		projectile->update(info, controls);
+	}
+}
 
+// Checks if player projectiles are colliding with any enemies.
+void Territory::collidePlayerProjectiles(UpdateInfo info, Controls * controls)
+{
+	for (auto projectile : playerProjectiles)
+	{
 		if (!projectile->isExpended())
 		{
 			for (auto enemy : enemies)
@@ -197,7 +204,14 @@ void Territory::updateEnemyProjectiles(UpdateInfo info, Controls * controls)
 	for (auto projectile : enemyProjectiles)
 	{
 		projectile->update(info, controls);
+	}
+}
 
+// Checks if enemy projectiles collides with the player.
+void Territory::collideEnemyProjectiles(UpdateInfo info, Controls * controls)
+{
+	for (auto projectile : enemyProjectiles)
+	{
 		if (Collision::isClose(player, projectile))
 		{
 			if (!projectile->hasPierced(player))
@@ -218,8 +232,15 @@ void Territory::updateEnemyProjectiles(UpdateInfo info, Controls * controls)
 				}
 			}
 		}
+	}
+}
 
-		if (player->getIsInSafeZone())
+// Checks if enemy projectiles collides with a safe room containing a player.
+void Territory::collideEnemyProjectilesSafe(UpdateInfo info, Controls * controls)
+{
+	if (player->getIsInSafeZone())
+	{
+		for (auto projectile : enemyProjectiles)
 		{
 			Rect<float> boundingBox = projectile->getBoundingBox();
 			int safeZoneIndex = player->getSafeZoneIndex();
@@ -258,6 +279,7 @@ void Territory::updateEnemyProjectiles(UpdateInfo info, Controls * controls)
 	}
 }
 
+// Updates enemies AI.
 void Territory::updateEnemies(UpdateInfo info)
 {
 	if (!player->getIsInSafeZone())
@@ -275,6 +297,7 @@ void Territory::updatePlayer(UpdateInfo info, Controls * controls)
 	player->update(info, controls);
 	player->setIsInSafeZone(false);
 
+	// Check if the player is in a safe zone.
 	for (int i = 0; i < 6 && !player->getIsInSafeZone(); i++)
 	{
 		for (int j = 0; j < safeZonesTiles[i].size(); j++)
@@ -297,6 +320,7 @@ void Territory::updatePlayer(UpdateInfo info, Controls * controls)
 	}
 }
 
+// Updates all effects.
 void Territory::updateEffects(UpdateInfo info)
 {
 	for (auto effect : effects)
@@ -305,8 +329,8 @@ void Territory::updateEffects(UpdateInfo info)
 	}
 }
 
-// Can alter if this territory is active.
-void Territory::updateBorderTiles()
+// Caution: Can possibly deactivate this territory and activate another.
+void Territory::collideBorderTiles()
 {
 	for (int i = 0; i < borderCoordinates.size(); i++)
 	{
@@ -774,36 +798,89 @@ void Territory::draw(RenderTarget& target, RenderStates states) const
 		target.draw(fadeTileCluster);
 	}
 }
-
+	/*
+		Uses: 
+		Affects: 
+	*/
 void Territory::update(UpdateInfo info, Controls * controls, Sounds * sounds)
 {
 	this->sounds = sounds;
-
 	// Update all player projectiles
+	/*
+		Uses: playerProjectile
+		Affects: playerProjectile
+	*/
 	updatePlayerProjectiles(info, controls);
+	/*
+		Uses: playerProjectiles(boundingBox),  enemies(boundingBox), playerProjectiles(piercing)
+		Affects: playerProjectiles(piercing),  enemies(hp), effects(spawns)
+	*/
+	collidePlayerProjectiles(info, controls);
 
 	// Update all enemies.
+	/*
+		Uses: enemies
+		Affects: enemies
+	*/
 	updateEnemies(info);
 
 	// Check if the player is hit by enemy projectiles.
+	/*
+		Uses: enemyProjectiles
+		Affects: enemyProjectiles
+	*/
 	updateEnemyProjectiles(info, controls);
+	/*
+		Uses: enemyProjectiles(boundingBox),  player(boundingBox), enemyProjectiles(piercing)
+		Affects: enemyProjectiles(piercing), player(hp), sounds(play)
+	*/
+	collideEnemyProjectiles(info, controls);
+	/*
+		Uses: enemyProjectiles(boundingBox), player(isInSafe), partitionedSafeZonesTiles(boundingBox)
+		Affects: enemyProjectiles(expend)
+	*/
+	collideEnemyProjectilesSafe(info, controls);
 
 	// Update player and safe zone checks.
+	/*
+		Uses: player(getBoundingBox, getConvexHull, getSpeed), safeZonesTiles(getBoundingBox, getConvexHull)
+		Affects: player(update, setIsInSafeZone, setSafeZoneIndex)
+	*/
 	updatePlayer(info, controls);
 
 	// Update all effects.
+	/*
+		Uses: effects
+		Affects: effects
+	*/
 	updateEffects(info);
 
 	// Spawn enemy
+	/*
+		Uses: enemySpawner, getSpawnPoints
+		Affects: enemySpawner, spawnQueue, entityCluster.getCollection(1), entityCluster.getCollection(0)
+	*/
 	enemySpawner.update(getSpawnPoints(), spawnQueue, entityCluster.getCollection(1), entityCluster.getCollection(0), info);
 
 	// Background tile stuff.
+	/*
+		Uses: tileColorings
+		Affects: floorTiles(setColor), tileColorings
+	*/
 	cleanFloorTiles();
 
 	// Enemy aura colorization on floor tiles.
+	/*
+		Uses: enemies(getPosition), territory(getPosition), floorTiles(getColor)	
+		Affects: floorTiles(setColor), tileColorings
+	*/
 	colorEnemyAuraTiles();
 
 	// Beware this section can change if this territory is active.
 	// Handle the case of the player trying to cross the territory border.
-	updateBorderTiles();
+	/*
+		Uses: floorTiles,player(getBoundingBox, getConvexHull, getPosition, getSpeed), this(position)
+		Affects: world(changeTerritory), player(setPosition)
+	*/
+	collideBorderTiles();
 }

@@ -49,5 +49,5 @@ public:
 
 	void morph(float length, float width);
 
-	void applyTransform(Transform transform);
+	void applyTransform(Transform &transform);
 };

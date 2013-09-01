@@ -30,6 +30,6 @@ public:
 	virtual void draw(RenderTarget& target, RenderStates states) const;
 
 private:
-	void applyTransform(Transform transform);
+	void applyTransform(Transform &transform);
 
 };
