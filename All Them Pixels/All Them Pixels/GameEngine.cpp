@@ -20,6 +20,9 @@ GameEngine::GameEngine(int width, int height)
 	info.elapsedGameTime = 0;
 	info.updateInterval = 0;
 
+	//window->setVerticalSyncEnabled(true);
+	window->setFramerateLimit(GAME_GOAL_FPS);
+
 	// Initial controls.
 	controls = new KeyboardControls();
 

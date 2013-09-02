@@ -6,18 +6,24 @@ using namespace sf;
 
 int main(int argc, char ** argv)
 {
-	Time sleepDuration = milliseconds(GAME_UPDATE_INTERVAL);
+	Uint64 lastUpdateTime = 0;
+	Clock time;
 	GameEngine engine(WORLD_VIEW_WIDTH, WORLD_VIEW_HEIGHT);
 
 	engine.pushState(new PlayingState());
 	
 	while (!engine.expended())
     {
+		Uint64 currentTime = time.getElapsedTime().asMilliseconds();
+		Uint64 elapsedTime = currentTime - lastUpdateTime;
+		
+		elapsedTime = (elapsedTime > GAME_MAXIMUM_UPDATE_INTERVAL) ? GAME_MAXIMUM_UPDATE_INTERVAL : elapsedTime;
+
 		engine.handleEvents();
-		engine.update(GAME_UPDATE_INTERVAL);
+		engine.update(elapsedTime);
 		engine.draw();
-			
-		sleep(sleepDuration);
+
+		lastUpdateTime = currentTime;
     }
     return 0;
 }
