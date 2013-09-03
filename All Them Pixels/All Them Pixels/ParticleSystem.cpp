@@ -42,6 +42,94 @@ Vector2f ParticleSystem::getRandomDirection(float base, float variance)
 	return Vector2f(cosf(angle), sinf(angle));
 }
 
+void ParticleSystem::updateParticles(UpdateInfo info)
+{
+// Update particles
+	for (std::list<Particle>::iterator it = particles.begin(); it != particles.end();)
+	{
+		Particle &particle = (*it);
+		Vertex * vertices = &(*vertexSource)[particle.vertexOffset];
+		float radius;
+		float a, b, c, d;
+
+		// Update  particle age
+		particle.age += info.updateInterval;
+
+		// Update color and size progression
+		if (particle.age < particle.grow)
+		{
+			float progression = particle.age / particle.grow;
+
+			particle.color = getColorProgression(color[0], color[1], progression);
+			particle.size = getProgression(particle.templateSize[0], particle.templateSize[1], progression);
+		}
+		else if (particle.age > particle.duration - shrink)
+		{
+			float progression = (particle.age - (particle.duration - particle.shrink)) / particle.shrink;
+
+			particle.color = getColorProgression(color[1], color[2], progression);
+			particle.size = getProgression(particle.templateSize[1], particle.templateSize[2], progression);
+		}
+			
+		vertices[0].color = particle.color;
+		vertices[1].color = particle.color;
+		vertices[2].color = particle.color;
+		vertices[3].color = particle.color;
+
+		// Update particle position
+		particle.position += (systemSpeed * 0.25f + particle.speed) * (info.updateInterval / 1000.0f);		
+
+		// Update particle visual
+		radius = particle.size / 2;
+		a = particle.position.x + radius;
+		b = particle.position.x - radius;
+		c = particle.position.y + radius;
+		d = particle.position.y - radius;
+
+		vertices[0].position = Vector2f(a, c);
+		vertices[1].position = Vector2f(b, c);
+		vertices[2].position = Vector2f(b, d);
+		vertices[3].position = Vector2f(a, d);
+		
+		// Increment iterator
+		it++;
+	}
+}
+
+void ParticleSystem::cleanup()
+{
+	// Clean up
+	for (std::list<Particle>::iterator it = particles.begin(); it != particles.end();)
+	{
+		if ((*it).age < (*it).duration)
+		{
+			it++;
+		}
+		else
+		{
+			vertexSource->remove((*it).vertexOffset);
+
+			it = particles.erase(it);
+		}
+	}
+}
+
+void ParticleSystem::spawnCycle(UpdateInfo info)
+{
+	// Spawn particles
+	if (age <= duration && info.elapsedGameTime - lastSpawnEvent >= spawnRate)
+	{
+		int particlesToSpawn = (info.elapsedGameTime - lastSpawnEvent) / spawnRate;
+
+		for (int i = 0; i < particlesToSpawn; i++)
+		{
+			spawnParticle();
+		}
+
+		lastSpawnEvent = info.elapsedGameTime;
+	}
+}
+
 ParticleSystem::ParticleSystem(int start, int duration, Vector2f position, Vector2f systemSpeed, VertexCollection * vertexSource) : Effect(start, duration)
 {
 	// Default settings
@@ -125,75 +213,9 @@ void ParticleSystem::despawnParticle(Particle * particle)
 
 void ParticleSystem::update(UpdateInfo info)
 {
-	age += info.updateInterval;
+	age += info.updateInterval;	
 	
-	// Update particles
-	for (std::list<Particle>::iterator it = particles.begin(); it != particles.end();)
-	{
-		Particle &particle = (*it);
-
-		// Update  particle age
-		particle.age += info.updateInterval;
-
-		// Update color and size progression
-		if (particle.age < particle.grow)
-		{
-			float progression = particle.age / particle.grow;
-
-			particle.color = getColorProgression(color[0], color[1], progression);
-			particle.size = getProgression(particle.templateSize[0], particle.templateSize[1], progression);
-		}
-		else if (particle.age > particle.duration - shrink)
-		{
-			float progression = (particle.age - (particle.duration - particle.shrink)) / particle.shrink;
-
-			particle.color = getColorProgression(color[1], color[2], progression);
-			particle.size = getProgression(particle.templateSize[1], particle.templateSize[2], progression);
-		}
-			
-		(*vertexSource)[particle.vertexOffset + 0].color = particle.color;
-		(*vertexSource)[particle.vertexOffset + 1].color = particle.color;
-		(*vertexSource)[particle.vertexOffset + 2].color = particle.color;
-		(*vertexSource)[particle.vertexOffset + 3].color = particle.color;
-		Vector2f abc = particle.speed * (info.updateInterval / 1000.0f);	
-		// Update particle position
-		particle.position += (systemSpeed * 0.25f + particle.speed) * (info.updateInterval / 1000.0f);
-
-		// Update particle visual
-		(*vertexSource)[particle.vertexOffset + 0].position = Vector2f(particle.position.x + (particle.size / 2), particle.position.y + (particle.size / 2));
-		(*vertexSource)[particle.vertexOffset + 1].position = Vector2f(particle.position.x - (particle.size / 2), particle.position.y + (particle.size / 2));
-		(*vertexSource)[particle.vertexOffset + 2].position = Vector2f(particle.position.x - (particle.size / 2), particle.position.y - (particle.size / 2));
-		(*vertexSource)[particle.vertexOffset + 3].position = Vector2f(particle.position.x + (particle.size / 2), particle.position.y - (particle.size / 2));
-		
-		// Increment iterator
-		it++;
-	}
-
-	// Clean up
-	for (std::list<Particle>::iterator it = particles.begin(); it != particles.end();)
-	{
-		if ((*it).age < (*it).duration)
-		{
-			it++;
-		}
-		else
-		{
-			vertexSource->remove((*it).vertexOffset);
-
-			it = particles.erase(it);
-		}
-	}
-	
-	// Spawn particles
-	if (age <= duration && info.elapsedGameTime - lastSpawnEvent >= spawnRate)
-	{
-		int particlesToSpawn = (info.elapsedGameTime - lastSpawnEvent) / spawnRate;
-
-		for (int i = 0; i < particlesToSpawn; i++)
-		{
-			spawnParticle();
-		}
-
-		lastSpawnEvent = info.elapsedGameTime;
-	}
+	updateParticles(info);
+	cleanup();
+	spawnCycle(info);
 }

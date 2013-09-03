@@ -51,6 +51,9 @@ private:
 	float getProgression(float a, float b, float progression);
 	Color getColorProgression(Color a, Color b, float progression);
 	Vector2f getRandomDirection(float base, float variance);
+	void updateParticles(UpdateInfo info);
+	void cleanup();
+	void spawnCycle(UpdateInfo info);
 
 public:
 	ParticleSystem(int start, int duration, Vector2f position, Vector2f systemSpeed, VertexCollection * vertexSource);
