@@ -186,6 +186,22 @@ void PauseState::handleEvents(GameEngine * engine, vector<Event> events)
 				}
 				break;
 
+			case Event::KeyPressed:
+				if (events[i].key.code == Keyboard::Escape && pauseButtonReleased)
+				{
+					target->resume(engine);
+
+					expend();
+				}
+				break;
+
+			case Event::KeyReleased:
+				if (events[i].key.code == Keyboard::Escape)
+				{
+					pauseButtonReleased = true;
+				}
+				break;
+
 			case Event::MouseButtonReleased:
 				RenderWindow * window = engine->getWindow();
 				Vector2f size = window->getView().getSize();

@@ -56,6 +56,19 @@ void PlayingState::handleEvents(GameEngine * engine, vector<Event> events)
 				}
 				break;
 
+			case Event::KeyPressed:
+				switch (events[i].key.code)
+				{
+					case Keyboard::Escape:
+						pause(engine);
+						break;
+
+					case Keyboard::F11:
+						engine->toggleFullscreen();
+						break;
+				}
+				break;
+
 			case Event::LostFocus:
 				pausedBeforeLoosOfFocus = _paused;
 				pause(engine);
