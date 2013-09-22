@@ -287,6 +287,7 @@ void Territory::updateEnemies(UpdateInfo info)
 		for (auto enemy : enemies)
 		{
 			AI::update(&spawnQueue, enemy, player, info);
+			enemy->update(info, NULL);
 		}
 	}
 }
@@ -860,7 +861,7 @@ void Territory::update(UpdateInfo info, Controls * controls, Sounds * sounds)
 		Uses: enemySpawner, getSpawnPoints
 		Affects: enemySpawner, spawnQueue, entityCluster.getCollection(1), entityCluster.getCollection(0)
 	*/
-	enemySpawner.update(getSpawnPoints(), spawnQueue, entityCluster.getCollection(1), entityCluster.getCollection(0), info);
+	enemySpawner.update(getSpawnPoints(), spawnQueue, player, entityCluster.getCollection(1), entityCluster.getCollection(0), info);
 
 	// Background tile stuff.
 	/*

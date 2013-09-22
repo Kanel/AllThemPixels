@@ -243,13 +243,12 @@ void Player::update(UpdateInfo info, Controls * controls)
 	int shots;
 	float strength = getStrength(controls);
 	Vector2f spawn = aimBoxPosition;
-	Vector2f aim = controls->getVector(Controls::AimHorizontal, Controls::AimVertical);
-	Vector2f direction = Vector2fMath::unitVector(aim);
-	float abc = (config.speed * strength * (info.updateInterval / 1000.0f));
+	Vector2f aimJoystick = controls->getVector(Controls::AimHorizontal, Controls::AimVertical);
+	
 	speed = Vector2fMath::unitVector(controls->getVector(Controls::MovementHorizontal, Controls::MovementVertical)) * (config.speed * strength * (info.updateInterval / 1000.0f));
-	aimVector = direction;
+	this->aim = Vector2fMath::unitVector(aimJoystick);
 
-	if (Vector2fMath::length(direction) != 0)
+	if (Vector2fMath::length(aim) != 0)
 	{
 		Vector2f vec = controls->getVector(Controls::MovementHorizontal, Controls::MovementVertical);
 		bool spath = true;
@@ -258,11 +257,11 @@ void Player::update(UpdateInfo info, Controls * controls)
 	updateRotation(controls);
 	translate(speed);
 	
-	if (weapon.isReady(info.elapsedGameTime, info.updateInterval, shots) && Vector2fMath::length(aim) > GAMEPAD_JOYSTICK_THRESHOLD)
+	if (weapon.isReady(info.elapsedGameTime, info.updateInterval, shots) && Vector2fMath::length(aimJoystick) > GAMEPAD_JOYSTICK_THRESHOLD)
 	{
 		for (int i = 0; i < shots; i++)
 		{
-			spawnQueue->push(weapon.fire(aimBoxPosition, direction, info.elapsedGameTime, ProjectileEntity));
+			spawnQueue->push(weapon.fire(aimBoxPosition, aim, info.elapsedGameTime, ProjectileEntity));
 		}
 	}
 }

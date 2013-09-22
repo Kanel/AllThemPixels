@@ -11,11 +11,15 @@ AIProperties AI::generate(int difficulty)
 
 	assert(difficulty > 0);
 
-	aiProperties.aimavoidance = (difficulty > 3) ? 50 + rand() % 50 : 0;
-	aiProperties.playerspace = (float)(rand() % 200) / 100.0;
-	aiProperties.righthanded = (rand() % 2 == 0);
-	aiProperties.speed = 1+(float)(rand() % ((1+difficulty) * 100));
-	aiProperties.sinusmovement = (rand() % 3 == 1 ? 100.0f : 0);
+	aiProperties.aimAvoidanceDistance = (difficulty > 3) ? randomInt(50, 100) : 0;
+	aiProperties.aimAvoidanceSpeed = (difficulty > 3) ? randomInt(0, difficulty * 10) : 0;
+	aiProperties.movementSpeed = randomInt(0, difficulty * 100);
+	aiProperties.orbitalSpeed = randomInt(-100, 100);
+	aiProperties.orbitalThreshold = randomFloat(10, 200, 2);
+	aiProperties.orbitalDistance = randomFloat(50, 500, 2);
+	aiProperties.stalkingDistance = aiProperties.orbitalDistance;
+	aiProperties.sinusRotationSpeed = randomFloat(0, 35, 2);
+	aiProperties.sinusRotationRadius = randomFloat(0, 100, 2);
 
 	return aiProperties;
 }
@@ -24,37 +28,6 @@ void AI::update(queue<Entity *> *spawnQueue, Enemy * target, Player * player, Up
 {
 	int shots;
 	AIProperties properties = target->aiProperties;
-	float projectileSpeed = target->weapon.config.speed;
-	float speed = properties.speed;
-	int range = 100;// weapon->ttl * speed; //make correct
-	Vector2f direction = Vector2fMath::unitVector(player->getPosition() - target->getPosition());
-
-	// Determine in which direction to circle the player.
-	if (Vector2fMath::distance(player->getPosition(), target->getPosition()) < range * properties.playerspace)
-	{
-		direction = properties.righthanded ? Vector2fMath::turn90right(direction) : Vector2fMath::turn90left(direction) ;
-	}
-
-	// Dodge behaviour.
-	if (properties.aimavoidance > 0)
-	{
-		Vector2f a = player->getPosition();
-		Vector2f p = target->getPosition();
-		Vector2f n = player->aimVector;
-		Vector2f v1 = Vector2fMath::dot((a-p), n)*n;
-		Vector2f v2 = aproximation(Vector2fMath::invert(Vector2fMath::unitVector(v1)));
-		Vector2f v3 = aproximation(n);
-		float distance = Vector2fMath::length((a-p)-v1);
-
-		if (distance < properties.aimavoidance && v3 == v2)
-		{
-			direction = Vector2fMath::invert(Vector2fMath::unitVector((a-p)-v1));
-		}
-	}
-
-	// Move the controlled enemy.
-	target->translate(direction * speed * (info.updateInterval / 1000.0f) * 
-		(properties.sinusmovement > 0 ? 2.0f * (float)abs(sin(info.elapsedGameTime/ properties.sinusmovement)) : 1));
 
 	// Fire the weapon as many times as allowed.
 	if (target->weapon.isReady(info.elapsedGameTime, info.updateInterval, shots))

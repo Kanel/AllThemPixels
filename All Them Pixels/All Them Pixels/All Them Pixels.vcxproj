@@ -86,6 +86,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AI.cpp" />
+    <ClCompile Include="AimAvoidanceMovement.cpp" />
     <ClCompile Include="Cero.cpp" />
     <ClCompile Include="CircleBar.cpp" />
     <ClCompile Include="Collision.cpp" />
@@ -105,8 +106,11 @@
     <ClCompile Include="HexagonGrid.cpp" />
     <ClCompile Include="HexagonHull.cpp" />
     <ClCompile Include="KeyboardControls.cpp" />
+    <ClCompile Include="LinearMovement.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Map.cpp" />
+    <ClCompile Include="Movement.cpp" />
+    <ClCompile Include="OribitalMovement.cpp" />
     <ClCompile Include="PauseState.cpp" />
     <ClCompile Include="MontoneChain.cpp" />
     <ClCompile Include="ParticleSystem.cpp" />
@@ -116,9 +120,12 @@
     <ClCompile Include="Projectile.cpp" />
     <ClCompile Include="SAT.cpp" />
     <ClCompile Include="Shapes.cpp" />
+    <ClCompile Include="SinusMovement.cpp" />
     <ClCompile Include="SkillWheel.cpp" />
     <ClCompile Include="Sounds.cpp" />
+    <ClCompile Include="StalkingMovement.cpp" />
     <ClCompile Include="Territory.cpp" />
+    <ClCompile Include="TrackingMovement.cpp" />
     <ClCompile Include="ValueBar.cpp" />
     <ClCompile Include="Vector2fMath.cpp" />
     <ClCompile Include="VertexCluster.cpp" />
@@ -128,6 +135,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AI.h" />
+    <ClInclude Include="AimAvoidanceMovement.h" />
     <ClInclude Include="AxialCoordinates.h" />
     <ClInclude Include="Cero.h" />
     <ClInclude Include="CircleBar.h" />
@@ -154,7 +162,10 @@
     <ClInclude Include="HexagonGridStorageRow.h" />
     <ClInclude Include="HexagonHull.h" />
     <ClInclude Include="KeyboardControls.h" />
+    <ClInclude Include="LinearMovement.h" />
     <ClInclude Include="Map.h" />
+    <ClInclude Include="Movement.h" />
+    <ClInclude Include="OrbitalMovement.h" />
     <ClInclude Include="PauseState.h" />
     <ClInclude Include="MonotoneChain.h" />
     <ClInclude Include="ParticleSystem.h" />
@@ -166,10 +177,13 @@
     <ClInclude Include="resource.h" />
     <ClInclude Include="SAT.h" />
     <ClInclude Include="Shapes.h" />
+    <ClInclude Include="SinusMovement.h" />
     <ClInclude Include="SkillPoints.h" />
     <ClInclude Include="SkillWheel.h" />
     <ClInclude Include="Sounds.h" />
+    <ClInclude Include="StalkingMovement.h" />
     <ClInclude Include="Territory.h" />
+    <ClInclude Include="TrackingMovement.h" />
     <ClInclude Include="UpdateInfo.h" />
     <ClInclude Include="ValueBar.h" />
     <ClInclude Include="Vector2fMath.h" />

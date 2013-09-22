@@ -4,10 +4,15 @@ int EnemySpawner::calculateValue(AIProperties aiProperties)
 {
 	int value = 0;
 
-	value += aiProperties.aimavoidance;
-	value += aiProperties.playerspace;
-	value += (aiProperties.righthanded) ? 1 : 0;
-	value += aiProperties.speed;
+	value += aiProperties.aimAvoidanceDistance;
+	value += aiProperties.aimAvoidanceSpeed;
+	value += aiProperties.movementSpeed;
+	value += abs(aiProperties.orbitalSpeed);
+	value += aiProperties.orbitalThreshold;
+	value += aiProperties.orbitalDistance;
+	value += aiProperties.stalkingDistance;
+	value += aiProperties.sinusRotationSpeed;
+	value += aiProperties.sinusRotationRadius;
 
 	return value;
 }
@@ -53,7 +58,7 @@ bool EnemySpawner::canSpawn()
 	return spawnPointsUsed + 100 <= config.spawnPoints;
 }
 
-void EnemySpawner::update(vector<Vector2f> spawnPoints, queue<Entity *> &spawnQueue, VertexCollection * enemyVertexSource, VertexCollection * projectileVertexSource, UpdateInfo info)
+void EnemySpawner::update(vector<Vector2f> spawnPoints, queue<Entity *> &spawnQueue, Player * player, VertexCollection * enemyVertexSource, VertexCollection * projectileVertexSource, UpdateInfo info)
 {
 	if (lastSpawnEvent + config.spawnRate < info.elapsedGameTime)
 	{
@@ -62,7 +67,16 @@ void EnemySpawner::update(vector<Vector2f> spawnPoints, queue<Entity *> &spawnQu
 			int spawnIndex = rand() % spawnPoints.size();
 			EnemyClass enemyClass = enemyClasses[rand() % enemyClasses.size()];
 			Enemy * enemy = new Enemy(100, spawnPoints[spawnIndex], new HexagonHull(spawnPoints[spawnIndex], sqrtf(enemyClass.points / 10), sqrtf(enemyClass.points) / 5, Hexagon::FlatTopped, enemyVertexSource));
-			
+			StalkingMovement * stalkingMovement = new StalkingMovement(player, enemyClass.aiProperties.movementSpeed, enemyClass.aiProperties.stalkingDistance);
+			OrbitalMovement * orbital = new OrbitalMovement(player, enemyClass.aiProperties.orbitalSpeed, enemyClass.aiProperties.orbitalDistance, enemyClass.aiProperties.orbitalThreshold);
+			SinusMovement * sinusMovement = new SinusMovement(M_PI / 1.0f, 25);
+			AimAvoidanceMovement * aimAvoidance = new AimAvoidanceMovement(player, enemyClass.aiProperties.aimAvoidanceSpeed, enemyClass.aiProperties.aimAvoidanceDistance);
+
+			enemy->equip(stalkingMovement);			
+			enemy->equip(orbital);
+			enemy->equip(sinusMovement);
+			enemy->equip(aimAvoidance);
+
 			enemy->educate(enemyClass.aiProperties);
 			enemy->arm(Weapon(enemyClass.weaponconfiguration, projectileVertexSource));
 			spawnQueue.push(enemy);

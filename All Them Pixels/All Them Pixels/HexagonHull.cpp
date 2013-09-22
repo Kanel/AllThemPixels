@@ -4,6 +4,7 @@ HexagonHull::HexagonHull(Vector2f position, int hexagonCount, float hexagonRadiu
 {
 	HexagonGrid grid(Hexagon::FlatTopped, hexagonRadius);
 
+	this->position = position;
 	this->hexagonCount = hexagonCount;
 	this->hexagons = new Hexagon*[hexagonCount];
 	

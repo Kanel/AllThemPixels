@@ -16,12 +16,16 @@ class Entity
 protected:
 	Vector2f position;
 	EntityTypes type;
+	Vector2f aim;
 
 public:
 	Entity(Vector2f position);
 
 	virtual Vector2f getPosition();
 	virtual void setPosition(Vector2f position);
+
+	Vector2f getAim();
+	void setAim(Vector2f aim);
 
 	EntityTypes getType();
 	virtual void expend() = 0; // not at all a strange name...

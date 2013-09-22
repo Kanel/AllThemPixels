@@ -9,6 +9,11 @@ Enemy::Enemy(unsigned int hp, Vector2f position, HexagonHull * hull) : Destructi
 Enemy::~Enemy()
 {
 	delete hull;
+
+	for (auto movement : movements)
+	{
+		delete movement;
+	}
 }
 
 void Enemy::educate(AIProperties aiProperties)
@@ -19,6 +24,12 @@ void Enemy::educate(AIProperties aiProperties)
 void Enemy::arm(Weapon weapon)
 {
 	this->weapon = weapon;
+}
+
+void Enemy::equip(Movement * movement)
+{
+	movements.push_back(movement);
+	movement->setPosition(&position);
 }
 
 SkillPoints Enemy::getSkillPoints()
@@ -50,5 +61,9 @@ ConvexHull Enemy::getConvexHull()
 
 void Enemy::update(UpdateInfo info, Controls * controls)
 {
-	
+	for (auto movement : movements)
+	{
+		movement->update(info);
+	}
+	hull->setPosition(position);
 }

@@ -3,13 +3,22 @@
 Entity::Entity(Vector2f position)
 {
 	this->position = position;
-
-	type = UnknownEntity;
+	this->type = UnknownEntity;
 }
 
 Vector2f Entity::getPosition()
 {
 	return position;
+}
+
+Vector2f Entity::getAim()
+{
+	return aim;
+}
+
+void Entity::setAim(Vector2f aim)
+{
+	this->aim = aim;
 }
 
 EntityTypes Entity::getType()

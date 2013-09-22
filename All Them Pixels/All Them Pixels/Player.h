@@ -29,7 +29,6 @@ class Player : public Destructible, public Drawable
 {
 public:
 	queue<Entity *> *spawnQueue;
-	Vector2f aimVector;
 
 protected:
 	int shapeCount;

@@ -79,6 +79,12 @@
     <Filter Include="Source Files\State Engine\States">
       <UniqueIdentifier>{177b0aad-f96e-4ea3-8a6a-df1e630d6b57}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\AI\Movement">
+      <UniqueIdentifier>{0c7fe1c4-24a5-41c4-b2c0-e8aafc8155e9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\AI\Movement">
+      <UniqueIdentifier>{7ca283e4-07ec-4086-8850-bd553c6707be}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -200,6 +206,27 @@
     </ClCompile>
     <ClCompile Include="GamepadControls.cpp">
       <Filter>Source Files\IO</Filter>
+    </ClCompile>
+    <ClCompile Include="LinearMovement.cpp">
+      <Filter>Source Files\AI\Movement</Filter>
+    </ClCompile>
+    <ClCompile Include="TrackingMovement.cpp">
+      <Filter>Source Files\AI\Movement</Filter>
+    </ClCompile>
+    <ClCompile Include="Movement.cpp">
+      <Filter>Source Files\AI\Movement</Filter>
+    </ClCompile>
+    <ClCompile Include="StalkingMovement.cpp">
+      <Filter>Source Files\AI\Movement</Filter>
+    </ClCompile>
+    <ClCompile Include="SinusMovement.cpp">
+      <Filter>Source Files\AI\Movement</Filter>
+    </ClCompile>
+    <ClCompile Include="OribitalMovement.cpp">
+      <Filter>Source Files\AI\Movement</Filter>
+    </ClCompile>
+    <ClCompile Include="AimAvoidanceMovement.cpp">
+      <Filter>Source Files\AI\Movement</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -352,6 +379,27 @@
     </ClInclude>
     <ClInclude Include="GamepadControls.h">
       <Filter>Header Files\IO</Filter>
+    </ClInclude>
+    <ClInclude Include="TrackingMovement.h">
+      <Filter>Header Files\AI\Movement</Filter>
+    </ClInclude>
+    <ClInclude Include="LinearMovement.h">
+      <Filter>Header Files\AI\Movement</Filter>
+    </ClInclude>
+    <ClInclude Include="Movement.h">
+      <Filter>Header Files\AI\Movement</Filter>
+    </ClInclude>
+    <ClInclude Include="SinusMovement.h">
+      <Filter>Header Files\AI\Movement</Filter>
+    </ClInclude>
+    <ClInclude Include="StalkingMovement.h">
+      <Filter>Header Files\AI\Movement</Filter>
+    </ClInclude>
+    <ClInclude Include="OrbitalMovement.h">
+      <Filter>Header Files\AI\Movement</Filter>
+    </ClInclude>
+    <ClInclude Include="AimAvoidanceMovement.h">
+      <Filter>Header Files\AI\Movement</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

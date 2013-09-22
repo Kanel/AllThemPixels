@@ -10,8 +10,6 @@ using std::queue;
 
 class Player;
 
-
-
 static class AI
 {
 private:

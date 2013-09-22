@@ -1,7 +1,12 @@
 #pragma once
 
 #include "Enemy.h"
+#include "Player.h"
 #include "UpdateInfo.h"
+#include "StalkingMovement.h"
+#include "SinusMovement.h"
+#include "OrbitalMovement.h"
+#include "AimAvoidanceMovement.h"
 #include <queue>
 #include <vector>
 
@@ -40,5 +45,5 @@ public:
 
 	bool canSpawn();
 
-	void update(vector<Vector2f> spawnPoints, queue<Entity *> &spawnQueue, VertexCollection * enemyVertexSource, VertexCollection * projectileVertexSource, UpdateInfo info);
+	void update(vector<Vector2f> spawnPoints, queue<Entity *> &spawnQueue, Player * player, VertexCollection * enemyVertexSource, VertexCollection * projectileVertexSource, UpdateInfo info);
 };
